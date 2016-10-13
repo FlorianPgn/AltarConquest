@@ -38,9 +38,11 @@ public class MainGameActivity extends FragmentActivity implements OnMapReadyCall
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        double depInfoLat = 48.08604927627401;
+        double depInfoLng = -0.7595989108085632;
+
+        // Initialisation de la position de départ de la caméra
+        LatLng startCameraPosition = new LatLng(depInfoLat, depInfoLng);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 18.0f));
     }
 }
