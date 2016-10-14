@@ -18,6 +18,10 @@ public class Flag {
         this.teamColor = teamColor;
     }
 
+    //Methods
+
+
+    //Getters
     public String getName(){
         return name;
     }
