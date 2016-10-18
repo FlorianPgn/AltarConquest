@@ -13,7 +13,7 @@ public class Base extends TeamComponent {
     }
 
     public void refillToken(Joueur joueur){
-        joueur.setAttackTockenAvailable(true);
-        joueur.setDefenseTockenAvailable(true);
+        joueur.setAttackTokenAvailable(true);
+        joueur.setDefenseTokenAvailable(true);
     }
 }
