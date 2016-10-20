@@ -13,9 +13,6 @@ public class Joueur {
 
     private boolean attackTokenAvailable = true;
     private boolean defenseTokenAvailable = true;
-
-    private boolean attackTokenAvaiable = true;
-    private boolean defenceTokenAvaiable = true;
     private TeamColor teamColor;
     private boolean holdingAFlag = false;
     private Flag stolenFlag;
@@ -24,7 +21,7 @@ public class Joueur {
     public Joueur(String pseudo, LatLng coordonnees, TeamColor teamColor){
         this.pseudo = pseudo;
         this.coordonnees = coordonnees;
-        //this.teamColor = teamColor;
+        this.teamColor = teamColor;
     }
 
 
@@ -45,11 +42,6 @@ public class Joueur {
         return attackTokenAvailable;
     }
 
-    public boolean isAttackTokenAvaiable() {
-        return attackTokenAvaiable;
-
-    }
-
     public TeamColor getTeamColor() {
         return teamColor;
     }
@@ -57,11 +49,6 @@ public class Joueur {
 
     public boolean isDefenceTokenAvailable() {
         return defenseTokenAvailable;
-    }
-
-    public boolean isDefenceTokenAvaiable() {
-        return defenceTokenAvaiable;
-
     }
 
     public boolean isHoldingAFlag() {
@@ -80,7 +67,6 @@ public class Joueur {
     public void setScore(int score) {
         this.score = score;
     }
-
 
     public void setAttackTokenAvailable(boolean attackTokenAvailable) {
         this.attackTokenAvailable = attackTokenAvailable;
