@@ -6,27 +6,24 @@ import com.google.android.gms.maps.model.LatLng;
  * Created by Florian on 14/10/2016.
  */
 
-public class Joueur {
+public class Player {
     private String pseudo;
     private int score;
     private LatLng coordonnees;
 
     private boolean attackTokenAvailable = true;
     private boolean defenseTokenAvailable = true;
-    private TeamColor teamColor;
     private boolean holdingAFlag = false;
     private Flag stolenFlag;
 
 
-    public Joueur(String pseudo, LatLng coordonnees, TeamColor teamColor){
+    public Player(String pseudo, LatLng coordonnees){
         this.pseudo = pseudo;
         this.coordonnees = coordonnees;
-        this.teamColor = teamColor;
     }
 
 
     //Methods
-
 
     //Getters
     public String getPseudo() {
@@ -42,9 +39,7 @@ public class Joueur {
         return attackTokenAvailable;
     }
 
-    public TeamColor getTeamColor() {
-        return teamColor;
-    }
+
 
 
     public boolean isDefenceTokenAvailable() {
