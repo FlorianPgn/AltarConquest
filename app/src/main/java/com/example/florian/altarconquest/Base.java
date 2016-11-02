@@ -17,8 +17,8 @@ public class Base  {
         this.teamColor = teamColor;
     }
 
-    public void refillToken(Joueur joueur){
-        joueur.setAttackTokenAvailable(true);
-        joueur.setDefenseTokenAvailable(true);
+    public void refillToken(Player player){
+        player.setAttackTokenAvailable(true);
+        player.setDefenseTokenAvailable(true);
     }
 }
