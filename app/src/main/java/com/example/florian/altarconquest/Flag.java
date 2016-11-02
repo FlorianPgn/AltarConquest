@@ -8,13 +8,13 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Flag {
     private String name;
-    private LatLng coordonees;
+    private LatLng coordonnees;
     private boolean capturable = false;
     private TeamColor teamColor;
 
-    public Flag(String name, LatLng coordonees, TeamColor teamColor){
+    public Flag(String name, LatLng coordonnees, TeamColor teamColor){
         this.name = name;
-        this.coordonees = coordonees;
+        this.coordonnees = coordonnees;
         this.teamColor = teamColor;
     }
 
@@ -26,8 +26,8 @@ public class Flag {
         return name;
     }
 
-    public LatLng getCoordonees(){
-        return coordonees;
+    public LatLng getCoordonnees(){
+        return coordonnees;
     }
 
     public boolean isCapturable(){
