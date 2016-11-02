@@ -10,25 +10,17 @@ public class Joueur {
     private String pseudo;
     private int score;
     private LatLng coordonnees;
-<<<<<<< HEAD
+
     private boolean attackTokenAvailable = true;
     private boolean defenseTokenAvailable = true;
-=======
-    private boolean attackTokenAvaiable = true;
-    private boolean defenceTokenAvaiable = true;
->>>>>>> refs/remotes/origin/master
     private TeamColor teamColor;
     private boolean holdingAFlag = false;
     private Flag stolenFlag;
 
-<<<<<<< HEAD
+
     public Joueur(String pseudo, LatLng coordonnees, TeamColor teamColor){
         this.pseudo = pseudo;
         this.coordonnees = coordonnees;
-=======
-    public Joueur(String pseudo, TeamColor teamColor){
-        this.pseudo = pseudo;
->>>>>>> refs/remotes/origin/master
         this.teamColor = teamColor;
     }
 
@@ -45,26 +37,18 @@ public class Joueur {
         return coordonnees;
     }
 
-<<<<<<< HEAD
+
     public boolean isAttackTokenAvailable() {
         return attackTokenAvailable;
-=======
-    public boolean isAttackTokenAvaiable() {
-        return attackTokenAvaiable;
->>>>>>> refs/remotes/origin/master
     }
 
     public TeamColor getTeamColor() {
         return teamColor;
     }
 
-<<<<<<< HEAD
+
     public boolean isDefenceTokenAvailable() {
         return defenseTokenAvailable;
-=======
-    public boolean isDefenceTokenAvaiable() {
-        return defenceTokenAvaiable;
->>>>>>> refs/remotes/origin/master
     }
 
     public boolean isHoldingAFlag() {
@@ -84,7 +68,6 @@ public class Joueur {
         this.score = score;
     }
 
-<<<<<<< HEAD
     public void setAttackTokenAvailable(boolean attackTokenAvailable) {
         this.attackTokenAvailable = attackTokenAvailable;
     }
@@ -92,7 +75,6 @@ public class Joueur {
     public void setDefenseTokenAvailable(boolean defenceTokenAvailable) {
         this.defenseTokenAvailable = defenceTokenAvailable;
     }
+
 }
-=======
-}
->>>>>>> refs/remotes/origin/master
+
