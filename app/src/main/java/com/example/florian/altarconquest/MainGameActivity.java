@@ -7,7 +7,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.GroundOverlay;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MainGameActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -41,8 +46,23 @@ public class MainGameActivity extends FragmentActivity implements OnMapReadyCall
         double depInfoLat = 48.08604927627401;
         double depInfoLng = -0.7595989108085632;
 
+        double echologiaLat = 48.10922932860948;
+        double echologiaLng = -0.7235687971115112;
+
+
+
         // Initialisation de la position de départ de la caméra
-        LatLng startCameraPosition = new LatLng(depInfoLat, depInfoLng);
+        LatLng startCameraPosition = new LatLng(echologiaLat, echologiaLng);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 18.0f));
+
+        GroundOverlayOptions groundOverlayOptions = new GroundOverlayOptions();
+        BitmapDescriptor image = BitmapDescriptorFactory.fromResource(R.drawable.echologia_map);
+        LatLngBounds bounds = LatLngBounds.builder()
+                .include(new LatLng(depInfoLat, depInfoLng))
+                .include(new LatLng(depInfoLat+2000, depInfoLng+2000))
+                .build();
+
+        groundOverlayOptions.image(image).position(new LatLng(48.10872932860948, -0.7233687971115112), 380f).transparency(0.2f);
+        GroundOverlay imageOverlay = mMap.addGroundOverlay(groundOverlayOptions);
     }
 }
