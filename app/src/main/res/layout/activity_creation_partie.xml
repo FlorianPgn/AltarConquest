@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_creation_partie"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.hugo.altarconquest.Accueil"
+    android:background="@drawable/fond" >
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="110dp"
+        android:background="@drawable/creation_partie"
+        android:id="@+id/creer_une_partie"
+        android:layout_below="@+id/bouton_retour"
+        android:layout_centerHorizontal="true"
+        android:layout_alignStart="@+id/tv_nom_partie" />
+
+    <ImageButton
+        android:background="@drawable/retour"
+        android:id="@+id/bouton_retour"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginStart="19dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageButton
+        android:layout_width="250dp"
+        android:layout_height="70dp"
+        android:background="@drawable/creer_la_partie"
+        android:id="@+id/bouton_creer_la_partie"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="62dp" />
+
+    <TextView
+        android:text="NOMBRE DE \nJOUEURS MAX :"
+        android:id="@+id/nb_joueurs"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:layout_height="50dp"
+        android:layout_width="250dp"
+        android:layout_above="@+id/bouton_creer_la_partie"
+        android:layout_alignStart="@+id/input_mot_de_passe"
+        android:layout_marginBottom="32dp" />
+
+    <EditText
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/input_nb_joueurs"
+        android:layout_alignTop="@+id/nb_joueurs"
+        android:layout_toEndOf="@+id/nb_joueurs" />
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/input_mot_de_passe"
+        android:hint="Votre mot de passe"
+        android:layout_above="@+id/nb_joueurs"
+        android:layout_alignStart="@+id/tv_mot_de_passe" />
+
+    <TextView
+        android:text="MOT DE PASSE (OPTIONNEL) :"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:id="@+id/tv_mot_de_passe"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:layout_above="@+id/input_mot_de_passe"
+        android:layout_alignStart="@+id/input_nom_de_partie" />
+
+    <EditText
+        android:layout_width="300dp"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/input_nom_de_partie"
+        android:layout_height="50dp"
+        android:hint="Votre nom de partie"
+        android:layout_above="@+id/tv_mot_de_passe"
+        android:layout_alignStart="@+id/tv_nom_partie" />
+
+    <TextView
+        android:text="NOM DE LA PARTIE :"
+        android:layout_width="300dp"
+        android:id="@+id/tv_nom_partie"
+        android:textColorHint="@android:color/holo_green_dark"
+        android:layout_height="30dp"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:layout_above="@+id/input_nom_de_partie"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
