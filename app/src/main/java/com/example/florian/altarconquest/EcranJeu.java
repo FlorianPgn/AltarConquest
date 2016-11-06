@@ -1,7 +1,11 @@
 package com.example.florian.altarconquest;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,6 +21,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Button mapButton, flagButton, qrCodeButton, treeButton;
+    private RelativeLayout ecran;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +32,86 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
+        mapButton = (Button) findViewById(R.id.mapButton);
+        mapButton.setVisibility(View.INVISIBLE);
+        mapButton.setClickable(false);
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Ouvre la grande map avec l'altar
+                // A compléter
+            }
+        });
+
+        flagButton = (Button) findViewById(R.id.flagButton);
+        flagButton.setVisibility(View.INVISIBLE);
+        flagButton.setClickable(false);
+        flagButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Code pour intercepter un drapeau ennemi
+                // A compléter
+            }
+        });
+
+        qrCodeButton = (Button) findViewById(R.id.qrCodeButton);
+        qrCodeButton.setVisibility(View.INVISIBLE);
+        qrCodeButton.setClickable(false);
+        qrCodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ouvrirScanQrCode();
+            }
+        });
+
+        treeButton = (Button) findViewById(R.id.treeButton);
+        treeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // On clique sur le bouton du milieu, affichage
+                // des trois autres boutons
+                mapButton.setVisibility(View.VISIBLE);
+                mapButton.setClickable(true);
+
+                flagButton.setVisibility(View.VISIBLE);
+                flagButton.setClickable(true);
+
+                qrCodeButton.setVisibility(View.VISIBLE);
+                qrCodeButton.setClickable(true);
+
+                treeButton.setVisibility(View.INVISIBLE);
+                treeButton.setClickable(false);
+            }
+        });
+
+        ecran = (RelativeLayout)findViewById(R.id.ecran);
+        ecran.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(flagButton.getVisibility() == View.VISIBLE){
+                    mapButton.setVisibility(View.INVISIBLE);
+                    mapButton.setClickable(false);
+
+                    flagButton.setVisibility(View.INVISIBLE);
+                    flagButton.setClickable(false);
+
+                    qrCodeButton.setVisibility(View.INVISIBLE);
+                    qrCodeButton.setClickable(false);
+
+                    treeButton.setVisibility(View.VISIBLE);
+                    treeButton.setClickable(true);
+                }
+            }
+        });
+
+
+    }
+
+    public void ouvrirScanQrCode() {
+        Intent intent = new Intent(this, EcranScanQrCode.class);
+        startActivity(intent);
     }
 
 
