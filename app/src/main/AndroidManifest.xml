@@ -50,6 +50,8 @@
         <activity android:name=".EcranRejoindre_Partie"></activity>
 
         <activity android:name=".EcranChoix_Equipe"></activity>
+
+        <activity android:name=".EcranScanQrCode"></activity>
     </application>
 
 </manifest>
