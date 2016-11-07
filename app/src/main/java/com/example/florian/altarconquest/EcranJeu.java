@@ -18,11 +18,15 @@ import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import java.util.ArrayList;
+import java.util.ListIterator;
+
 public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Button mapButton, flagButton, qrCodeButton, treeButton;
     private RelativeLayout ecran;
+    private ArrayList<Button> boutonsDeployables;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +37,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        boutonsDeployables = new ArrayList<Button>();
+
 
         mapButton = (Button) findViewById(R.id.mapButton);
-        mapButton.setVisibility(View.INVISIBLE);
-        mapButton.setClickable(false);
+        boutonsDeployables.add(mapButton);
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,8 +51,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         });
 
         flagButton = (Button) findViewById(R.id.flagButton);
-        flagButton.setVisibility(View.INVISIBLE);
-        flagButton.setClickable(false);
+        boutonsDeployables.add(flagButton);
         flagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,8 +61,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         });
 
         qrCodeButton = (Button) findViewById(R.id.qrCodeButton);
-        qrCodeButton.setVisibility(View.INVISIBLE);
-        qrCodeButton.setClickable(false);
+        boutonsDeployables.add(qrCodeButton);
         qrCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,46 +69,49 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
+        for(Button leBouton: boutonsDeployables){
+            leBouton.setVisibility(View.INVISIBLE);
+            leBouton.setClickable(false);
+        }
+
         treeButton = (Button) findViewById(R.id.treeButton);
         treeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // On clique sur le bouton du milieu, affichage
                 // des trois autres boutons
-                mapButton.setVisibility(View.VISIBLE);
-                mapButton.setClickable(true);
-
-                flagButton.setVisibility(View.VISIBLE);
-                flagButton.setClickable(true);
-
-                qrCodeButton.setVisibility(View.VISIBLE);
-                qrCodeButton.setClickable(true);
+                for(Button leBouton: boutonsDeployables){
+                    leBouton.setVisibility(View.VISIBLE);
+                    leBouton.setClickable(true);
+                }
 
                 treeButton.setVisibility(View.INVISIBLE);
                 treeButton.setClickable(false);
             }
         });
 
+
+
+    }
+
+    public void onWindowFocusChanged(boolean hasFocus) {
+
+        super.onWindowFocusChanged(hasFocus);
+
         ecran = (RelativeLayout)findViewById(R.id.ecran);
         ecran.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(flagButton.getVisibility() == View.VISIBLE){
-                    mapButton.setVisibility(View.INVISIBLE);
-                    mapButton.setClickable(false);
-
-                    flagButton.setVisibility(View.INVISIBLE);
-                    flagButton.setClickable(false);
-
-                    qrCodeButton.setVisibility(View.INVISIBLE);
-                    qrCodeButton.setClickable(false);
-
+                    for(Button leBouton: boutonsDeployables){
+                        leBouton.setVisibility(View.INVISIBLE);
+                        leBouton.setClickable(false);
+                    }
                     treeButton.setVisibility(View.VISIBLE);
                     treeButton.setClickable(true);
                 }
             }
         });
-
 
     }
 
