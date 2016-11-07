@@ -99,7 +99,14 @@
         </LinearLayout>
 
     </LinearLayout>
-
+    <Button
+        android:id="@+id/unactiveTreeButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/unactive_tree"
+        android:layout_alignParentBottom="true"
+        />
     <Button
         android:id="@+id/treeButton"
         android:layout_width="50dp"
@@ -107,6 +114,7 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/tree_icon"
         android:layout_alignParentBottom="true"
-        />
+    />
+
 
 </RelativeLayout>

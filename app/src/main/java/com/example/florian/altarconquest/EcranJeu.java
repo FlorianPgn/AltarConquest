@@ -24,7 +24,7 @@ import java.util.ListIterator;
 public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private Button mapButton, flagButton, qrCodeButton, treeButton;
+    private Button mapButton, flagButton, qrCodeButton, treeButton, unactiveTreeButton;
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
 
@@ -83,10 +83,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
                 for(Button leBouton: boutonsDeployables){
                     leBouton.setVisibility(View.VISIBLE);
                     leBouton.setClickable(true);
-                }
 
-                treeButton.setVisibility(View.INVISIBLE);
-                treeButton.setClickable(false);
+                    treeButton.setVisibility(View.INVISIBLE);
+                }
             }
         });
 
@@ -98,20 +97,23 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
         super.onWindowFocusChanged(hasFocus);
 
-        ecran = (RelativeLayout)findViewById(R.id.ecran);
-        ecran.setOnClickListener(new View.OnClickListener() {
+        unactiveTreeButton = (Button)findViewById(R.id.unactiveTreeButton);
+
+        unactiveTreeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(flagButton.getVisibility() == View.VISIBLE){
+                if(qrCodeButton.isClickable()){
                     for(Button leBouton: boutonsDeployables){
                         leBouton.setVisibility(View.INVISIBLE);
                         leBouton.setClickable(false);
                     }
+
                     treeButton.setVisibility(View.VISIBLE);
                     treeButton.setClickable(true);
                 }
             }
         });
+
 
     }
 
