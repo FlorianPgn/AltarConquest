@@ -1,4 +1,4 @@
-package com.example.florian.altarconquest;
+package com.example.florian.altarconquest.Model;
 
 import com.google.android.gms.maps.model.LatLng;
 

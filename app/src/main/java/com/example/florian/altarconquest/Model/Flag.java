@@ -1,4 +1,4 @@
-package com.example.florian.altarconquest;
+package com.example.florian.altarconquest.Model;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -12,9 +12,9 @@ public class Flag {
     private boolean capturable = false;
     private TeamColor teamColor;
 
-    public Flag(String name, LatLng coordonnees, TeamColor teamColor){
+    public Flag(String name, double latitude, double longitude, TeamColor teamColor){
         this.name = name;
-        this.coordonnees = coordonnees;
+        this.coordonnees = new LatLng(latitude, longitude);
         this.teamColor = teamColor;
     }
 
@@ -36,5 +36,9 @@ public class Flag {
 
     public TeamColor getTeamColor(){
         return teamColor;
+    }
+
+    public String toString(){
+        return name+" "+coordonnees.toString()+" "+teamColor;
     }
 }
