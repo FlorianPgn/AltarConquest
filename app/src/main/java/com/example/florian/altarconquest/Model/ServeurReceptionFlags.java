@@ -79,6 +79,8 @@ public class ServeurReceptionFlags extends android.os.AsyncTask<String,Void,Stri
                 game.ajouterDrapeau(flag);
             }
 
+            game.initialisationObjetsLocalises();
+
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {

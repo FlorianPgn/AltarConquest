@@ -152,17 +152,12 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
         GroundOverlayOptions groundOverlayOptions = new GroundOverlayOptions();
         BitmapDescriptor image = BitmapDescriptorFactory.fromResource(R.drawable.echologia_map);
-        LatLngBounds bounds = LatLngBounds.builder()
-                .include(new LatLng(depInfoLat, depInfoLng))
-                .include(new LatLng(depInfoLat+2000, depInfoLng+2000))
-                .build();
 
         groundOverlayOptions.image(image).position(new LatLng(48.10872932860948, -0.7233687971115112), 380f).transparency(0.2f);
         GroundOverlay imageOverlay = mMap.addGroundOverlay(groundOverlayOptions);
 
         Game game = new Game("test", this);
         game.launchServerRequest();
-        game.initialisationObjetsLocalises();
 
     }
 }
