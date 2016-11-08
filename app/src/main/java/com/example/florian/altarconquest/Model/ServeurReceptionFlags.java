@@ -29,7 +29,7 @@ public class ServeurReceptionFlags extends android.os.AsyncTask<String,Void,Stri
 
     @Override
     protected String doInBackground(String... params) {
-
+        Log.i("Serveur", "reception données");
         // creation de la connection HTTP
         URL url = null;
         try {
@@ -70,13 +70,13 @@ public class ServeurReceptionFlags extends android.os.AsyncTask<String,Void,Stri
         super.onPostExecute(s);
 
         try {
-            FlagParser xmlParser = new FlagParser();
+            FlagParser flagParser = new FlagParser();
             InputStream stream = new ByteArrayInputStream(s.getBytes(Charset.defaultCharset()));
 
-            List<Flag> resultats = xmlParser.parse(stream);
+            List<Flag> resultats = flagParser.parse(stream);
 
             for (Flag flag: resultats) {
-               game.ajouterDrapeau(flag);
+                game.ajouterDrapeau(flag);
             }
 
         } catch (XmlPullParserException e) {

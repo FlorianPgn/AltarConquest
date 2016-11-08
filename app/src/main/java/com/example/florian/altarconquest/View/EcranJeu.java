@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,12 +19,13 @@ import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
 public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    public GoogleMap mMap;
     private Button mapButton, flagButton, qrCodeButton, treeButton, unactiveTreeButton;
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
@@ -145,7 +147,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
 
         // Initialisation de la position de départ de la caméra
-        LatLng startCameraPosition = new LatLng(echologiaLat, echologiaLng);
+        LatLng startCameraPosition = new LatLng(depInfoLat, depInfoLng);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 18.0f));
 
         GroundOverlayOptions groundOverlayOptions = new GroundOverlayOptions();
@@ -157,5 +159,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
         groundOverlayOptions.image(image).position(new LatLng(48.10872932860948, -0.7233687971115112), 380f).transparency(0.2f);
         GroundOverlay imageOverlay = mMap.addGroundOverlay(groundOverlayOptions);
+
+        Game game = new Game("test", this);
+        game.launchServerRequest();
+        game.initialisationObjetsLocalises();
+
     }
 }

@@ -37,4 +37,8 @@ public class Flag {
     public TeamColor getTeamColor(){
         return teamColor;
     }
+
+    public String toString(){
+        return name+" "+coordonnees.toString()+" "+teamColor;
+    }
 }

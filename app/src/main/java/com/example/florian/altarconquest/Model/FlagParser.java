@@ -8,6 +8,7 @@ import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.util.Log;
 import android.util.Xml;
 
 public class FlagParser {
@@ -38,7 +39,9 @@ public class FlagParser {
      */
     private List<Flag> readData(XmlPullParser parser) throws XmlPullParserException, IOException {
         // création d'une nouvelle liste d'objets de type Entry
-        // que l'obn va remplir avec le contenu du XML
+        // que l'obn va remplir avec le contenu du
+
+
         List<Flag> entries = new ArrayList<>();
 
         // le XML doit commencer par "<data>"
@@ -118,7 +121,7 @@ public class FlagParser {
                     break;
             }
         }
-        // retourner une nouvelle Entry avec le nom et message extrait du XML
+        // retourner une nouvelle Entry avec le nom et message extrait du
         return new Flag(nom, latitude, longitude, couleur);
     }
 
