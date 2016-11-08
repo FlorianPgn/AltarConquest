@@ -1,4 +1,4 @@
-package com.example.florian.altarconquest;
+package com.example.florian.altarconquest.View;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.example.florian.altarconquest.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -19,7 +20,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 

@@ -1,10 +1,12 @@
-package com.example.florian.altarconquest;
+package com.example.florian.altarconquest.View;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+
+import com.example.florian.altarconquest.R;
 
 public class EcranGestion_Partie extends Activity {
     @Override

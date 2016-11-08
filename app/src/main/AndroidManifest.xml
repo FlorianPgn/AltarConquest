@@ -32,26 +32,26 @@
             android:value="@string/google_maps_key" />
 
 
-        <activity android:name=".EcranAccueil">
+        <activity android:name=".View.EcranAccueil">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EcranJeu"
+        <activity android:name=".View.EcranJeu"
             android:label="@string/title_activity_main_game"></activity>
-        <activity android:name=".Regles"></activity>
+        <activity android:name=".View.EcranRegles"></activity>
 
-        <activity android:name=".EcranGestion_Partie"></activity>
+        <activity android:name=".View.EcranGestion_Partie"></activity>
 
-        <activity android:name=".EcranCreation_Partie"></activity>
+        <activity android:name=".View.EcranCreation_Partie"></activity>
 
-        <activity android:name=".EcranRejoindre_Partie"></activity>
+        <activity android:name=".View.EcranRejoindre_Partie"></activity>
 
-        <activity android:name=".EcranChoix_Equipe"></activity>
+        <activity android:name=".View.EcranChoix_Equipe"></activity>
 
-        <activity android:name=".EcranScanQrCode"></activity>
+        <activity android:name=".View.EcranScanQrCode"></activity>
     </application>
 
 </manifest>

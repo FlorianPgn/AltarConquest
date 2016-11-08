@@ -1,4 +1,4 @@
-package com.example.florian.altarconquest;
+package com.example.florian.altarconquest.Model;
 
 /**
  * Created by Florian on 02/11/2016.
@@ -17,5 +17,9 @@ public class Game {
     public Game(String name, String password){
         this(name);
         this.password = password;
+    }
+
+    public void ajouterDrapeau(Flag flag){
+
     }
 }
