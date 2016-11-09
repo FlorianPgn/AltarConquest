@@ -4,15 +4,28 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import com.example.florian.altarconquest.R;
 
-public class EcranCreation_Partie extends Activity{
+public class EcranCreation_Partie extends Activity implements AdapterView.OnItemSelectedListener {
+
+    Spinner spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creation_partie);
+
+
+        spinner = (Spinner) findViewById(R.id.input_nb_joueurs);
+        String[] items = {"2", "4", "6", "8", "9", "10", "11", "12"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        spinner.setAdapter(adapter);
 
         ImageButton bouton_retour = (ImageButton) findViewById(R.id.bouton_retour);
         bouton_retour.setOnClickListener(new View.OnClickListener() {
@@ -33,15 +46,24 @@ public class EcranCreation_Partie extends Activity{
         );
     }
 
-    public void ouvrirGestion_Partie()
-    {
+    public void ouvrirGestion_Partie() {
         Intent intent = new Intent(this, EcranGestion_Partie.class);
         startActivity(intent);
     }
 
-    public void ouvrirChoix_Equipe()
-    {
+    public void ouvrirChoix_Equipe() {
         Intent intent = new Intent(this, EcranChoix_Equipe.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        parent.getSelectedItemPosition();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

@@ -3,7 +3,6 @@ package com.example.florian.altarconquest.Model;
 import android.util.Log;
 
 import com.example.florian.altarconquest.View.EcranJeu;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**

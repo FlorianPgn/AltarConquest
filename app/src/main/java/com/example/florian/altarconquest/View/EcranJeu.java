@@ -138,8 +138,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        double depInfoLat = 48.08604927627401;
-        double depInfoLng = -0.7595989108085632;
+        double depInfoLat = 48.08574927627401;
+        double depInfoLng = -0.7584989108085632;
 
         double echologiaLat = 48.10922932860948;
         double echologiaLng = -0.7235687971115112;
@@ -148,7 +148,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
         // Initialisation de la position de départ de la caméra
         LatLng startCameraPosition = new LatLng(depInfoLat, depInfoLng);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 18.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 17.0f));
 
         GroundOverlayOptions groundOverlayOptions = new GroundOverlayOptions();
         BitmapDescriptor image = BitmapDescriptorFactory.fromResource(R.drawable.echologia_map);
