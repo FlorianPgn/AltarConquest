@@ -39,9 +39,6 @@ public class Player {
         return attackTokenAvailable;
     }
 
-
-
-
     public boolean isDefenceTokenAvailable() {
         return defenseTokenAvailable;
     }

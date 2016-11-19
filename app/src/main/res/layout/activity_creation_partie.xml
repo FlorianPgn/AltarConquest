@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.hugo.altarconquest.Accueil"
+    tools:context="com.example.florian.altarconquest.View.EcranAccueil"
     android:background="@drawable/fond" >
 
     <ImageView
@@ -52,15 +52,6 @@
         android:layout_marginBottom="32dp" />
 
     <EditText
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/input_nb_joueurs"
-        android:layout_alignTop="@+id/nb_joueurs"
-        android:layout_toEndOf="@+id/nb_joueurs" />
-
-    <EditText
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:inputType="textPersonName"
@@ -100,5 +91,14 @@
         android:textColor="@android:color/black"
         android:layout_above="@+id/input_nom_de_partie"
         android:layout_centerHorizontal="true" />
+
+    <Spinner
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:inputType="textPersonName"
+        android:layout_marginRight="30dp"
+        android:id="@+id/input_nb_joueurs"
+        android:layout_below="@+id/input_mot_de_passe"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

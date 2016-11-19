@@ -14,11 +14,11 @@ public class EcranChoix_Equipe extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choix_equipe);
 
-        ImageButton bouton_retour = (ImageButton) findViewById(R.id.bouton_retour);
+        ImageButton button_retour = (ImageButton) findViewById(R.id.bouton_retour);
         ImageButton button_red_team = (ImageButton) findViewById(R.id.bouton_equipe_rouge);
         ImageButton button_blue_team = (ImageButton) findViewById(R.id.bouton_equipe_bleue);
 
-        bouton_retour.setOnClickListener(new View.OnClickListener() {
+        button_retour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
@@ -42,7 +42,7 @@ public class EcranChoix_Equipe extends Activity {
     }
 
     public void ouvrirCreation_Partie() {
-        Intent intent = new Intent(this, EcranCreation_Partie.class);
+        Intent intent = new Intent(this, EcranJeu.class);
         startActivity(intent);
     }
 

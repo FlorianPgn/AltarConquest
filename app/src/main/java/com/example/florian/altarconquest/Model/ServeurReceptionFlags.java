@@ -87,6 +87,7 @@ public class ServeurReceptionFlags extends android.os.AsyncTask<String,Void,Stri
             e.printStackTrace();
         }
         // affiche la réponse du serveur dans le LogCat
+        Log.i("Fin", "requete serveur flags");
         Log.i("retour serveur", "serveurComRecevoirMessage=" + s);
 
     }
