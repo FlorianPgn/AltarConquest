@@ -1,10 +1,12 @@
-package com.example.florian.altarconquest;
+package com.example.florian.altarconquest.View;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+
+import com.example.florian.altarconquest.R;
 
 public class EcranAccueil extends Activity {
 
@@ -42,7 +44,7 @@ public class EcranAccueil extends Activity {
 
     public void ouvrirRegles()
     {
-        Intent intent = new Intent(this, Regles.class);
+        Intent intent = new Intent(this, EcranRegles.class);
         startActivity(intent);
     }
 }

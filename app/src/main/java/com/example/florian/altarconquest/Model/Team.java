@@ -1,4 +1,6 @@
-package com.example.florian.altarconquest;
+package com.example.florian.altarconquest.Model;
+
+import android.util.Log;
 
 import java.util.LinkedList;
 
@@ -24,8 +26,8 @@ public class Team {
         listOfPlayers.add(player);
     }
 
-    public void ajouterDrapeau(Player player){
-        listOfPlayers.add(player);
+    public void ajouterDrapeau(Flag flag){
+        listofFlags.add(flag);
     }
 
 
