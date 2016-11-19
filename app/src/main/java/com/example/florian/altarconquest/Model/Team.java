@@ -13,9 +13,11 @@ public class Team {
     private LinkedList<Player> listOfPlayers;
     private Base base;
     private LinkedList<Flag> listofFlags;
+    private int nbMaxJoueurs;
 
-    public Team(TeamColor teamColor){
+    public Team(TeamColor teamColor, int nbMaxJoueurs){
         this.teamColor = teamColor;
+        this.nbMaxJoueurs = nbMaxJoueurs;
         listOfPlayers = new LinkedList<>();
         listofFlags = new LinkedList<>();
     }

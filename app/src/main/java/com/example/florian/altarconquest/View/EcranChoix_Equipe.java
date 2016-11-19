@@ -42,7 +42,7 @@ public class EcranChoix_Equipe extends Activity {
     }
 
     public void ouvrirCreation_Partie() {
-        Intent intent = new Intent(this, EcranCreation_Partie.class);
+        Intent intent = new Intent(this, EcranJeu.class);
         startActivity(intent);
     }
 

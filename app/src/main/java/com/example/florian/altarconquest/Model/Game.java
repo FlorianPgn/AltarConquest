@@ -14,19 +14,35 @@ public class Game {
     private String password;
     private Team blueTeam;
     private Team redTeam;
+    private int nbJoueurs;
 
-    private EcranJeu activity;
+    private EcranJeu ecranJeu;
 
-    public Game(String name, EcranJeu activity){
+    public Game(String name, int nbJoueurs, EcranJeu ecranJeu){
         this.name = name;
-        this.activity = activity;
-        blueTeam = new Team(TeamColor.BLUE);
-        redTeam = new Team(TeamColor.RED);
+        this.nbJoueurs = nbJoueurs;
+        this.ecranJeu = ecranJeu;
+
+        if (nbJoueurs%2 == 0) {
+            blueTeam = new Team(TeamColor.BLUE, nbJoueurs / 2);
+            redTeam = new Team(TeamColor.RED, nbJoueurs / 2);
+        } else {
+            blueTeam = new Team(TeamColor.BLUE, nbJoueurs / 2 + 1);
+            redTeam = new Team(TeamColor.RED, nbJoueurs / 2);
+        }
+
     }
 
-    public Game(String name, String password, EcranJeu activity){
-        this(name, activity);
+    public Game(String name, int nbJoueurs, String password, EcranJeu ecranJeu){
+        this(name, nbJoueurs, ecranJeu);
         this.password = password;
+        ServerSendGameProperties ssgp = new ServerSendGameProperties(ecranJeu);
+        ssgp.execute(addQuote(name), addQuote(password), addQuote(String.valueOf(nbJoueurs)));
+
+    }
+
+    public String addQuote(String chaine){
+        return "'"+chaine+"'";
     }
 
     public void ajouterDrapeau(Flag flag){
@@ -37,24 +53,23 @@ public class Game {
     }
 
     public void launchServerRequest(){
-        Log.i("Début", "requete serveur");
+        Log.i("Début", "requete serveur flags");
         ServeurReceptionFlags srf = new ServeurReceptionFlags(this);
         srf.execute();
-        Log.i("Fin", "requete serveur");
     }
 
     public void initialisationObjetsLocalises(){
         Log.i("Init", "Initialisation flags");
 
-
         for (Flag flag : blueTeam.getListofFlags()) {
-            activity.mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
+            ecranJeu.mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
         }
 
         for (Flag flag : redTeam.getListofFlags()) {
-            activity.mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
+            ecranJeu.mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
         }
 
-        Log.i("Liste des drapeaux", ""+blueTeam.getListofFlags());
+        Log.i("Liste des drapeaux b", ""+blueTeam.getListofFlags());
+        Log.i("Liste des drapeaux r", ""+redTeam.getListofFlags());
     }
 }

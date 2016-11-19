@@ -34,26 +34,26 @@
             android:value="@string/google_maps_key" />
 
 
-        <activity android:name=".View.EcranAccueil">
+        <ecranJeu android:name=".View.EcranAccueil">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".View.EcranJeu"
-            android:label="@string/title_activity_main_game"></activity>
-        <activity android:name=".View.EcranRegles"></activity>
+        </ecranJeu>
+        <ecranJeu android:name=".View.EcranJeu"
+            android:label="@string/title_activity_main_game"></ecranJeu>
+        <ecranJeu android:name=".View.EcranRegles"></ecranJeu>
 
-        <activity android:name=".View.EcranGestion_Partie"></activity>
+        <ecranJeu android:name=".View.EcranGestion_Partie"></ecranJeu>
 
-        <activity android:name=".View.EcranCreation_Partie"></activity>
+        <ecranJeu android:name=".View.EcranCreation_Partie"></ecranJeu>
 
-        <activity android:name=".View.EcranRejoindre_Partie"></activity>
+        <ecranJeu android:name=".View.EcranRejoindre_Partie"></ecranJeu>
 
-        <activity android:name=".View.EcranChoix_Equipe"></activity>
+        <ecranJeu android:name=".View.EcranChoix_Equipe"></ecranJeu>
 
-        <activity android:name=".View.EcranScanQrCode"></activity>
+        <ecranJeu android:name=".View.EcranScanQrCode"></ecranJeu>
     </application>
 
 </manifest>

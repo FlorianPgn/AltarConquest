@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.R;
 
 public class EcranCreation_Partie extends Activity implements AdapterView.OnItemSelectedListener {
@@ -41,6 +42,8 @@ public class EcranCreation_Partie extends Activity implements AdapterView.OnItem
             @Override
             public void onClick(View v)
             {
+                Game game = new Game("Game de flo", 5, this);
+                game.launchServerRequest();
                 ouvrirChoix_Equipe();
             }}
         );

@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.example.florian.altarconquest.Model.Game;
+import com.example.florian.altarconquest.Model.ServerSendGameProperties;
 import com.example.florian.altarconquest.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
 
@@ -153,6 +155,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         // Initialisation de la position de départ de la caméra
         LatLng startCameraPosition = new LatLng(depInfoLat, depInfoLng);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 17.0f));
+        retirerMouvementCameraMarkers();
 
         GroundOverlayOptions groundOverlayOptions = new GroundOverlayOptions();
         BitmapDescriptor image = BitmapDescriptorFactory.fromResource(R.drawable.echologia_map);
@@ -163,9 +166,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
         demanderPermissionGps();
 
-
-        Game game = new Game("test", this);
-        game.launchServerRequest();
 
     }
 
@@ -195,5 +195,23 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
             }
 
         }
+    }
+
+    public void retirerMouvementCameraMarkers(){
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+            Marker currentShown;
+
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.equals(currentShown)) {
+                    marker.hideInfoWindow();
+                    currentShown = null;
+                } else {
+                    marker.showInfoWindow();
+                    currentShown = marker;
+                }
+                return true;
+            }
+        });
     }
 }
