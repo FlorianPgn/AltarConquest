@@ -48,7 +48,7 @@ public class EcranGestion_Partie extends Activity {
 
     public void ouvrirCreation_Partie()
     {
-        Intent intent = new Intent(this, EcranJeu.class);
+        Intent intent = new Intent(this, EcranCreation_Partie.class);
         startActivity(intent);
     }
 

@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.example.florian.altarconquest.Model.Game;
-import com.example.florian.altarconquest.Model.ServerSendGameProperties;
 import com.example.florian.altarconquest.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -166,6 +165,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
         demanderPermissionGps();
 
+        Game game = new Game("Game de flo", 5, this);
+        game.launchServerRequest();
 
     }
 

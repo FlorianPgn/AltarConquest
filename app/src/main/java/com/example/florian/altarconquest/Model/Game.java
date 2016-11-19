@@ -36,14 +36,9 @@ public class Game {
     public Game(String name, int nbJoueurs, String password, EcranJeu ecranJeu){
         this(name, nbJoueurs, ecranJeu);
         this.password = password;
-        ServerSendGameProperties ssgp = new ServerSendGameProperties(ecranJeu);
-        ssgp.execute(addQuote(name), addQuote(password), addQuote(String.valueOf(nbJoueurs)));
 
     }
 
-    public String addQuote(String chaine){
-        return "'"+chaine+"'";
-    }
 
     public void ajouterDrapeau(Flag flag){
         if(flag.getTeamColor() == TeamColor.BLUE)
