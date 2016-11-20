@@ -21,12 +21,14 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_weight="1"
             android:background="@drawable/blue_flag_icon"/>
 
         <TextView
             android:id="@+id/compteurDrapeauBleu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="0"
             android:textSize="50dp"
             android:textStyle="bold"
@@ -35,16 +37,32 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_weight="1"
             android:background="@drawable/red_flag_icon"/>
 
         <TextView
             android:id="@+id/compteurDrapeauRouge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="20"
             android:text="0"
             android:textSize="50dp"
             android:textStyle="bold"
             android:textColor="#FF0000"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/jeton_noir_et_tour"
+            />
+
+        <ImageView
+            android:background="@drawable/jeton_blanc_et_tour"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            />
 
     </LinearLayout>
 
