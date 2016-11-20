@@ -3,12 +3,14 @@ package com.example.florian.altarconquest.View;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.florian.altarconquest.Model.Game;
@@ -30,6 +32,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
     public GoogleMap mMap;
     private Button mapButton, flagButton, qrCodeButton, treeButton, unactiveTreeButton;
+    private static ImageView attackToken;
+    private static ImageView defenceToken;
+    private Boolean attackTokenAvailable = true, defenseTokenAvailable = true;
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
 
@@ -45,6 +50,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
         boutonsDeployables = new ArrayList<Button>();
+
+        attackToken = (ImageView) findViewById(R.id.attackToken);
+        defenceToken = (ImageView) findViewById(R.id.defencetoken);
 
 
         mapButton = (Button) findViewById(R.id.mapButton);
@@ -214,5 +222,26 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
                 return true;
             }
         });
+    }
+
+
+    public static void setDefencetoken(boolean defenceTokenAvailable){
+        if(defenceTokenAvailable){
+            defenceToken.setImageResource(R.drawable.jeton_blanc);
+        }
+        else{
+            defenceToken.setImageResource(R.drawable.jeton_blanc_et_tour);
+        }
+
+    }
+
+    public static void setAttackToken(boolean attackTokenAvailable){
+        if(attackTokenAvailable){
+            attackToken.setImageResource(R.drawable.jeton_noir);
+        }
+        else{
+            attackToken.setImageResource(R.drawable.jeton_noir_et_tour);
+        }
+
     }
 }
