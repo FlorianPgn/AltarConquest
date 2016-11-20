@@ -51,6 +51,7 @@
             android:textColor="#FF0000"/>
 
         <ImageView
+            android:id="@+id/attackToken"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"
@@ -58,6 +59,7 @@
             />
 
         <ImageView
+            android:id="@+id/defencetoken"
             android:background="@drawable/jeton_blanc_et_tour"
             android:layout_width="50dp"
             android:layout_height="50dp"
