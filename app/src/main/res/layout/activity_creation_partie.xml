@@ -101,4 +101,13 @@
         android:layout_above="@+id/input_nom_de_partie"
         android:layout_centerHorizontal="true" />
 
+    <Spinner
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:inputType="textPersonName"
+        android:layout_marginRight="30dp"
+        android:id="@+id/input_nb_joueurs"
+        android:layout_below="@+id/input_mot_de_passe"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>

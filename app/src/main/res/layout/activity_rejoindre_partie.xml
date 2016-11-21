@@ -12,6 +12,15 @@
     tools:context="com.example.florian.altarconquest.View.EcranAccueil"
     android:background="@drawable/fond" >
 
+    <ImageView
+        android:background="@drawable/liste_partie"
+        android:id="@+id/rejoindre_partie"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/bouton_retour"
+        android:layout_centerHorizontal="true"
+        android:layout_height="90dp"
+        android:layout_width="270dp" />
+
     <ImageButton
         android:background="@drawable/retour"
         android:id="@+id/bouton_retour"
