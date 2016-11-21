@@ -43,9 +43,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.EcranJeu"
-            android:label="@string/title_activity_main_game"></activity>
-        <activity android:name=".View.EcranRegles"></activity>
 
         <activity
             android:name=".View.EcranJeu"
