@@ -1,8 +1,12 @@
 package com.example.florian.altarconquest.View;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -18,8 +22,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
 
@@ -29,6 +32,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     private Button mapButton, flagButton, qrCodeButton, treeButton, unactiveTreeButton;
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
+
+    private final int REQUEST_CODE = 128;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +143,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        double depInfoLat = 48.08604927627401;
-        double depInfoLng = -0.7595989108085632;
+        double depInfoLat = 48.08574927627401;
+        double depInfoLng = -0.7584989108085632;
 
         double echologiaLat = 48.10922932860948;
         double echologiaLng = -0.7235687971115112;
@@ -148,7 +153,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
         // Initialisation de la position de départ de la caméra
         LatLng startCameraPosition = new LatLng(depInfoLat, depInfoLng);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 18.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 17.0f));
+        retirerMouvementCameraMarkers();
 
         GroundOverlayOptions groundOverlayOptions = new GroundOverlayOptions();
         BitmapDescriptor image = BitmapDescriptorFactory.fromResource(R.drawable.echologia_map);
@@ -156,8 +162,57 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         groundOverlayOptions.image(image).position(new LatLng(48.10872932860948, -0.7233687971115112), 380f).transparency(0.2f);
         GroundOverlay imageOverlay = mMap.addGroundOverlay(groundOverlayOptions);
 
-        Game game = new Game("test", this);
+
+        demanderPermissionGps();
+
+        Game game = new Game("Game de flo", 5, this);
         game.launchServerRequest();
 
+    }
+
+    public void demanderPermissionGps(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        mMap.setMyLocationEnabled(true);
+                    }
+
+                } else {
+                    demanderPermissionGps();
+                }
+                return;
+            }
+
+        }
+    }
+
+    public void retirerMouvementCameraMarkers(){
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+            Marker currentShown;
+
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.equals(currentShown)) {
+                    marker.hideInfoWindow();
+                    currentShown = null;
+                } else {
+                    marker.showInfoWindow();
+                    currentShown = marker;
+                }
+                return true;
+            }
+        });
     }
 }

@@ -110,7 +110,7 @@ public class FlagParser {
                     // sinon, sauter la balise
                     break;
                 case "couleur":
-                    if(readTag(parser, "couleur").equals("bleu"))
+                    if(readTag(parser, "couleur").equals("bleue"))
                         couleur = TeamColor.BLUE;
                     else
                         couleur = TeamColor.RED;
