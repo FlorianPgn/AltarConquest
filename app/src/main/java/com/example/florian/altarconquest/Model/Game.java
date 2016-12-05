@@ -35,7 +35,6 @@ public class Game {
     public Game(String name, int nbJoueurs, String password){
         this(name, nbJoueurs);
         this.password = password;
-
     }
 
     public void ajouterDrapeau(Flag flag){

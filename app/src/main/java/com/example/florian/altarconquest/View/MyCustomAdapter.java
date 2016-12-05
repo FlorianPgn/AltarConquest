@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.example.florian.altarconquest.Controller.JoinGameListener;
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.R;
 
@@ -59,14 +60,17 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
         //Handle buttons and add onClickListeners
         Button joinBtn = (Button)view.findViewById(R.id.list_item_button);
 
-        joinBtn.setOnClickListener(new View.OnClickListener(){
+        joinBtn.setOnClickListener(new JoinGameListener(context));
+
+
+        /*joinBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //do something
                 list.remove(position); //or some other task
                 notifyDataSetChanged();
             }
-        });
+        });*/
 
         return view;
     }
