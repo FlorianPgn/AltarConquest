@@ -27,4 +27,12 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
 
+    <TextView
+        android:text="Nombre de joueurs..."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_nb_joueurs"
+        android:layout_alignBottom="@+id/list_item_pic"
+        android:layout_toEndOf="@+id/list_item_pic" />
+
 </RelativeLayout>
