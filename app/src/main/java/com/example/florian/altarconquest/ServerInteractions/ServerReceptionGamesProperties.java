@@ -1,6 +1,13 @@
-package com.example.florian.altarconquest.Model;
+package com.example.florian.altarconquest.ServerInteractions;
 
 import android.util.Log;
+
+import com.example.florian.altarconquest.Model.Flag;
+import com.example.florian.altarconquest.Model.Game;
+import com.example.florian.altarconquest.ServerInteractions.Parsers.FlagParser;
+import com.example.florian.altarconquest.ServerInteractions.Parsers.GameParser;
+import com.example.florian.altarconquest.View.EcranJeu;
+import com.example.florian.altarconquest.View.EcranRejoindre_Partie;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -14,17 +21,20 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Florian on 08/11/2016.
+ * Created by Florian on 04/12/2016.
  */
 
-public class ServeurReceptionFlags extends android.os.AsyncTask<String,Void,String> {
-    public Game game;
+public class ServerReceptionGamesProperties extends android.os.AsyncTask<String,Void,String> {
     private String s;
+    private EcranRejoindre_Partie ecranRejoindre_partie;
 
-    public ServeurReceptionFlags(Game game){
-        this.game = game;
+
+    public ServerReceptionGamesProperties(EcranRejoindre_Partie ecranRejoindre_partie){
+        this.ecranRejoindre_partie = ecranRejoindre_partie;
     }
 
     @Override
@@ -33,7 +43,7 @@ public class ServeurReceptionFlags extends android.os.AsyncTask<String,Void,Stri
         // creation de la connection HTTP
         URL url = null;
         try {
-            url = new URL("http://altarconquest.hol.es/scripts/getflags.php");
+            url = new URL("http://altarconquest.hol.es/scripts/get_games.php");
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -70,16 +80,13 @@ public class ServeurReceptionFlags extends android.os.AsyncTask<String,Void,Stri
         super.onPostExecute(s);
 
         try {
-            FlagParser flagParser = new FlagParser();
+            GameParser gameParser = new GameParser();
             InputStream stream = new ByteArrayInputStream(s.getBytes(Charset.defaultCharset()));
 
-            List<Flag> resultats = flagParser.parse(stream);
+            List<Game> resultats = gameParser.parse(stream);
 
-            for (Flag flag: resultats) {
-                game.ajouterDrapeau(flag);
-            }
+            ecranRejoindre_partie.generateListContent(resultats);
 
-            game.initialisationObjetsLocalises();
 
         } catch (XmlPullParserException e) {
             e.printStackTrace();
@@ -90,9 +97,5 @@ public class ServeurReceptionFlags extends android.os.AsyncTask<String,Void,Stri
         Log.i("Fin", "requete serveur flags");
         Log.i("retour serveur", "serveurComRecevoirMessage=" + s);
 
-    }
-
-    public String getS(){
-        return s;
     }
 }

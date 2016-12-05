@@ -2,6 +2,7 @@ package com.example.florian.altarconquest.Model;
 
 import android.util.Log;
 
+import com.example.florian.altarconquest.ServerInteractions.ServeurReceptionFlags;
 import com.example.florian.altarconquest.View.EcranJeu;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -16,12 +17,10 @@ public class Game {
     private Team redTeam;
     private int nbJoueurs;
 
-    private EcranJeu ecranJeu;
 
-    public Game(String name, int nbJoueurs, EcranJeu ecranJeu){
+    public Game(String name, int nbJoueurs){
         this.name = name;
         this.nbJoueurs = nbJoueurs;
-        this.ecranJeu = ecranJeu;
 
         if (nbJoueurs%2 == 0) {
             blueTeam = new Team(TeamColor.BLUE, nbJoueurs / 2);
@@ -33,12 +32,11 @@ public class Game {
 
     }
 
-    public Game(String name, int nbJoueurs, String password, EcranJeu ecranJeu){
-        this(name, nbJoueurs, ecranJeu);
+    public Game(String name, int nbJoueurs, String password){
+        this(name, nbJoueurs);
         this.password = password;
 
     }
-
 
     public void ajouterDrapeau(Flag flag){
         if(flag.getTeamColor() == TeamColor.BLUE)
@@ -47,24 +45,27 @@ public class Game {
             redTeam.ajouterDrapeau(flag);
     }
 
-    public void launchServerRequest(){
-        Log.i("Début", "requete serveur flags");
-        ServeurReceptionFlags srf = new ServeurReceptionFlags(this);
-        srf.execute();
+    public String getName() {
+        return name;
     }
 
-    public void initialisationObjetsLocalises(){
-        Log.i("Init", "Initialisation flags");
+    public void setName(String name) {
+        this.name = name;
+    }
 
-        for (Flag flag : blueTeam.getListofFlags()) {
-            ecranJeu.mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
-        }
+    public int getNbJoueurs() {
+        return nbJoueurs;
+    }
 
-        for (Flag flag : redTeam.getListofFlags()) {
-            ecranJeu.mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
-        }
+    public String getPassword() {
+        return password;
+    }
 
-        Log.i("Liste des drapeaux b", ""+blueTeam.getListofFlags());
-        Log.i("Liste des drapeaux r", ""+redTeam.getListofFlags());
+    public Team getBlueTeam() {
+        return blueTeam;
+    }
+
+    public Team getRedTeam() {
+        return redTeam;
     }
 }

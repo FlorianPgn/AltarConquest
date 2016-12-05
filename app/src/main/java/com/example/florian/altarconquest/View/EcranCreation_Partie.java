@@ -11,8 +11,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+
 import com.example.florian.altarconquest.Model.Game;
-import com.example.florian.altarconquest.Model.ServerSendGameProperties;
+import com.example.florian.altarconquest.ServerInteractions.ServerSendGameProperties;
 import com.example.florian.altarconquest.R;
 
 public class EcranCreation_Partie extends Activity implements AdapterView.OnItemSelectedListener {
@@ -20,6 +21,7 @@ public class EcranCreation_Partie extends Activity implements AdapterView.OnItem
     Spinner spinner;
     EditText nomPartie;
     EditText passwordPartie;
+    Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +52,11 @@ public class EcranCreation_Partie extends Activity implements AdapterView.OnItem
             public void onClick(View v)
             {
                 Log.i("Création partie", "");
+                //Insertion game dans la bdd
                 ServerSendGameProperties ssgp = new ServerSendGameProperties(EcranCreation_Partie.this);
                 ssgp.execute(addQuote(nomPartie.getText().toString()), addQuote(passwordPartie.getText().toString()), addQuote(String.valueOf(spinner.getSelectedItem())));
+
+
                 ouvrirChoix_Equipe();
             }}
         );
