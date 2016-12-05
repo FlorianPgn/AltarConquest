@@ -22,7 +22,7 @@ public class EcranChoix_Equipe extends Activity {
             @Override
             public void onClick(View v)
             {
-                ouvrirCreation_Partie();
+                ouvrirRejoinre_Partie();
             }
         });
 
@@ -41,8 +41,8 @@ public class EcranChoix_Equipe extends Activity {
         });
     }
 
-    public void ouvrirCreation_Partie() {
-        Intent intent = new Intent(this, EcranJeu.class);
+    public void ouvrirRejoinre_Partie() {
+        Intent intent = new Intent(this, EcranRejoindre_Partie.class);
         startActivity(intent);
     }
 

@@ -1,4 +1,4 @@
-package com.example.florian.altarconquest.Model;
+package com.example.florian.altarconquest.ServerInteractions;
 
     import android.os.AsyncTask;
     import android.util.Log;
@@ -58,14 +58,14 @@ package com.example.florian.altarconquest.Model;
         // création des données POST qui doivent être passées en paramètre
         String name = (String) params[0];
         String password = (String) params[1];
-        String nbJoueurs = (String) params[2];
+        String nbJoueursMax = (String) params[2];
 
         // creation de data sous la forme name=partieDeFlo&password=secret&nbJoueur=9
         String data = null;
         try {
             data = URLEncoder.encode("name", "UTF-8")+"="+URLEncoder.encode(name,"UTF-8");
             data += "&"+URLEncoder.encode("password", "UTF-8")+"="+URLEncoder.encode(password,"UTF-8");
-            data += "&"+URLEncoder.encode("nbJoueurs", "UTF-8")+"="+URLEncoder.encode(nbJoueurs,"UTF-8");
+            data += "&"+URLEncoder.encode("nbJoueursMax", "UTF-8")+"="+URLEncoder.encode(nbJoueursMax,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

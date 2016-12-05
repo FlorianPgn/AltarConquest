@@ -1,4 +1,4 @@
-package com.example.florian.altarconquest.Model;
+package com.example.florian.altarconquest.ServerInteractions.Parsers;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +10,9 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Log;
 import android.util.Xml;
+
+import com.example.florian.altarconquest.Model.Flag;
+import com.example.florian.altarconquest.Model.TeamColor;
 
 public class FlagParser {
 
