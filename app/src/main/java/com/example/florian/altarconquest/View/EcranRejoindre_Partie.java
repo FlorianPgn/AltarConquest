@@ -19,7 +19,7 @@ import java.util.TimerTask;
 
 public class EcranRejoindre_Partie extends Activity
 {
-
+    public static Activity context;
     private ArrayList<Game> list;
 
     @Override
@@ -51,14 +51,6 @@ public class EcranRejoindre_Partie extends Activity
                 ouvrirGestion_Partie();
             }
         });
-
-        ImageButton bouton_rejoindre_partie = (ImageButton) findViewById(R.id.bouton_rejoindre_partie);
-        bouton_rejoindre_partie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ouvrirChoix_Equipe();
-            }
-        });
     }
 
     public void setActiveGame() {
@@ -77,11 +69,6 @@ public class EcranRejoindre_Partie extends Activity
 
     public void ouvrirGestion_Partie() {
         Intent intent = new Intent(this, EcranGestion_Partie.class);
-        startActivity(intent);
-    }
-
-    public void ouvrirChoix_Equipe() {
-        Intent intent = new Intent(this, EcranChoix_Equipe.class);
         startActivity(intent);
     }
 }

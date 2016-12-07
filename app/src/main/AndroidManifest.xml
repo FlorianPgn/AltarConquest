@@ -44,9 +44,9 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".View.EcranJeu"
+        <activity android:name=".View.EcranJeu"
             android:screenOrientation="portrait"/>
+
         <activity android:name=".View.EcranRegles"
             android:screenOrientation="portrait"/>
 
@@ -66,7 +66,10 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".View.EcranScanQrCode"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".View.EcranLobbyPartie"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
