@@ -16,7 +16,6 @@ import com.example.florian.altarconquest.Controller.JoinGameListener;
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +23,7 @@ import java.util.List;
  */
 
 public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
+
     private List<Game> list;
     private Context context;
 
@@ -73,9 +73,10 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
             @Override
             public void onClick(View v) {
                 //do something
-                if (list.get(position).getNbJoueurs() < list.get(position).getNbJoueursMax()) {
+                if (list.get(position).getNbJoueurs() <= list.get(position).getNbJoueursMax())
+                {
                     list.get(position).setNbJoueurs(list.get(position).getNbJoueurs() + 1);
-                    Intent intent = new Intent(context, EcranChoix_Equipe.class);
+                    Intent intent = new Intent(context, EcranLobbyPartie.class);
                     list.remove(position); //or some other task
                     context.startActivity(intent);
                     notifyDataSetChanged();
@@ -85,9 +86,6 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
                     Toast toast = Toast.makeText(context, "Cette partie est complète, veuillez en choisir une autre :)", Toast.LENGTH_SHORT);
                     toast.show();
                 }
-
-
-
             }
         });*/
 

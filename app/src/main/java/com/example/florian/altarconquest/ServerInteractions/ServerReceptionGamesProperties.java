@@ -91,5 +91,6 @@ public class ServerReceptionGamesProperties extends android.os.AsyncTask<String,
         // affiche la réponse du serveur dans le LogCat
         Log.i("Fin", "requete serveur flags");
         Log.i("retour serveur", "serveurComRecevoirMessage=" + s);
+
     }
 }
