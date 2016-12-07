@@ -14,7 +14,7 @@
 
     <ImageView
         android:background="@drawable/regles_titre"
-        android:id="@+id/rejoindre_partie"
+        android:id="@+id/liste_partie"
         android:layout_width="300dp"
         android:layout_marginTop="16dp"
         android:layout_below="@+id/bouton_retour"
@@ -37,8 +37,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="21dp"
         android:id="@+id/texte_regles"
-        android:layout_below="@+id/rejoindre_partie"
-        android:layout_alignStart="@+id/rejoindre_partie"
+        android:layout_below="@+id/liste_partie"
+        android:layout_alignStart="@+id/liste_partie"
         android:textColor="@android:color/black" />
 
 </RelativeLayout>
