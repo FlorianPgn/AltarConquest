@@ -13,6 +13,7 @@ public class Game {
     private int nbJoueurs;
     private int nbJoueursMax;
 
+
     public Game(int id, String name, int nbJoueursMax){
         this.id = id;
         this.name = name;
@@ -26,6 +27,7 @@ public class Game {
             redTeam = new Team(TeamColor.RED, nbJoueursMax / 2);
         }
     }
+
 
     public Game(int id, String name, int nbJoueursMax, String password){
         this(id, name, nbJoueursMax);

@@ -19,7 +19,7 @@ import java.util.TimerTask;
 
 public class EcranRejoindre_Partie extends Activity
 {
-
+    public static Activity context;
     private ArrayList<Game> list;
     private Timer timer;
 
@@ -77,4 +77,5 @@ public class EcranRejoindre_Partie extends Activity
         super.onStop();
         timer.cancel();
     }
+
 }

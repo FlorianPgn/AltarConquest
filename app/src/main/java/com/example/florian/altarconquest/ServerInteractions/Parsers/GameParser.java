@@ -105,7 +105,6 @@ public class GameParser {
                         break;
                     case "name":
                         name = readTag(parser, "name");
-
                         break;
                     case "password":
                         password = readTag(parser, "password");
@@ -122,7 +121,9 @@ public class GameParser {
                 }
             }
             // retourner une nouvelle Entry avec le nom et message extrait du
+
             Game game = new Game(id, name, nbJoueursMax, password);
+
             game.setNbJoueurs(nbJoueursActuel);
             return game;
         }
