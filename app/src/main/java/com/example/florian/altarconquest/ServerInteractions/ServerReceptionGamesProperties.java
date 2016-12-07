@@ -2,11 +2,8 @@ package com.example.florian.altarconquest.ServerInteractions;
 
 import android.util.Log;
 
-import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.Model.Game;
-import com.example.florian.altarconquest.ServerInteractions.Parsers.FlagParser;
 import com.example.florian.altarconquest.ServerInteractions.Parsers.GameParser;
-import com.example.florian.altarconquest.View.EcranJeu;
 import com.example.florian.altarconquest.View.EcranRejoindre_Partie;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -21,8 +18,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Florian on 04/12/2016.
@@ -96,6 +91,5 @@ public class ServerReceptionGamesProperties extends android.os.AsyncTask<String,
         // affiche la réponse du serveur dans le LogCat
         Log.i("Fin", "requete serveur flags");
         Log.i("retour serveur", "serveurComRecevoirMessage=" + s);
-
     }
 }

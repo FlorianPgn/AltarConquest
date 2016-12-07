@@ -1,6 +1,8 @@
 package com.example.florian.altarconquest.View;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.florian.altarconquest.Controller.JoinGameListener;
 import com.example.florian.altarconquest.Model.Game;
@@ -57,18 +60,34 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
         TextView listItemText = (TextView)view.findViewById(R.id.list_item_text);
         listItemText.setText(list.get(position).getName());
 
+        TextView listNbJoueurs = (TextView)view.findViewById(R.id.list_nb_joueurs);
+        listNbJoueurs.setText("Nombre de joueurs : " + list.get(position).getNbJoueurs() + "/" + list.get(position).getNbJoueursMax());
+
         //Handle buttons and add onClickListeners
         Button joinBtn = (Button)view.findViewById(R.id.list_item_button);
 
-        joinBtn.setOnClickListener(new JoinGameListener(context));
+        joinBtn.setOnClickListener(new JoinGameListener(context, list.get(position).getId()));
 
 
-        /*joinBtn.setOnClickListener(new View.OnClickListener(){
+       /*joinBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //do something
-                list.remove(position); //or some other task
-                notifyDataSetChanged();
+                if (list.get(position).getNbJoueurs() < list.get(position).getNbJoueursMax()) {
+                    list.get(position).setNbJoueurs(list.get(position).getNbJoueurs() + 1);
+                    Intent intent = new Intent(context, EcranChoix_Equipe.class);
+                    list.remove(position); //or some other task
+                    context.startActivity(intent);
+                    notifyDataSetChanged();
+                }
+                else
+                {
+                    Toast toast = Toast.makeText(context, "Cette partie est complète, veuillez en choisir une autre :)", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+
+
+
             }
         });*/
 

@@ -1,40 +1,36 @@
 package com.example.florian.altarconquest.Model;
 
-import android.util.Log;
-
-import com.example.florian.altarconquest.ServerInteractions.ServeurReceptionFlags;
-import com.example.florian.altarconquest.View.EcranJeu;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 /**
  * Created by Florian on 02/11/2016.
  */
 
 public class Game {
+    private int id;
     private String name;
     private String password;
     private Team blueTeam;
     private Team redTeam;
     private int nbJoueurs;
+    private int nbJoueursMax;
 
-
-    public Game(String name, int nbJoueurs){
+    public Game(int id, String name, int nbJoueursMax){
+        this.id = id;
         this.name = name;
-        this.nbJoueurs = nbJoueurs;
+        this.nbJoueursMax = nbJoueursMax;
 
-        if (nbJoueurs%2 == 0) {
-            blueTeam = new Team(TeamColor.BLUE, nbJoueurs / 2);
-            redTeam = new Team(TeamColor.RED, nbJoueurs / 2);
+        if (nbJoueursMax %2 == 0) {
+            blueTeam = new Team(TeamColor.BLUE, nbJoueursMax / 2);
+            redTeam = new Team(TeamColor.RED, nbJoueursMax / 2);
         } else {
-            blueTeam = new Team(TeamColor.BLUE, nbJoueurs / 2 + 1);
-            redTeam = new Team(TeamColor.RED, nbJoueurs / 2);
+            blueTeam = new Team(TeamColor.BLUE, nbJoueursMax / 2 + 1);
+            redTeam = new Team(TeamColor.RED, nbJoueursMax / 2);
         }
-
     }
 
-    public Game(String name, int nbJoueurs, String password){
-        this(name, nbJoueurs);
+    public Game(int id, String name, int nbJoueursMax, String password){
+        this(id, name, nbJoueursMax);
         this.password = password;
+
     }
 
     public void ajouterDrapeau(Flag flag){
@@ -44,6 +40,8 @@ public class Game {
             redTeam.ajouterDrapeau(flag);
     }
 
+    public int getId() { return id;}
+
     public String getName() {
         return name;
     }
@@ -52,13 +50,15 @@ public class Game {
         this.name = name;
     }
 
-    public int getNbJoueurs() {
-        return nbJoueurs;
+    public int getNbJoueursMax() {
+        return nbJoueursMax;
     }
 
     public String getPassword() {
         return password;
     }
+
+    public int getNbJoueurs() { return nbJoueurs; }
 
     public Team getBlueTeam() {
         return blueTeam;
@@ -67,4 +67,6 @@ public class Game {
     public Team getRedTeam() {
         return redTeam;
     }
+
+    public void setNbJoueurs(int nbJoueurs) { this.nbJoueurs = nbJoueurs; }
 }

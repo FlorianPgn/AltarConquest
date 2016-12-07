@@ -21,10 +21,10 @@ public class EcranRejoindre_Partie extends Activity
 {
 
     private ArrayList<Game> list;
+    private Timer timer;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rejoindre_partie);
 
@@ -32,7 +32,7 @@ public class EcranRejoindre_Partie extends Activity
         list = new ArrayList<>();
 
 
-        Timer timer =  new Timer();
+        timer =  new Timer();
 
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -49,14 +49,6 @@ public class EcranRejoindre_Partie extends Activity
             @Override
             public void onClick(View v) {
                 ouvrirGestion_Partie();
-            }
-        });
-
-        ImageButton bouton_rejoindre_partie = (ImageButton) findViewById(R.id.bouton_rejoindre_partie);
-        bouton_rejoindre_partie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ouvrirChoix_Equipe();
             }
         });
     }
@@ -80,8 +72,9 @@ public class EcranRejoindre_Partie extends Activity
         startActivity(intent);
     }
 
-    public void ouvrirChoix_Equipe() {
-        Intent intent = new Intent(this, EcranChoix_Equipe.class);
-        startActivity(intent);
+    @Override
+    protected void onStop() {
+        super.onStop();
+        timer.cancel();
     }
 }
