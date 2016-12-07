@@ -28,7 +28,6 @@ public class Game {
     public Game(String name, int nbJoueursMax, String password){
         this(name, nbJoueursMax);
         this.password = password;
-
     }
 
     public void ajouterDrapeau(Flag flag){

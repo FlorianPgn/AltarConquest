@@ -59,6 +59,9 @@
         <activity android:name=".View.EcranRejoindre_Partie"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".View.EcranLobbyPartie"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".View.EcranChoix_Equipe"
             android:screenOrientation="portrait"/>
 

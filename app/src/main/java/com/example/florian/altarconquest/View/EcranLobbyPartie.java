@@ -37,6 +37,7 @@ public class EcranLobbyPartie extends Activity {
             player = (String) savedInstanceState.getSerializable("STRING_PSEUDO");
         }
 
+
         ListView listView = (ListView) findViewById(R.id.liste_joueurs);
         ImageButton bouton_retour = (ImageButton) findViewById(R.id.bouton_retour);
 
@@ -67,5 +68,6 @@ public class EcranLobbyPartie extends Activity {
     {
         Intent intent = new Intent(this, EcranRejoindre_Partie.class);
         startActivity(intent);
+
     }
 }
