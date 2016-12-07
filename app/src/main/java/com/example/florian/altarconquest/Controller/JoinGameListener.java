@@ -8,6 +8,7 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.florian.altarconquest.ServerInteractions.ServerSendPlayer;
 import com.example.florian.altarconquest.View.EcranLobbyPartie;
 
 /**
@@ -17,8 +18,10 @@ import com.example.florian.altarconquest.View.EcranLobbyPartie;
 public class JoinGameListener implements View.OnClickListener {
 
     private Context context;
+    private int id;
 
-    public JoinGameListener(Context context){
+    public JoinGameListener(Context context, int id){
+        this.id = id;
         this.context = context;
     }
 
@@ -39,9 +42,13 @@ public class JoinGameListener implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String pseudo = input.getText().toString();
-                Intent intent = new Intent(context, EcranLobbyPartie.class);
-                intent.putExtra("STRING_PSEUDO", pseudo);
-                context.startActivity(intent);
+                if(pseudo != "") {
+                    ServerSendPlayer ssp = new ServerSendPlayer();
+                    ssp.execute(pseudo, String.valueOf(id));
+                    Intent intent = new Intent(context, EcranLobbyPartie.class);
+                    intent.putExtra("STRING_PSEUDO", pseudo);
+                    context.startActivity(intent);
+                }
             }
         });
         builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {

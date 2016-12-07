@@ -5,6 +5,7 @@ package com.example.florian.altarconquest.Model;
  */
 
 public class Game {
+    private int id;
     private String name;
     private String password;
     private Team blueTeam;
@@ -12,7 +13,9 @@ public class Game {
     private int nbJoueurs;
     private int nbJoueursMax;
 
-    public Game(String name, int nbJoueursMax){
+
+    public Game(int id, String name, int nbJoueursMax){
+        this.id = id;
         this.name = name;
         this.nbJoueursMax = nbJoueursMax;
 
@@ -25,9 +28,11 @@ public class Game {
         }
     }
 
-    public Game(String name, int nbJoueursMax, String password){
-        this(name, nbJoueursMax);
+
+    public Game(int id, String name, int nbJoueursMax, String password){
+        this(id, name, nbJoueursMax);
         this.password = password;
+
     }
 
     public void ajouterDrapeau(Flag flag){
@@ -36,6 +41,8 @@ public class Game {
         if(flag.getTeamColor() == TeamColor.RED)
             redTeam.ajouterDrapeau(flag);
     }
+
+    public int getId() { return id;}
 
     public String getName() {
         return name;

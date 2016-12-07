@@ -66,10 +66,10 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
         //Handle buttons and add onClickListeners
         Button joinBtn = (Button)view.findViewById(R.id.list_item_button);
 
-        joinBtn.setOnClickListener(new JoinGameListener(context));
+        joinBtn.setOnClickListener(new JoinGameListener(context, list.get(position).getId()));
 
 
-        /*joinBtn.setOnClickListener(new View.OnClickListener(){
+       /*joinBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //do something

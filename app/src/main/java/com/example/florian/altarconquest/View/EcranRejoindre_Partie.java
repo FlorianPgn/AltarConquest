@@ -21,10 +21,10 @@ public class EcranRejoindre_Partie extends Activity
 {
     public static Activity context;
     private ArrayList<Game> list;
+    private Timer timer;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rejoindre_partie);
 
@@ -32,7 +32,7 @@ public class EcranRejoindre_Partie extends Activity
         list = new ArrayList<>();
 
 
-        Timer timer =  new Timer();
+        timer =  new Timer();
 
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -71,4 +71,11 @@ public class EcranRejoindre_Partie extends Activity
         Intent intent = new Intent(this, EcranGestion_Partie.class);
         startActivity(intent);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        timer.cancel();
+    }
+
 }

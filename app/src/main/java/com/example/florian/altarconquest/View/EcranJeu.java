@@ -169,7 +169,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
         demanderPermissionGps();
 
-        Game game = new Game("Game de flo", 5);
+        Game game = new Game(5, "Game de flo", 5);
         launchServerRequest(game);
 
     }

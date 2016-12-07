@@ -68,8 +68,6 @@
         <activity android:name=".View.EcranScanQrCode"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".View.EcranLobbyPartie"
-            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
