@@ -68,27 +68,6 @@ public class MyListGameAdapter extends BaseAdapter implements ListAdapter {
 
         joinBtn.setOnClickListener(new JoinGameListener(context, list.get(position).getId()));
 
-
-       /*joinBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                //do something
-                if (list.get(position).getNbJoueurs() <= list.get(position).getNbJoueursMax())
-                {
-                    list.get(position).setNbJoueurs(list.get(position).getNbJoueurs() + 1);
-                    Intent intent = new Intent(context, EcranLobbyPartie.class);
-                    list.remove(position); //or some other task
-                    context.startActivity(intent);
-                    notifyDataSetChanged();
-                }
-                else
-                {
-                    Toast toast = Toast.makeText(context, "Cette partie est complète, veuillez en choisir une autre :)", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            }
-        });*/
-
         return view;
     }
 }

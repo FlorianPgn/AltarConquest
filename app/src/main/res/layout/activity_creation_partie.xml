@@ -41,47 +41,6 @@
         android:layout_marginBottom="62dp" />
 
     <TextView
-        android:text="NOMBRE DE \nJOUEURS MAX :"
-        android:id="@+id/nb_joueurs"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:layout_height="50dp"
-        android:layout_width="250dp"
-        android:layout_above="@+id/bouton_creer_la_partie"
-        android:layout_alignStart="@+id/input_mot_de_passe"
-        android:layout_marginBottom="32dp" />
-
-    <EditText
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/input_mot_de_passe"
-        android:hint="Votre mot de passe"
-        android:layout_above="@+id/nb_joueurs"
-        android:layout_alignStart="@+id/tv_mot_de_passe" />
-
-    <TextView
-        android:text="MOT DE PASSE (OPTIONNEL) :"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:id="@+id/tv_mot_de_passe"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        android:layout_above="@+id/input_mot_de_passe"
-        android:layout_alignStart="@+id/input_nom_de_partie" />
-
-    <EditText
-        android:layout_width="300dp"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/input_nom_de_partie"
-        android:layout_height="50dp"
-        android:hint="Votre nom de partie"
-        android:layout_above="@+id/tv_mot_de_passe"
-        android:layout_alignStart="@+id/tv_nom_partie" />
-
-    <TextView
         android:text="NOM DE LA PARTIE :"
         android:layout_width="300dp"
         android:id="@+id/tv_nom_partie"
@@ -91,6 +50,47 @@
         android:textColor="@android:color/black"
         android:layout_above="@+id/input_nom_de_partie"
         android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="300dp"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/input_nom_de_partie"
+        android:layout_height="50dp"
+        android:hint="Votre nom de partie"
+        android:layout_above="@+id/tv_mot_de_passe"
+        android:layout_alignStart="@+id/tv_nom_partie"/>
+
+    <TextView
+        android:text="MOT DE PASSE (OPTIONNEL) :"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:id="@+id/tv_mot_de_passe"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:layout_above="@+id/input_mot_de_passe"
+        android:layout_alignStart="@+id/input_nom_de_partie"/>
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/input_mot_de_passe"
+        android:hint="Votre mot de passe"
+        android:layout_above="@+id/nb_joueurs"
+        android:layout_alignStart="@+id/tv_mot_de_passe" />
+
+    <TextView
+        android:text="NOMBRE DE \nJOUEURS MAX :"
+        android:id="@+id/nb_joueurs"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:layout_height="50dp"
+        android:layout_width="250dp"
+        android:layout_above="@+id/bouton_creer_la_partie"
+        android:layout_alignStart="@+id/input_mot_de_passe"
+        android:layout_marginBottom="32dp" />
 
     <Spinner
         android:layout_width="100dp"

@@ -59,7 +59,7 @@
         <activity android:name=".View.EcranRejoindre_Partie"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".View.EcranLobbyPartie"
+        <activity android:name=".View.EcranLobby_Partie"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".View.EcranChoix_Equipe"
@@ -67,7 +67,6 @@
 
         <activity android:name=".View.EcranScanQrCode"
             android:screenOrientation="portrait"/>
-
     </application>
 
 </manifest>
