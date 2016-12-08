@@ -101,7 +101,6 @@ public class GameParser {
                 switch (tag) {
                     case "id":
                         id = Integer.parseInt(readTag(parser, "id"));
-
                         break;
                     case "name":
                         name = readTag(parser, "name");

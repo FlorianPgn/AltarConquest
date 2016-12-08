@@ -8,8 +8,9 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 
-import com.example.florian.altarconquest.ServerInteractions.ServerSendPlayer;
-import com.example.florian.altarconquest.View.EcranLobbyPartie;
+import com.example.florian.altarconquest.ServerInteractions.ServerSendPlayerProperties;
+import com.example.florian.altarconquest.View.EcranLobby_Partie;
+
 
 /**
  * Created by Florian on 05/12/2016.
@@ -43,9 +44,9 @@ public class JoinGameListener implements View.OnClickListener {
             public void onClick(DialogInterface dialog, int which) {
                 String pseudo = input.getText().toString();
                 if(pseudo != "") {
-                    ServerSendPlayer ssp = new ServerSendPlayer();
+                    ServerSendPlayerProperties ssp = new ServerSendPlayerProperties();
                     ssp.execute(pseudo, String.valueOf(id));
-                    Intent intent = new Intent(context, EcranLobbyPartie.class);
+                    Intent intent = new Intent(context, EcranLobby_Partie.class);
                     intent.putExtra("STRING_PSEUDO", pseudo);
                     context.startActivity(intent);
                 }

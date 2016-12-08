@@ -1,8 +1,6 @@
 package com.example.florian.altarconquest.View;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.florian.altarconquest.Controller.JoinGameListener;
 import com.example.florian.altarconquest.Model.Game;
@@ -22,12 +19,12 @@ import java.util.List;
  * Created by Florian on 04/12/2016.
  */
 
-public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
+public class MyListGameAdapter extends BaseAdapter implements ListAdapter {
 
     private List<Game> list;
     private Context context;
 
-    public MyCustomAdapter(List<Game> list, Context context) {
+    public MyListGameAdapter(List<Game> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -53,7 +50,7 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.list_item, null);
+            view = inflater.inflate(R.layout.list_game_item, null);
         }
 
         //Handle TextView and display string from your list
@@ -67,27 +64,6 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
         Button joinBtn = (Button)view.findViewById(R.id.list_item_button);
 
         joinBtn.setOnClickListener(new JoinGameListener(context, list.get(position).getId()));
-
-
-       /*joinBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                //do something
-                if (list.get(position).getNbJoueurs() <= list.get(position).getNbJoueursMax())
-                {
-                    list.get(position).setNbJoueurs(list.get(position).getNbJoueurs() + 1);
-                    Intent intent = new Intent(context, EcranLobbyPartie.class);
-                    list.remove(position); //or some other task
-                    context.startActivity(intent);
-                    notifyDataSetChanged();
-                }
-                else
-                {
-                    Toast toast = Toast.makeText(context, "Cette partie est complète, veuillez en choisir une autre :)", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            }
-        });*/
 
         return view;
     }
