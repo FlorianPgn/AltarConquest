@@ -10,21 +10,21 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.example.florian.altarconquest.Controller.JoinGameListener;
-import com.example.florian.altarconquest.Model.Game;
+import com.example.florian.altarconquest.Model.Player;
 import com.example.florian.altarconquest.R;
 
 import java.util.List;
 
 /**
- * Created by Florian on 04/12/2016.
+ * Created by Hugo on 08/12/2016.
  */
 
-public class MyListGameAdapter extends BaseAdapter implements ListAdapter {
+public class MyListPlayerAdapter extends BaseAdapter implements ListAdapter {
 
-    private List<Game> list;
+    private List<Player> list;
     private Context context;
 
-    public MyListGameAdapter(List<Game> list, Context context) {
+    public MyListPlayerAdapter(List<Player> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -50,20 +50,12 @@ public class MyListGameAdapter extends BaseAdapter implements ListAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.list_game_item, null);
+            view = inflater.inflate(R.layout.list_player_item, null);
         }
 
         //Handle TextView and display string from your list
         TextView listItemText = (TextView)view.findViewById(R.id.list_item_text);
-        listItemText.setText(list.get(position).getName());
-
-        TextView listNbJoueurs = (TextView)view.findViewById(R.id.list_nb_joueurs);
-        listNbJoueurs.setText("Nombre de joueurs : " + list.get(position).getNbJoueurs() + "/" + list.get(position).getNbJoueursMax());
-
-        //Handle buttons and add onClickListeners
-        Button joinBtn = (Button)view.findViewById(R.id.list_item_button);
-
-        joinBtn.setOnClickListener(new JoinGameListener(context, list.get(position).getId()));
+        listItemText.setText(list.get(position).getPseudo());
 
         return view;
     }

@@ -86,3 +86,4 @@ public class EcranLobby_Partie extends Activity {
         lView.setAdapter(adapter);
     }
 }
+
