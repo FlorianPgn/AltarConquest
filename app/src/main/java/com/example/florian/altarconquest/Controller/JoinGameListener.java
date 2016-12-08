@@ -11,6 +11,7 @@ import android.widget.EditText;
 import com.example.florian.altarconquest.ServerInteractions.ServerSendPlayerProperties;
 import com.example.florian.altarconquest.View.EcranLobby_Partie;
 
+
 /**
  * Created by Florian on 05/12/2016.
  */

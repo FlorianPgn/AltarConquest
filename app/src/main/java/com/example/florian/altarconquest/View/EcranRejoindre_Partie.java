@@ -20,6 +20,7 @@ import java.util.TimerTask;
 public class EcranRejoindre_Partie extends Activity
 {
     public static Activity context;
+
     private Timer timer;
 
     @Override
