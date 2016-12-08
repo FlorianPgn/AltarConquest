@@ -83,6 +83,7 @@ public class GameParser {
         private Game readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
             // le XML doit commencer par "<flag>"
             parser.require(XmlPullParser.START_TAG, null, "game");
+            int id = 0;
             String name = null;
             String password = null;
             int nbJoueursActuel = 0;
@@ -98,6 +99,9 @@ public class GameParser {
 
                 // si cette balise est un <nom>, extraire le nom
                 switch (tag) {
+                    case "id":
+                        id = Integer.parseInt(readTag(parser, "id"));
+                        break;
                     case "name":
                         name = readTag(parser, "name");
                         break;
@@ -116,7 +120,9 @@ public class GameParser {
                 }
             }
             // retourner une nouvelle Entry avec le nom et message extrait du
-            Game game = new Game(name, nbJoueursMax, password);
+
+            Game game = new Game(id, name, nbJoueursMax, password);
+
             game.setNbJoueurs(nbJoueursActuel);
             return game;
         }

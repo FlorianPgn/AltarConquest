@@ -20,19 +20,14 @@ import java.util.TimerTask;
 public class EcranRejoindre_Partie extends Activity
 {
     public static Activity context;
-    private ArrayList<Game> list;
+    private Timer timer;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rejoindre_partie);
 
-        //generate list
-        list = new ArrayList<>();
-
-
-        Timer timer =  new Timer();
+        timer =  new Timer();
 
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -60,7 +55,7 @@ public class EcranRejoindre_Partie extends Activity
     public void generateListContent(List<Game> list) {
         Log.i("generate","");
         //instantiate custom adapter
-        MyCustomAdapter adapter = new MyCustomAdapter(list, this);
+        MyListGameAdapter adapter = new MyListGameAdapter(list, this);
 
         //handle listview and assign adapter
         ListView lView = (ListView)findViewById(R.id.liste_parties);
@@ -71,4 +66,11 @@ public class EcranRejoindre_Partie extends Activity
         Intent intent = new Intent(this, EcranGestion_Partie.class);
         startActivity(intent);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        timer.cancel();
+    }
+
 }

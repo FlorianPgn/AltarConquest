@@ -10,6 +10,7 @@ public class Player {
     private String pseudo;
     private int score;
     private LatLng coordonnees;
+    private TeamColor teamColor;
 
     private boolean attackTokenAvailable = true;
     private boolean defenseTokenAvailable = true;
@@ -17,9 +18,10 @@ public class Player {
     private Flag stolenFlag;
 
 
-    public Player(String pseudo, LatLng coordonnees){
+    public Player(String pseudo, LatLng coordonnees, TeamColor teamColor){
         this.pseudo = pseudo;
         this.coordonnees = coordonnees;
+        this.teamColor = teamColor;
     }
 
 
@@ -33,7 +35,6 @@ public class Player {
     public LatLng getCoordonnees() {
         return coordonnees;
     }
-
 
     public boolean isAttackTokenAvailable() {
         return attackTokenAvailable;

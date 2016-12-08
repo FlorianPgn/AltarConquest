@@ -1,35 +1,37 @@
-package com.example.florian.altarconquest.ServerInteractions;
+package com.example.florian.altarconquest.ServerInteractions; /**
+ * Created by Hugo on 08/12/2016.
+ */
 
 import android.util.Log;
-
-import com.example.florian.altarconquest.Model.Game;
-import com.example.florian.altarconquest.ServerInteractions.Parsers.GameParser;
-import com.example.florian.altarconquest.View.EcranRejoindre_Partie;
+import com.example.florian.altarconquest.Model.Player;
+import com.example.florian.altarconquest.ServerInteractions.Parsers.PlayerParser;
+import com.example.florian.altarconquest.View.EcranLobby_Partie;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.List;
 
-/**
- * Created by Florian on 04/12/2016.
- */
-
-public class ServerReceptionGamesProperties extends android.os.AsyncTask<String,Void,String> {
+public class ServerReceptionPlayersProperties extends android.os.AsyncTask<String,Void,String> {
     private String s;
-    private EcranRejoindre_Partie ecranRejoindre_partie;
+    private EcranLobby_Partie ecranLobbyPartie;
 
 
-    public ServerReceptionGamesProperties(EcranRejoindre_Partie ecranRejoindre_partie){
-        this.ecranRejoindre_partie = ecranRejoindre_partie;
+    public ServerReceptionPlayersProperties(EcranLobby_Partie ecranLobbyPartie) {
+        this.ecranLobbyPartie = ecranLobbyPartie;
     }
 
     @Override
@@ -38,7 +40,8 @@ public class ServerReceptionGamesProperties extends android.os.AsyncTask<String,
         // creation de la connection HTTP
         URL url = null;
         try {
-            url = new URL("http://altarconquest.hol.es/scripts/get_games.php");
+            url = new URL("http://altarconquest.hol.es/scripts/get_players.php");
+
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -46,7 +49,38 @@ public class ServerReceptionGamesProperties extends android.os.AsyncTask<String,
         HttpURLConnection conn = null;
         try {
             conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
             conn.setDoOutput(true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String gameId = params[0];
+        String data = null;
+        try {
+            data = URLEncoder.encode("gameId", "UTF-8")+"="+URLEncoder.encode(gameId,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        // envoyer la requete HTTP par le bon stream et fermer la connection
+        OutputStream os = null;
+        try {
+            os = conn.getOutputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BufferedWriter bufferWriter = null;
+        try {
+            bufferWriter = new BufferedWriter((new OutputStreamWriter(os, "UTF-8")));
+            bufferWriter.write(data);
+            bufferWriter.flush();
+            bufferWriter.close();
+            os.close();
+            conn.connect();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,12 +109,12 @@ public class ServerReceptionGamesProperties extends android.os.AsyncTask<String,
         super.onPostExecute(s);
 
         try {
-            GameParser gameParser = new GameParser();
+            PlayerParser playerParser = new PlayerParser();
             InputStream stream = new ByteArrayInputStream(s.getBytes(Charset.defaultCharset()));
 
-            List<Game> resultats = gameParser.parse(stream);
+            List<Player> resultats = playerParser.parse(stream);
 
-            ecranRejoindre_partie.generateListContent(resultats);
+            ecranLobbyPartie.generateListContent(resultats);
 
 
         } catch (XmlPullParserException e) {
