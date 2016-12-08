@@ -22,12 +22,12 @@ import java.util.List;
  * Created by Florian on 04/12/2016.
  */
 
-public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
+public class MyListGameAdapter extends BaseAdapter implements ListAdapter {
 
     private List<Game> list;
     private Context context;
 
-    public MyCustomAdapter(List<Game> list, Context context) {
+    public MyListGameAdapter(List<Game> list, Context context) {
         this.list = list;
         this.context = context;
     }

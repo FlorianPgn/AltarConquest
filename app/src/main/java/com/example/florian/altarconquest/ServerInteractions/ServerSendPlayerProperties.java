@@ -21,11 +21,11 @@ import java.net.URLEncoder;
  * Created by Florian on 07/12/2016.
  */
 
-public class ServerSendPlayer extends AsyncTask<String, Void, String> {
+public class ServerSendPlayerProperties extends AsyncTask<String, Void, String> {
 
     public EcranCreation_Partie context;
 
-    public ServerSendPlayer(){
+    public ServerSendPlayerProperties(){
 
     }
     /**
