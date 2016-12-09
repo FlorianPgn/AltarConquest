@@ -37,6 +37,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
 
+    private String gameId;
+
     private final int REQUEST_CODE = 128;
 
     @Override
@@ -44,12 +46,21 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        boutonsDeployables = new ArrayList<Button>();
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                gameId = null;
+            } else {
+                gameId = extras.getString("STRING_GAMEID");
+            }
+        } else {
+            gameId = (String) savedInstanceState.getSerializable("STRING_GAMEID");
+        }
 
+        boutonsDeployables = new ArrayList<Button>();
 
         mapButton = (Button) findViewById(R.id.mapButton);
         boutonsDeployables.add(mapButton);

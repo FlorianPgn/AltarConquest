@@ -49,10 +49,6 @@ public class EcranRejoindre_Partie extends Activity
         });
     }
 
-    public void setActiveGame() {
-
-    }
-
     public void generateListContent(List<Game> list) {
         Log.i("generate","");
         //instantiate custom adapter

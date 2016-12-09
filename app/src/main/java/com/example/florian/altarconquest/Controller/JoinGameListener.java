@@ -8,6 +8,7 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.ServerInteractions.ServerSendPlayerProperties;
 import com.example.florian.altarconquest.View.EcranLobby_Partie;
 
@@ -18,10 +19,10 @@ import com.example.florian.altarconquest.View.EcranLobby_Partie;
 public class JoinGameListener implements View.OnClickListener {
 
     private Context context;
-    private int id;
+    private Game game;
 
-    public JoinGameListener(Context context, int id){
-        this.id = id;
+    public JoinGameListener(Context context, Game game){
+        this.game = game;
         this.context = context;
     }
 
@@ -44,10 +45,11 @@ public class JoinGameListener implements View.OnClickListener {
                 String pseudo = input.getText().toString();
                 if(pseudo != "") {
                     ServerSendPlayerProperties ssp = new ServerSendPlayerProperties();
-                    ssp.execute(pseudo, String.valueOf(id));
+                    ssp.execute(pseudo, String.valueOf(game.getId()));
                     Intent intent = new Intent(context, EcranLobby_Partie.class);
                     intent.putExtra("STRING_PSEUDO", pseudo);
-                    intent.putExtra("STRING_GAMEID", String.valueOf(id));
+                    intent.putExtra("STRING_GAMEID", String.valueOf(game.getId()));
+                    intent.putExtra("STRING_JMAX", String.valueOf(game.getNbJoueursMax()));
                     context.startActivity(intent);
                 }
             }
