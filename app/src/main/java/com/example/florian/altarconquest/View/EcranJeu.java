@@ -37,6 +37,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
 
+    private String pseudo;
     private String gameId;
 
     private final int REQUEST_CODE = 128;

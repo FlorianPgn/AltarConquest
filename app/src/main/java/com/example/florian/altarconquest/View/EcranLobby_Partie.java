@@ -24,7 +24,7 @@ import java.util.TimerTask;
 
 public class EcranLobby_Partie extends Activity {
 
-    private String player;
+    private String pseudo;
     private String gameId;
     private String nbJoueursMax;
     List<String> listeJoueurs;
@@ -42,16 +42,16 @@ public class EcranLobby_Partie extends Activity {
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
-                player = null;
+                pseudo = null;
                 gameId = null;
                 nbJoueursMax = null;
             } else {
-                player = extras.getString("STRING_PSEUDO");
+                pseudo = extras.getString("STRING_PSEUDO");
                 gameId = extras.getString("STRING_GAMEID");
                 nbJoueursMax = extras.getString("STRING_JMAX");
             }
         } else {
-            player = (String) savedInstanceState.getSerializable("STRING_PSEUDO");
+            pseudo = (String) savedInstanceState.getSerializable("STRING_PSEUDO");
             gameId = (String) savedInstanceState.getSerializable("STRING_GAMEID");
             nbJoueursMax = (String) savedInstanceState.getSerializable("STRING_JMAX");
         }
@@ -93,6 +93,7 @@ public class EcranLobby_Partie extends Activity {
 
         if(Integer.parseInt(nbJoueursMax) == list.size()) {
             Intent intent = new Intent(this, EcranJeu.class);
+            intent.putExtra("STRING_PSEUDO", pseudo);
             intent.putExtra("STRING_GAMEID", gameId);
             startActivity(intent);
         }
