@@ -21,38 +21,20 @@ import java.net.URLEncoder;
  * Created by Florian on 07/12/2016.
  */
 
-public class ServerSendPlayerProperties extends AsyncTask<String, Void, String> {
-
-    public EcranCreation_Partie context;
+public class ServerSendPlayerProperties extends ServerSendData {
 
     public ServerSendPlayerProperties(){
-
+        super();
     }
-    /**
-     * Fonction qui se connect au serveur pour recevoir
-     * tous les messages dans la BD
-     * @param params rien
-     */
+
+
     @Override
-    protected String doInBackground(String... params) {
+    public String getScriptUrl() {
+        return "http://altarconquest.hol.es/scripts/send_player_properties.php";
+    }
 
-        // creation de la connection HTTP
-        URL url = null;
-        try {
-            url = new URL("http://altarconquest.hol.es/scripts/send_player_properties.php");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        HttpURLConnection conn = null;
-        try {
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    @Override
+    public String encodeData() {
         // création des données POST qui doivent être passées en paramètre
         String pseudo = (String) params[0];
         String gameId = (String) params[1];
@@ -65,57 +47,6 @@ public class ServerSendPlayerProperties extends AsyncTask<String, Void, String> 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
-
-        // envoyer la requete HTTP par le bon stream et fermer la connection
-        OutputStream os = null;
-        try {
-            os = conn.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        BufferedWriter bufferWriter = null;
-        try {
-            bufferWriter = new BufferedWriter((new OutputStreamWriter(os, "UTF-8")));
-            bufferWriter.write(data);
-            bufferWriter.flush();
-            bufferWriter.close();
-            os.close();
-            conn.connect();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // attraper et concatener la réponse du serveur en un block
-        BufferedReader bufferReader = null;
-        try {
-            bufferReader = new BufferedReader((new InputStreamReader(conn.getInputStream())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-        try {
-            while((line = bufferReader.readLine()) != null){
-                sb.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sb.toString();
-    }
-
-
-    /**
-     * fonction qui se déclenche automatiquement quand le serveur a répondu,
-     * @param   s   la réponse du serveur
-     */
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        // affiche la réponse du serveur dans le LogCat
-        Log.i("retour serveur", "serveurComEnvoieMessage=" + s);
+        return data;
     }
 }
