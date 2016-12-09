@@ -17,8 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:hardwareAccelerated="false"
-        android:largeHeap="true">
+        android:largeHeap="true"
 
+        >
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -46,7 +47,9 @@
 
         <activity
             android:name=".View.EcranJeu"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"
+            android:largeHeap="true"/>
         <activity android:name=".View.EcranRegles"
             android:screenOrientation="portrait"/>
 

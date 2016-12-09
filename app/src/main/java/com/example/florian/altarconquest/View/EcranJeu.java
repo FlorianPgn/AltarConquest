@@ -3,15 +3,17 @@ package com.example.florian.altarconquest.View;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.florian.altarconquest.Model.EcomieEnergie;
 import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.R;
@@ -33,9 +35,11 @@ import java.util.ArrayList;
 public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
     public GoogleMap mMap;
+    public EcomieEnergie economieEnergie;
     private Button mapButton, flagButton, qrCodeButton, treeButton, unactiveTreeButton;
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
+    public ImageView imageEconomie;
 
     private final int REQUEST_CODE = 128;
 
@@ -43,10 +47,13 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
 
         boutonsDeployables = new ArrayList<Button>();
 
@@ -101,6 +108,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         });
 
 
+        economieEnergie = new EcomieEnergie(this);
+        economieEnergie.start();
 
     }
 
