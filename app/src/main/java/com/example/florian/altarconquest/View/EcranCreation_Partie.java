@@ -53,11 +53,10 @@ public class EcranCreation_Partie extends Activity implements AdapterView.OnItem
             {
                 Log.i("Création partie", "");
                 //Insertion game dans la bdd
-                ServerSendGameProperties ssgp = new ServerSendGameProperties(EcranCreation_Partie.this);
+                ServerSendGameProperties ssgp = new ServerSendGameProperties();
                 ssgp.execute(addQuote(nomPartie.getText().toString()), addQuote(passwordPartie.getText().toString()), addQuote(String.valueOf(spinner.getSelectedItem())));
 
-
-                ouvrirChoix_Equipe();
+                ouvrirRejoindrePartie();
             }}
         );
     }
@@ -71,9 +70,9 @@ public class EcranCreation_Partie extends Activity implements AdapterView.OnItem
         startActivity(intent);
     }
 
-    public void ouvrirChoix_Equipe() {
+    public void ouvrirRejoindrePartie() {
         Log.i("Choix equipe", "");
-        Intent intent = new Intent(this, EcranChoix_Equipe.class);
+        Intent intent = new Intent(this, EcranRejoindre_Partie.class);
         startActivity(intent);
     }
 

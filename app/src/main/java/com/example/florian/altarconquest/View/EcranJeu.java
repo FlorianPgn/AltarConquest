@@ -17,7 +17,7 @@ import com.example.florian.altarconquest.Model.EcomieEnergie;
 import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.R;
-import com.example.florian.altarconquest.ServerInteractions.ServeurReceptionFlags;
+import com.example.florian.altarconquest.ServerInteractions.ServerReceptionFlagsPositions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -41,6 +41,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     private ArrayList<Button> boutonsDeployables;
     public ImageView imageEconomie;
 
+    private String pseudo;
+    private String gameId;
+
     private final int REQUEST_CODE = 128;
 
     @Override
@@ -49,14 +52,24 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_game);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
 
         boutonsDeployables = new ArrayList<Button>();
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                gameId = null;
+            } else {
+                gameId = extras.getString("STRING_GAMEID");
+            }
+        } else {
+            gameId = (String) savedInstanceState.getSerializable("STRING_GAMEID");
+        }
 
+        boutonsDeployables = new ArrayList<Button>();
 
         mapButton = (Button) findViewById(R.id.mapButton);
         boutonsDeployables.add(mapButton);
@@ -178,14 +191,14 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
         demanderPermissionGps();
 
-        Game game = new Game("Game de flo", 5);
+        Game game = new Game(5, "Game de flo", 5);
         launchServerRequest(game);
 
     }
 
     public void launchServerRequest(Game game){
         Log.i("Début", "requete serveur flags");
-        ServeurReceptionFlags srf = new ServeurReceptionFlags(game, this);
+        ServerReceptionFlagsPositions srf = new ServerReceptionFlagsPositions(game, this);
         srf.execute();
     }
 

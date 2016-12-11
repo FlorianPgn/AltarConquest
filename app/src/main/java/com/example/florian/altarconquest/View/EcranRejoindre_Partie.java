@@ -19,20 +19,16 @@ import java.util.TimerTask;
 
 public class EcranRejoindre_Partie extends Activity
 {
+    public static Activity context;
 
-    private ArrayList<Game> list;
+    private Timer timer;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rejoindre_partie);
 
-        //generate list
-        list = new ArrayList<>();
-
-
-        Timer timer =  new Timer();
+        timer =  new Timer();
 
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -51,24 +47,12 @@ public class EcranRejoindre_Partie extends Activity
                 ouvrirGestion_Partie();
             }
         });
-
-        ImageButton bouton_rejoindre_partie = (ImageButton) findViewById(R.id.bouton_rejoindre_partie);
-        bouton_rejoindre_partie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ouvrirChoix_Equipe();
-            }
-        });
-    }
-
-    public void setActiveGame() {
-
     }
 
     public void generateListContent(List<Game> list) {
         Log.i("generate","");
         //instantiate custom adapter
-        MyCustomAdapter adapter = new MyCustomAdapter(list, this);
+        MyListGameAdapter adapter = new MyListGameAdapter(list, this);
 
         //handle listview and assign adapter
         ListView lView = (ListView)findViewById(R.id.liste_parties);
@@ -80,8 +64,10 @@ public class EcranRejoindre_Partie extends Activity
         startActivity(intent);
     }
 
-    public void ouvrirChoix_Equipe() {
-        Intent intent = new Intent(this, EcranChoix_Equipe.class);
-        startActivity(intent);
+    @Override
+    protected void onStop() {
+        super.onStop();
+        timer.cancel();
     }
+
 }

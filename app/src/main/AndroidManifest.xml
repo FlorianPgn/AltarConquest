@@ -44,8 +44,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
             android:name=".View.EcranJeu"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="false"
@@ -62,11 +60,14 @@
         <activity android:name=".View.EcranRejoindre_Partie"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".View.EcranLobby_Partie"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".View.EcranChoix_Equipe"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".View.EcranScanQrCode"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
