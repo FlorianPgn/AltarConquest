@@ -10,6 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/blue_flag_icon"/>
         <fragment
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -19,6 +24,44 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            android:textSize="50dp"
+            android:textStyle="bold"
+            android:textColor="#0000CD"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/red_flag_icon"/>
+
+        <TextView
+            android:id="@+id/compteurDrapeauRouge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:text="0"
+            android:textSize="50dp"
+            android:textStyle="bold"
+            android:textColor="#FF0000"/>
+
+        <ImageView
+            android:id="@+id/attackToken"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/jeton_noir_et_tour"
+            />
+
+        <ImageView
+            android:id="@+id/defencetoken"
+            android:background="@drawable/jeton_blanc_et_tour"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            />
+
             android:orientation="horizontal">
 
             <ImageView
