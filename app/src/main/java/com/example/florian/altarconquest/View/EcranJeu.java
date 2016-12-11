@@ -8,13 +8,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.R;
+import com.example.florian.altarconquest.ServerInteractions.ServeurReceptionFlags;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,6 +28,7 @@ import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
@@ -38,6 +42,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
 
+    private String pseudo;
+    private String gameId;
+
     private final int REQUEST_CODE = 128;
 
     @Override
@@ -45,9 +52,19 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                gameId = null;
+            } else {
+                gameId = extras.getString("STRING_GAMEID");
+            }
+        } else {
+            gameId = (String) savedInstanceState.getSerializable("STRING_GAMEID");
+        }
 
         boutonsDeployables = new ArrayList<Button>();
 
@@ -173,9 +190,30 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
         demanderPermissionGps();
 
-        Game game = new Game("Game de flo", 5, this);
-        game.launchServerRequest();
+        Game game = new Game(5, "Game de flo", 5);
+        launchServerRequest(game);
 
+    }
+
+    public void launchServerRequest(Game game){
+        Log.i("Début", "requete serveur flags");
+        ServeurReceptionFlags srf = new ServeurReceptionFlags(game, this);
+        srf.execute();
+    }
+
+    public void initialisationObjetsLocalises(Game game){
+        Log.i("Init", "Initialisation flags");
+
+        for (Flag flag : game.getBlueTeam().getListofFlags()) {
+            mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
+        }
+
+        for (Flag flag : game.getRedTeam().getListofFlags()) {
+            mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
+        }
+
+        Log.i("Liste des drapeaux b", ""+game.getBlueTeam().getListofFlags());
+        Log.i("Liste des drapeaux r", ""+game.getRedTeam().getListofFlags());
     }
 
     public void demanderPermissionGps(){
