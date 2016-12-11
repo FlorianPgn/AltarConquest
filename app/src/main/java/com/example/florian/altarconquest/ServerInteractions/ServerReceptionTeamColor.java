@@ -41,7 +41,7 @@ public class ServerReceptionTeamColor extends android.os.AsyncTask<String,Void,S
         // creation de la connection HTTP
         URL url = null;
         try {
-            url = new URL("http://altarconquest.hol.es/scripts/get_players.php");
+            url = new URL("http://altarconquest.hol.es/scripts/get_players_color.php");
 
 
         } catch (MalformedURLException e) {
@@ -60,7 +60,7 @@ public class ServerReceptionTeamColor extends android.os.AsyncTask<String,Void,S
         String gameId = params[0];
         String data = null;
         try {
-            data = URLEncoder.encode("gameId", "UTF-8")+"="+URLEncoder.encode(gameId,"UTF-8");
+            data = URLEncoder.encode("teamColor", "UTF-8")+"="+URLEncoder.encode(gameId,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

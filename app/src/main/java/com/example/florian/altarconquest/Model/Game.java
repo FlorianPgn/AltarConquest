@@ -1,10 +1,13 @@
 package com.example.florian.altarconquest.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Florian on 02/11/2016.
  */
 
-public class Game {
+public class Game implements Parcelable {
     private int id;
     private String name;
     private String password;
@@ -33,6 +36,9 @@ public class Game {
         this(id, name, nbJoueursMax);
         this.password = password;
 
+    }
+
+    public Game(Parcel gameParcel) {
     }
 
     public void ajouterDrapeau(Flag flag){
@@ -71,4 +77,17 @@ public class Game {
     }
 
     public void setNbJoueurs(int nbJoueurs) { this.nbJoueurs = nbJoueurs; }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(password);
+        dest.writeString(password);
+    }
 }

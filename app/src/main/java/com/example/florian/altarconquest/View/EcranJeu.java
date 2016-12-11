@@ -3,19 +3,22 @@ package com.example.florian.altarconquest.View;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.florian.altarconquest.Model.EcomieEnergie;
 import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.R;
-import com.example.florian.altarconquest.ServerInteractions.ServeurReceptionFlags;
+import com.example.florian.altarconquest.ServerInteractions.ServerReceptionFlagsPositions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,15 +30,24 @@ import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.ArrayList;
 
 public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
     public GoogleMap mMap;
+    public EcomieEnergie economieEnergie;
     private Button mapButton, flagButton, qrCodeButton, treeButton, unactiveTreeButton;
+    private static ImageView attackToken;
+    private static ImageView defenceToken;
+    private Boolean attackTokenAvailable = true, defenseTokenAvailable = true;
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
+    public ImageView imageEconomie;
+
+    private String pseudo;
+    private String gameId;
 
     private final int REQUEST_CODE = 128;
 
@@ -43,12 +55,29 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
+
         boutonsDeployables = new ArrayList<Button>();
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                gameId = null;
+            } else {
+                gameId = extras.getString("STRING_GAMEID");
+            }
+        } else {
+            gameId = (String) savedInstanceState.getSerializable("STRING_GAMEID");
+        }
+
+        boutonsDeployables = new ArrayList<Button>();
+
+        attackToken = (ImageView) findViewById(R.id.attackToken);
+        defenceToken = (ImageView) findViewById(R.id.defencetoken);
 
 
         mapButton = (Button) findViewById(R.id.mapButton);
@@ -101,6 +130,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         });
 
 
+        economieEnergie = new EcomieEnergie(this);
+        economieEnergie.start();
 
     }
 
@@ -176,7 +207,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
     public void launchServerRequest(Game game){
         Log.i("Début", "requete serveur flags");
-        ServeurReceptionFlags srf = new ServeurReceptionFlags(game, this);
+        ServerReceptionFlagsPositions srf = new ServerReceptionFlagsPositions(game, this);
         srf.execute();
     }
 
@@ -242,4 +273,23 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     }
 
 
+    public static void setDefencetoken(boolean defenceTokenAvailable){
+        if(defenceTokenAvailable){
+            defenceToken.setImageResource(R.drawable.jeton_blanc);
+        }
+        else{
+            defenceToken.setImageResource(R.drawable.jeton_blanc_et_tour);
+        }
+
+    }
+
+    public static void setAttackToken(boolean attackTokenAvailable){
+        if(attackTokenAvailable){
+            attackToken.setImageResource(R.drawable.jeton_noir);
+        }
+        else{
+            attackToken.setImageResource(R.drawable.jeton_noir_et_tour);
+        }
+
+    }
 }

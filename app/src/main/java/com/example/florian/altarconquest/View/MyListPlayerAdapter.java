@@ -21,7 +21,7 @@ import java.util.List;
 
 public class MyListPlayerAdapter extends BaseAdapter implements ListAdapter {
 
-    private List<Player> list;
+    public List<Player> list;
     private Context context;
 
     public MyListPlayerAdapter(List<Player> list, Context context) {

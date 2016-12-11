@@ -62,7 +62,6 @@ public class MyListGameAdapter extends BaseAdapter implements ListAdapter {
 
         //Handle buttons and add onClickListeners
         Button joinBtn = (Button)view.findViewById(R.id.list_item_button);
-
         joinBtn.setOnClickListener(new JoinGameListener(context, list.get(position).getId()));
 
         return view;

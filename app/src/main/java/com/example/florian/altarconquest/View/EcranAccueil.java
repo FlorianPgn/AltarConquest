@@ -17,33 +17,28 @@ public class EcranAccueil extends Activity {
 
         ImageButton bouton_jouer = (ImageButton) findViewById(R.id.bouton_jouer);
         ImageButton bouton_regles = (ImageButton) findViewById(R.id.bouton_regles);
-        bouton_jouer.setOnClickListener(new View.OnClickListener()
-        {
+        bouton_jouer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 ouvrirCreationPartie();
             }
         });
 
-        bouton_regles.setOnClickListener(new View.OnClickListener()
-        {
+        bouton_regles.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 ouvrirRegles();
             }
         });
+
     }
 
-    public void ouvrirCreationPartie()
-    {
+    public void ouvrirCreationPartie() {
         Intent intent = new Intent(this, EcranGestion_Partie.class);
         startActivity(intent);
     }
 
-    public void ouvrirRegles()
-    {
+    public void ouvrirRegles() {
         Intent intent = new Intent(this, EcranRegles.class);
         startActivity(intent);
     }
