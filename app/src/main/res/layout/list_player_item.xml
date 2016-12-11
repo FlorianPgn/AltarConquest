@@ -13,18 +13,15 @@
         android:layout_width="50dp" />
 
     <TextView
-        android:text="Chargement de la partie..."
+        android:text="Chargement du joueur..."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/list_item_text"
-        android:layout_toEndOf="@id/list_item_pic" />
-
-    <Button
-        android:text="Rejoindre"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:id="@+id/list_item_button"
+        android:textSize="24sp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignBottom="@+id/list_item_pic"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/list_item_pic"
+        android:translationY="10dp" />
 
 </RelativeLayout>

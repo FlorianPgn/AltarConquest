@@ -53,6 +53,8 @@
         <activity
             android:name=".View.EcranGestion_Partie"
             android:screenOrientation="portrait" />
+        <activity android:name=".View.EcranLobby_Partie"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".View.EcranCreation_Partie"
             android:screenOrientation="portrait" />
@@ -65,7 +67,7 @@
         <activity
             android:name=".View.EcranScanQrCode"
             android:screenOrientation="portrait" />
-        <activity android:name=".View.EcranQuestions"></activity>
+        <activity android:name=".View.EcranQuestions"/>
     </application>
 
 </manifest>
