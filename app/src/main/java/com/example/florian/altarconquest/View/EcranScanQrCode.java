@@ -3,6 +3,7 @@ package com.example.florian.altarconquest.View;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,16 +22,8 @@ public class EcranScanQrCode extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ecran_scan_qr_code);
 
-        Button mybutton = (Button) findViewById(R.id.scan_button);
-        mybutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.getId() == R.id.scan_button) {
-                    // on lance le scanner au clic sur notre bouton
-                    new IntentIntegrator(EcranScanQrCode.this).initiateScan();
-                }
-            }
-        });
+        new IntentIntegrator(EcranScanQrCode.this).initiateScan();
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -48,6 +41,8 @@ public class EcranScanQrCode extends Activity {
             TextView scan_format = (TextView) findViewById(R.id.scan_format);
             TextView scan_content = (TextView) findViewById(R.id.scan_content);
 
+            gestionQRcodes(scanContent);
+
             // nous affichons le résultat dans nos TextView
 
             scan_format.setText("FORMAT: " + scanFormat);
@@ -57,6 +52,48 @@ public class EcranScanQrCode extends Activity {
                     "Aucune donnée reçu!", Toast.LENGTH_SHORT);
             toast.show();
         }
+
+    }
+
+    private void gestionQRcodes(String scanContent) {
+        Intent intent = null;
+
+        switch (scanContent) {
+            case "1":
+                intent = new Intent(this, EcranQuestions.class);
+                intent.putExtra("Questions", 1);
+                Log.e("Ce qu'on a récupérer",""+scanContent);
+                break;
+            case "2":
+                intent = new Intent(this, EcranQuestions.class);
+                intent.putExtra("Questions", 4);
+                Log.e("Ce qu'on a récupérer",""+scanContent);
+                break;
+            case "3":
+                intent = new Intent(this, EcranQuestions.class);
+                intent.putExtra("Questions", 7);
+                Log.e("Ce qu'on a récupérer",""+scanContent);
+                break;
+            case "4":
+                intent = new Intent(this, EcranQuestions.class);
+                intent.putExtra("Questions", 10);
+                Log.e("Ce qu'on a récupérer",""+scanContent);
+                break;
+            case "5":
+                intent = new Intent(this, EcranQuestions.class);
+                intent.putExtra("Questions", 13);
+                Log.e("Ce qu'on a récupérer",""+scanContent);
+                break;
+            case "6":
+                intent = new Intent(this, EcranQuestions.class);
+                intent.putExtra("Questions", 16);
+                Log.e("Ce qu'on a récupérer",""+scanContent);
+                break;
+        }
+
+        startActivity(intent);
+        finish();
+
 
     }
 }

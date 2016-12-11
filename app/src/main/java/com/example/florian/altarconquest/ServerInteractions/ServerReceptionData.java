@@ -1,12 +1,11 @@
 package com.example.florian.altarconquest.ServerInteractions;
 
+import android.content.Context;
 import android.util.Log;
 
-import com.example.florian.altarconquest.Model.Flag;
-import com.example.florian.altarconquest.ServerInteractions.Parsers.FlagParser;
 import com.example.florian.altarconquest.Model.Game;
-import com.example.florian.altarconquest.View.EcranJeu;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.example.florian.altarconquest.ServerInteractions.Parsers.GameParser;
+import com.example.florian.altarconquest.View.EcranRejoindre_Partie;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -22,17 +21,16 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 /**
- * Created by Florian on 08/11/2016.
+ * Created by Florian on 09/12/2016.
  */
 
-public class ServeurReceptionFlags extends android.os.AsyncTask<String,Void,String> {
-    public Game game;
+public abstract class ServerReceptionData extends android.os.AsyncTask<String,Void,String> {
     private String s;
-    private EcranJeu ecranJeu;
+    private Context context;
 
-    public ServeurReceptionFlags(Game game, EcranJeu ecranJeu){
-        this.game = game;
-        this.ecranJeu = ecranJeu;
+
+    public ServerReceptionData(Context context){
+        this.context = context;
     }
 
     @Override
@@ -41,7 +39,7 @@ public class ServeurReceptionFlags extends android.os.AsyncTask<String,Void,Stri
         // creation de la connection HTTP
         URL url = null;
         try {
-            url = new URL("http://altarconquest.hol.es/scripts/getflags.php");
+            url = new URL(getScriptUrl());
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -53,6 +51,8 @@ public class ServeurReceptionFlags extends android.os.AsyncTask<String,Void,Stri
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        addPostParameters(conn, params);
 
         // attraper et concatener la réponse du serveur en un block
         BufferedReader bufferReader = null;
@@ -77,30 +77,17 @@ public class ServeurReceptionFlags extends android.os.AsyncTask<String,Void,Stri
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-        try {
-            FlagParser flagParser = new FlagParser();
-            InputStream stream = new ByteArrayInputStream(s.getBytes(Charset.defaultCharset()));
+        doWhenTaskIsDone(s);
 
-            List<Flag> resultats = flagParser.parse(stream);
-
-            for (Flag flag: resultats) {
-                game.ajouterDrapeau(flag);
-            }
-
-            ecranJeu.initialisationObjetsLocalises(game);
-
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         // affiche la réponse du serveur dans le LogCat
-        Log.i("Fin", "requete serveur flags");
-        Log.i("retour serveur", "serveurComRecevoirMessage=" + s);
+        Log.i("Fin", "requete serveur");
+        Log.i("Retour serveur", "Message serveur reçu = " + s);
 
     }
 
-    public String getS(){
-        return s;
-    }
+    public abstract String getScriptUrl();
+
+    public abstract void addPostParameters(HttpURLConnection conn, String... params);
+
+    public abstract void doWhenTaskIsDone(String s);
 }

@@ -8,17 +8,18 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@drawable/altar_conquest"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:hardwareAccelerated="false"
         android:largeHeap="true">
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -27,8 +28,8 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/. 
         -->
-        <uses-library
-            android:name="com.google.android.maps" />
+        <uses-library android:name="com.google.android.maps" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -43,10 +44,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".View.EcranJeu"
-            android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".View.EcranJeu"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"
+            android:largeHeap="true"/>
         <activity android:name=".View.EcranRegles"
             android:screenOrientation="portrait"/>
 
@@ -62,11 +64,17 @@
         <activity android:name=".View.EcranLobby_Partie"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".View.EcranJeu"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".View.EcranChoix_Equipe"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".View.EcranScanQrCode"
             android:screenOrientation="portrait"/>
+      
+        <activity android:name=".View.EcranQuestions"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

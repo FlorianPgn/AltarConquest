@@ -1,5 +1,6 @@
 package com.example.florian.altarconquest.ServerInteractions;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -18,16 +19,15 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 /**
- * Created by Florian on 07/12/2016.
+ * Created by Florian on 09/12/2016.
  */
 
-public class ServerSendPlayer extends AsyncTask<String, Void, String> {
+public abstract class ServerSendData extends AsyncTask<String, Void, String> {
 
-    public EcranCreation_Partie context;
+    private Context context;
 
-    public ServerSendPlayer(){
+    protected String[] params;
 
-    }
     /**
      * Fonction qui se connect au serveur pour recevoir
      * tous les messages dans la BD
@@ -36,10 +36,12 @@ public class ServerSendPlayer extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
 
+        this.params = params;
+
         // creation de la connection HTTP
         URL url = null;
         try {
-            url = new URL("http://altarconquest.hol.es/scripts/send_player_properties.php");
+            url = new URL(getScriptUrl());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -53,18 +55,8 @@ public class ServerSendPlayer extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }
 
-        // création des données POST qui doivent être passées en paramètre
-        String pseudo = (String) params[0];
-        String gameId = (String) params[1];
 
-        // creation de data sous la forme name=partieDeFlo&password=secret&nbJoueur=9
-        String data = null;
-        try {
-            data = URLEncoder.encode("pseudo", "UTF-8")+"="+URLEncoder.encode(pseudo,"UTF-8");
-            data += "&"+URLEncoder.encode("gameId", "UTF-8")+"="+URLEncoder.encode(gameId,"UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        String data = encodeData();
 
 
         // envoyer la requete HTTP par le bon stream et fermer la connection
@@ -116,6 +108,10 @@ public class ServerSendPlayer extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         // affiche la réponse du serveur dans le LogCat
-        Log.i("retour serveur", "serveurComEnvoieMessage=" + s);
+        Log.i("Retour serveur", "Message retourné = " + s);
     }
+
+    public abstract String getScriptUrl();
+
+    public abstract String encodeData();
 }

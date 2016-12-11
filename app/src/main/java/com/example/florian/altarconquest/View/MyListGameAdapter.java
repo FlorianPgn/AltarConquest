@@ -1,6 +1,7 @@
 package com.example.florian.altarconquest.View;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,10 @@ public class MyListGameAdapter extends BaseAdapter implements ListAdapter {
 
         //Handle buttons and add onClickListeners
         Button joinBtn = (Button)view.findViewById(R.id.list_item_button);
-        joinBtn.setOnClickListener(new JoinGameListener(context, list.get(position).getId()));
+
+        if(!(list.get(position).getNbJoueurs() >= list.get(position).getNbJoueursMax())) {
+            joinBtn.setOnClickListener(new JoinGameListener(context, list.get(position)));
+        }
 
         return view;
     }
