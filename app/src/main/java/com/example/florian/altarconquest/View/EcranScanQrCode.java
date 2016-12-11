@@ -48,6 +48,8 @@ public class EcranScanQrCode extends Activity {
             TextView scan_format = (TextView) findViewById(R.id.scan_format);
             TextView scan_content = (TextView) findViewById(R.id.scan_content);
 
+            gestionQRcodes(scanContent);
+
             // nous affichons le résultat dans nos TextView
 
             scan_format.setText("FORMAT: " + scanFormat);
@@ -57,6 +59,36 @@ public class EcranScanQrCode extends Activity {
                     "Aucune donnée reçu!", Toast.LENGTH_SHORT);
             toast.show();
         }
+
+    }
+
+    private void gestionQRcodes(String scanContent) {
+        Intent intent = null;
+
+        switch (scanContent) {
+            case "1":
+                intent = new Intent(this, EcranQuestions.class);
+                intent.putExtra("Questions", 1);
+            case "2":
+                intent = new Intent(this, EcranQuestions.class);
+                intent.putExtra("Questions", 4);
+            case "3":
+                intent = new Intent(this, EcranQuestions.class);
+                intent.putExtra("Questions", 7);
+            case "4":
+                intent = new Intent(this, EcranQuestions.class);
+                intent.putExtra("Questions", 10);
+            case "5":
+                intent = new Intent(this, EcranQuestions.class);
+                intent.putExtra("Questions", 13);
+            case "6":
+                intent = new Intent(this, EcranQuestions.class);
+                intent.putExtra("Questions", 16);
+        }
+
+        startActivity(intent);
+        finish();
+
 
     }
 }
