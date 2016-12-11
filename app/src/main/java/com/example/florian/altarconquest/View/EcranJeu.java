@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.ArrayList;
 
