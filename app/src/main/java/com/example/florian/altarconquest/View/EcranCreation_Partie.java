@@ -55,7 +55,7 @@ public class EcranCreation_Partie extends Activity implements AdapterView.OnItem
                 //Insertion game dans la bdd
                 ServerSendGameProperties ssgp = new ServerSendGameProperties();
                 ssgp.execute(addQuote(nomPartie.getText().toString()), addQuote(passwordPartie.getText().toString()), addQuote(String.valueOf(spinner.getSelectedItem())));
-                
+
                 ouvrirRejoindrePartie();
             }}
         );

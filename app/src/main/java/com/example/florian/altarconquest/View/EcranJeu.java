@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.R;
-import com.example.florian.altarconquest.ServerInteractions.ServeurReceptionFlags;
+import com.example.florian.altarconquest.ServerInteractions.ServerReceptionFlagsPositions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -197,7 +197,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
     public void launchServerRequest(Game game){
         Log.i("Début", "requete serveur flags");
-        ServeurReceptionFlags srf = new ServeurReceptionFlags(game, this);
+        ServerReceptionFlagsPositions srf = new ServerReceptionFlagsPositions(game, this);
         srf.execute();
     }
 

@@ -2,60 +2,56 @@ package com.example.florian.altarconquest.ServerInteractions; /**
  * Created by Hugo on 08/12/2016.
  */
 
-import android.util.Log;
 import com.example.florian.altarconquest.Model.Player;
 import com.example.florian.altarconquest.ServerInteractions.Parsers.PlayerParser;
 import com.example.florian.altarconquest.View.EcranLobby_Partie;
-
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.List;
 
-public class ServerReceptionPlayersProperties extends android.os.AsyncTask<String,Void,String> {
-    private String s;
-    private EcranLobby_Partie ecranLobbyPartie;
+public class ServerReceptionPlayersProperties extends ServerReceptionData {
+    private EcranLobby_Partie context;
 
-
-    public ServerReceptionPlayersProperties(EcranLobby_Partie ecranLobbyPartie) {
-        this.ecranLobbyPartie = ecranLobbyPartie;
+    public ServerReceptionPlayersProperties(EcranLobby_Partie context) {
+        super(context);
+        this.context = context;
     }
 
     @Override
-    protected String doInBackground(String... params) {
-        Log.i("Serveur", "reception données");
-        // creation de la connection HTTP
-        URL url = null;
+    public String getScriptUrl() {
+        return "http://altarconquest.hol.es/scripts/get_players.php";
+    }
+
+    @Override
+    public void doWhenTaskIsDone(String s) {
         try {
-            url = new URL("http://altarconquest.hol.es/scripts/get_players.php");
+            PlayerParser playerParser = new PlayerParser();
+            InputStream stream = new ByteArrayInputStream(s.getBytes(Charset.defaultCharset()));
+
+            List<Player> resultats = playerParser.parse(stream);
+
+            context.generateListContent(resultats);
 
 
-        } catch (MalformedURLException e) {
+        } catch (XmlPullParserException e) {
             e.printStackTrace();
-        }
-        HttpURLConnection conn = null;
-        try {
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public void addPostParameters(HttpURLConnection conn, String... params) {
         String gameId = params[0];
         String data = null;
         try {
@@ -85,46 +81,7 @@ public class ServerReceptionPlayersProperties extends android.os.AsyncTask<Strin
             e.printStackTrace();
         }
 
-        // attraper et concatener la réponse du serveur en un block
-        BufferedReader bufferReader = null;
-        try {
-            bufferReader = new BufferedReader((new InputStreamReader(conn.getInputStream())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-        try {
-            while((line = bufferReader.readLine()) != null){
-                sb.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sb.toString();
     }
 
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
 
-        try {
-            PlayerParser playerParser = new PlayerParser();
-            InputStream stream = new ByteArrayInputStream(s.getBytes(Charset.defaultCharset()));
-
-            List<Player> resultats = playerParser.parse(stream);
-
-            ecranLobbyPartie.generateListContent(resultats);
-
-
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // affiche la réponse du serveur dans le LogCat
-        Log.i("Fin", "requete serveur flags");
-        Log.i("retour serveur", "serveurComRecevoirMessage=" + s);
-
-    }
 }
