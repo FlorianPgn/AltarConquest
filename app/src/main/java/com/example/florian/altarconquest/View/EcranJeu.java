@@ -4,9 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.florian.altarconquest.Model.EcomieEnergie;
 import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.R;
@@ -36,12 +37,14 @@ import java.util.ArrayList;
 public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
     public GoogleMap mMap;
+    public EcomieEnergie economieEnergie;
     private Button mapButton, flagButton, qrCodeButton, treeButton, unactiveTreeButton;
     private static ImageView attackToken;
     private static ImageView defenceToken;
     private Boolean attackTokenAvailable = true, defenseTokenAvailable = true;
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
+    public ImageView imageEconomie;
 
     private String pseudo;
     private String gameId;
@@ -52,10 +55,14 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
+
+        boutonsDeployables = new ArrayList<Button>();
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -123,6 +130,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         });
 
 
+        economieEnergie = new EcomieEnergie(this);
+        economieEnergie.start();
 
     }
 
