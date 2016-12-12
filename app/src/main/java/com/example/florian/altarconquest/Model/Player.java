@@ -33,6 +33,8 @@ public class Player {
         return pseudo;
     }
 
+    public TeamColor getColor() { return teamColor; }
+
     public LatLng getCoordonnees() {
         return coordonnees;
     }
@@ -71,6 +73,7 @@ public class Player {
         this.defenseTokenAvailable = defenceTokenAvailable;
         EcranJeu.setDefencetoken(defenceTokenAvailable); // Pour l'affichage des jetons
     }
+
 
 }
 
