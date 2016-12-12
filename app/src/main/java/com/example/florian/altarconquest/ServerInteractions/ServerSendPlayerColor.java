@@ -13,7 +13,6 @@ public class ServerSendPlayerColor extends ServerSendData {
         super();
     }
 
-
     @Override
     public String getScriptUrl() {
         return "http://altarconquest.hol.es/scripts/send_player_color.php";

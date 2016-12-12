@@ -27,7 +27,6 @@ import java.util.List;
 
 public class ServerReceptionFlagsPositions extends ServerReceptionData {
     public Game game;
-    private String s;
     private EcranJeu ecranJeu;
 
     public ServerReceptionFlagsPositions(Game game, EcranJeu ecranJeu){
