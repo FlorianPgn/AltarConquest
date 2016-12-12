@@ -12,10 +12,8 @@
 
     <application
         android:allowBackup="true"
-        android:hardwareAccelerated="false"
         android:icon="@drawable/altar_conquest"
         android:label="@string/app_name"
-        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:hardwareAccelerated="false"
@@ -44,11 +42,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".View.EcranJeu"
-            android:screenOrientation="portrait"
-            android:hardwareAccelerated="false"
-            android:largeHeap="true"/>
+
         <activity android:name=".View.EcranRegles"
             android:screenOrientation="portrait"/>
 
