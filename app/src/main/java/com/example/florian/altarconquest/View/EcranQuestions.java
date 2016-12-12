@@ -27,18 +27,16 @@ public class EcranQuestions extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ecran_questions);
 
-        intitule = (TextView) findViewById(R.id.intituleQuestion);
+        intitule = (TextView) findViewById(R.id.tv_question);
 
-        reponse1 = (Button) findViewById(R.id.reponseA);
-        reponse2 = (Button) findViewById(R.id.reponseB);
-        reponse3 = (Button) findViewById(R.id.reponseC);
-        reponse4 = (Button) findViewById(R.id.reponseD);
+        reponse1 = (Button) findViewById(R.id.boutonA);
+        reponse2 = (Button) findViewById(R.id.boutonB);
+        reponse3 = (Button) findViewById(R.id.boutonC);
+        reponse4 = (Button) findViewById(R.id.boutonD);
 
         Intent intent = getIntent();
         idQuestion = intent.getIntExtra("Questions", 0);
         nbReponses = intent.getIntExtra("NbReponses", 0);
-        Log.i("zr", "onCreate: " + nbReponses);
-        Log.i("zr", "onCreate: " + idQuestion);
 
         question = new Question(idQuestion);
 
