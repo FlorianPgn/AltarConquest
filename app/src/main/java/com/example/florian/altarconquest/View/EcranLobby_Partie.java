@@ -12,6 +12,7 @@ import com.example.florian.altarconquest.Controller.ChoixEquipeListener;
 import com.example.florian.altarconquest.Model.Player;
 import com.example.florian.altarconquest.R;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionPlayersProperties;
+import com.example.florian.altarconquest.ServerInteractions.ServerSendDeletedPlayer;
 
 import java.util.List;
 import java.util.Timer;
@@ -70,37 +71,33 @@ public class EcranLobby_Partie extends Activity {
             }
         };
 
-        timer.schedule(timerTask, 0, 1000 * 4);
+        timer.schedule(timerTask, 0, 500);
 
-        bouton_retour.setOnClickListener(new View.OnClickListener()
-        {
+        bouton_retour.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 ouvrirRejoindrePartie();
             }
         });
 
-        bouton_red.setOnClickListener(new View.OnClickListener()
-        {
+        bouton_red.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 new ChoixEquipeListener(pseudo, "rouge");
             }
         });
 
-        bouton_blue.setOnClickListener(new View.OnClickListener()
-        {
+        bouton_blue.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 new ChoixEquipeListener(pseudo, "bleue");
             }
         });
     }
 
     public void ouvrirRejoindrePartie() {
+        ServerSendDeletedPlayer ssdp = new ServerSendDeletedPlayer();
+        ssdp.execute(pseudo);
         Intent intent = new Intent(this, EcranRejoindre_Partie.class);
         startActivity(intent);
 
