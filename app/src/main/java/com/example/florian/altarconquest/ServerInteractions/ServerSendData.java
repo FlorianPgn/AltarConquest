@@ -55,9 +55,7 @@ public abstract class ServerSendData extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }
 
-
         String data = encodeData();
-
 
         // envoyer la requete HTTP par le bon stream et fermer la connection
         OutputStream os = null;

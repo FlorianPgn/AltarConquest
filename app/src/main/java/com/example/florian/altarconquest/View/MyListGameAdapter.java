@@ -64,8 +64,6 @@ public class MyListGameAdapter extends BaseAdapter implements ListAdapter {
         //Handle buttons and add onClickListeners
         Button joinBtn = (Button)view.findViewById(R.id.list_item_button);
 
-
-
         if(!(list.get(position).getNbJoueurs() >= list.get(position).getNbJoueursMax())) {
             joinBtn.setOnClickListener(new JoinGameListener(context, list.get(position)));
         }
