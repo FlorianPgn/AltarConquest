@@ -1,5 +1,6 @@
 package com.example.florian.altarconquest.View;
 
+import com.example.florian.altarconquest.R;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,7 +18,6 @@ import android.widget.RelativeLayout;
 import com.example.florian.altarconquest.Model.EcomieEnergie;
 import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.Model.Game;
-import com.example.florian.altarconquest.R;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionFlagsPositions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,7 +30,6 @@ import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.ArrayList;
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.example.florian.altarconquest.Controller.ChoixEquipeListener;
 import com.example.florian.altarconquest.Model.Player;
 import com.example.florian.altarconquest.R;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionPlayersProperties;
@@ -31,13 +32,18 @@ public class EcranLobby_Partie extends Activity {
 
     Timer timer;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ecran_lobby_partie);
 
         ImageButton bouton_retour = (ImageButton) findViewById(R.id.bouton_retour);
+        ImageButton bouton_red = (ImageButton) findViewById(R.id.bouton_red);
+        ImageButton bouton_blue = (ImageButton) findViewById(R.id.bouton_blue);
+
         timer =  new Timer();
+
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -72,6 +78,24 @@ public class EcranLobby_Partie extends Activity {
             public void onClick(View v)
             {
                 ouvrirRejoindrePartie();
+            }
+        });
+
+        bouton_red.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                new ChoixEquipeListener(pseudo, "rouge");
+            }
+        });
+
+        bouton_blue.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                new ChoixEquipeListener(pseudo, "bleue");
             }
         });
     }

@@ -1,6 +1,8 @@
 package com.example.florian.altarconquest.View;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.florian.altarconquest.Controller.JoinGameListener;
 import com.example.florian.altarconquest.Model.Player;
+import com.example.florian.altarconquest.Model.TeamColor;
 import com.example.florian.altarconquest.R;
 
 import java.util.List;
@@ -21,7 +24,7 @@ import java.util.List;
 
 public class MyListPlayerAdapter extends BaseAdapter implements ListAdapter {
 
-    private List<Player> list;
+    public List<Player> list;
     private Context context;
 
     public MyListPlayerAdapter(List<Player> list, Context context) {
@@ -56,6 +59,13 @@ public class MyListPlayerAdapter extends BaseAdapter implements ListAdapter {
         //Handle TextView and display string from your list
         TextView listItemText = (TextView)view.findViewById(R.id.list_item_text);
         listItemText.setText(list.get(position).getPseudo());
+        Log.i("COULEUR", "" + list.get(position).getColor());
+        if (list.get(position).getColor() == TeamColor.RED) {
+            listItemText.setTextColor(Color.RED);
+        }
+        else if (list.get(position).getColor() == TeamColor.BLUE) {
+            listItemText.setTextColor(Color.BLUE);
+        }
 
         return view;
     }
