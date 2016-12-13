@@ -4,11 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 
 import com.example.florian.altarconquest.Model.Game;
+import com.example.florian.altarconquest.Model.Player;
+import com.example.florian.altarconquest.Model.TeamColor;
 import com.example.florian.altarconquest.ServerInteractions.ServerSendPlayerProperties;
 import com.example.florian.altarconquest.View.EcranLobby_Partie;
 
@@ -43,13 +46,18 @@ public class JoinGameListener implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String pseudo = input.getText().toString();
-                if(pseudo != "") {
+                if(!pseudo.equals("")) {
                     ServerSendPlayerProperties ssp = new ServerSendPlayerProperties();
                     ssp.execute(pseudo, String.valueOf(game.getId()));
+
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("game", game);
+
                     Intent intent = new Intent(context, EcranLobby_Partie.class);
                     intent.putExtra("STRING_PSEUDO", pseudo);
                     intent.putExtra("STRING_GAMEID", String.valueOf(game.getId()));
                     intent.putExtra("STRING_JMAX", String.valueOf(game.getNbJoueursMax()));
+                    intent.putExtras(bundle);
                     context.startActivity(intent);
                 }
             }

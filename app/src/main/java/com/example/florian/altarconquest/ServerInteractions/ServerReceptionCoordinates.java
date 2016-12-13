@@ -1,10 +1,12 @@
-package com.example.florian.altarconquest.ServerInteractions; /**
- * Created by Hugo on 08/12/2016.
- */
+package com.example.florian.altarconquest.ServerInteractions;
 
+import android.content.Context;
+
+import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.Model.Player;
 import com.example.florian.altarconquest.ServerInteractions.Parsers.PlayerParser;
-import com.example.florian.altarconquest.View.EcranLobby_Partie;
+import com.example.florian.altarconquest.View.EcranJeu;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedWriter;
@@ -17,36 +19,22 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.List;
 
-public class ServerReceptionPlayersProperties extends ServerReceptionData {
-    private EcranLobby_Partie context;
+/**
+ * Created by Florian on 12/12/2016.
+ */
 
-    public ServerReceptionPlayersProperties(EcranLobby_Partie context) {
-        this.context = context;
+public class ServerReceptionCoordinates extends ServerReceptionData {
+
+    Game game;
+
+    public ServerReceptionCoordinates(Game game) {
+       this.game = game;
     }
 
     @Override
     public String getScriptUrl() {
         return "http://altarconquest.hol.es/scripts/get_players.php";
-    }
-
-    @Override
-    public void doWhenTaskIsDone(String s) {
-        try {
-            PlayerParser playerParser = new PlayerParser();
-            InputStream stream = new ByteArrayInputStream(s.getBytes(Charset.defaultCharset()));
-
-            List<Player> resultats = playerParser.parse(stream);
-
-            context.generateListContent(resultats);
-
-
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -79,8 +67,19 @@ public class ServerReceptionPlayersProperties extends ServerReceptionData {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
+    @Override
+    public void doWhenTaskIsDone(String s) {
+        PlayerParser parser = new PlayerParser();
+        InputStream stream = new ByteArrayInputStream(s.getBytes(Charset.defaultCharset()));
 
+        try {
+            game.updatePlayersCoordinates(parser.parse(stream));
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

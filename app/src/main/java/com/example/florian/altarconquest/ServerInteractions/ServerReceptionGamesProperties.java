@@ -27,7 +27,6 @@ public class ServerReceptionGamesProperties extends ServerReceptionData {
     private EcranRejoindre_Partie context;
 
     public ServerReceptionGamesProperties(EcranRejoindre_Partie context){
-        super(context);
         this.context = context;
     }
 

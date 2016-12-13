@@ -3,6 +3,8 @@ package com.example.florian.altarconquest.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 /**
  * Created by Florian on 02/11/2016.
  */
@@ -15,7 +17,6 @@ public class Game implements Parcelable {
     private Team redTeam;
     private int nbJoueurs;
     private int nbJoueursMax;
-
 
     public Game(int id, String name, int nbJoueursMax){
         this.id = id;
@@ -31,15 +32,38 @@ public class Game implements Parcelable {
         }
     }
 
-
     public Game(int id, String name, int nbJoueursMax, String password){
         this(id, name, nbJoueursMax);
         this.password = password;
 
     }
 
-    public Game(Parcel gameParcel) {
+    public Game(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        password = in.readString();
+        nbJoueursMax = in.readInt();
+
+        if (nbJoueursMax %2 == 0) {
+            blueTeam = new Team(TeamColor.BLUE, nbJoueursMax / 2);
+            redTeam = new Team(TeamColor.RED, nbJoueursMax / 2);
+        } else {
+            blueTeam = new Team(TeamColor.BLUE, nbJoueursMax / 2 + 1);
+            redTeam = new Team(TeamColor.RED, nbJoueursMax / 2);
+        }
     }
+
+    public static final Creator<Game> CREATOR = new Creator<Game>() {
+        @Override
+        public Game createFromParcel(Parcel in) {
+            return new Game(in);
+        }
+
+        @Override
+        public Game[] newArray(int size) {
+            return new Game[size];
+        }
+    };
 
     public void ajouterDrapeau(Flag flag){
         if(flag.getTeamColor() == TeamColor.BLUE)
@@ -88,6 +112,26 @@ public class Game implements Parcelable {
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(password);
-        dest.writeString(password);
+        dest.writeInt(nbJoueursMax);
+    }
+
+    public void updatePlayersCoordinates(List<Player> listPlayer){
+        for (Player player:listPlayer) {
+            if (player.getColor() == TeamColor.BLUE) {
+                for (Player inGamePlayer:getBlueTeam().getListeDesPlayers()) {
+                    if(inGamePlayer.getPseudo().equals(player.getPseudo())) {
+                        inGamePlayer.setCoordonnees(player.getCoordonnees());
+                    }
+                }
+            } else {
+                for (Player inGamePlayer:getRedTeam().getListeDesPlayers()) {
+                    if(inGamePlayer.getPseudo().equals(player.getPseudo())) {
+                        inGamePlayer.setCoordonnees(player.getCoordonnees());
+                    }
+                }
+            }
+
+        }
+
     }
 }

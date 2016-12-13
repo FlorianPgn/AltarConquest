@@ -9,7 +9,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.florian.altarconquest.Controller.ChoixEquipeListener;
+import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.Model.Player;
+import com.example.florian.altarconquest.Model.TeamColor;
 import com.example.florian.altarconquest.R;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionPlayersProperties;
 import com.example.florian.altarconquest.ServerInteractions.ServerSendDeletedPlayer;
@@ -32,7 +34,7 @@ public class EcranLobby_Partie extends Activity {
     List<String> listeJoueurs;
 
     Timer timer;
-
+    Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,8 @@ public class EcranLobby_Partie extends Activity {
 
         timer =  new Timer();
 
+        Bundle bundle = getIntent().getExtras();
+        game = bundle.getParcelable("game");
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -103,19 +107,32 @@ public class EcranLobby_Partie extends Activity {
 
     }
 
-    public void generateListContent(List<Player> list) {
-        Log.i("generate","");
+    public void generateListContent(List<Player> listPlayer) {
         //instantiate custom adapter
-        MyListPlayerAdapter adapter = new MyListPlayerAdapter(list, this);
+        MyListPlayerAdapter adapter = new MyListPlayerAdapter(listPlayer, this);
 
         //handle listview and assign adapter
         ListView lView = (ListView)findViewById(R.id.liste_joueurs);
         lView.setAdapter(adapter);
 
-        if(Integer.parseInt(nbJoueursMax) == list.size()) {
+        if(Integer.parseInt(nbJoueursMax) == listPlayer.size()) {
+
+
+            for (Player player:listPlayer) {
+                if (player.getColor() == TeamColor.BLUE) {
+
+                } else {
+
+                }
+
+            }
+
             Intent intent = new Intent(this, EcranJeu.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("game", game);
             intent.putExtra("STRING_PSEUDO", pseudo);
             intent.putExtra("STRING_GAMEID", gameId);
+            intent.putExtras(bundle);
             startActivity(intent);
         }
     }

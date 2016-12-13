@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import com.example.florian.altarconquest.Model.EcomieEnergie;
 import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.Model.Game;
+import com.example.florian.altarconquest.ServerInteractions.ServerReceptionCoordinates;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionFlagsPositions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,6 +33,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
@@ -47,6 +50,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
     private String pseudo;
     private String gameId;
+    private Game game;
 
     private final int REQUEST_CODE = 128;
 
@@ -60,8 +64,12 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
+        economieEnergie = new EcomieEnergie(this);
+        economieEnergie.start();
 
-        boutonsDeployables = new ArrayList<Button>();
+        Bundle bundle = getIntent().getExtras();
+        game = bundle.getParcelable("game");
+
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -73,6 +81,49 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
             gameId = (String) savedInstanceState.getSerializable("STRING_GAMEID");
         }
 
+
+        initialisationBoutons();
+
+
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                ServerReceptionCoordinates src = new ServerReceptionCoordinates(game);
+                src.execute(gameId);
+
+            }
+        };
+
+        timer.schedule(timerTask, 0, 1000 * 2);
+
+    }
+
+    public void onWindowFocusChanged(boolean hasFocus) {
+
+        super.onWindowFocusChanged(hasFocus);
+
+        unactiveTreeButton = (Button)findViewById(R.id.unactiveTreeButton);
+
+        unactiveTreeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(qrCodeButton.isClickable()){
+                    for(Button leBouton: boutonsDeployables){
+                        leBouton.setVisibility(View.INVISIBLE);
+                        leBouton.setClickable(false);
+                    }
+
+                    treeButton.setVisibility(View.VISIBLE);
+                    treeButton.setClickable(true);
+                }
+            }
+        });
+
+
+    }
+
+    public void initialisationBoutons(){
         boutonsDeployables = new ArrayList<Button>();
 
         attackToken = (ImageView) findViewById(R.id.attackToken);
@@ -127,35 +178,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
                 }
             }
         });
-
-
-        economieEnergie = new EcomieEnergie(this);
-        economieEnergie.start();
-
-    }
-
-    public void onWindowFocusChanged(boolean hasFocus) {
-
-        super.onWindowFocusChanged(hasFocus);
-
-        unactiveTreeButton = (Button)findViewById(R.id.unactiveTreeButton);
-
-        unactiveTreeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(qrCodeButton.isClickable()){
-                    for(Button leBouton: boutonsDeployables){
-                        leBouton.setVisibility(View.INVISIBLE);
-                        leBouton.setClickable(false);
-                    }
-
-                    treeButton.setVisibility(View.VISIBLE);
-                    treeButton.setClickable(true);
-                }
-            }
-        });
-
-
     }
 
     public void ouvrirScanQrCode() {
@@ -198,8 +220,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
 
         demanderPermissionGps();
-
-        Game game = new Game(5, "Game de flo", 5);
         launchServerRequest(game);
 
     }
