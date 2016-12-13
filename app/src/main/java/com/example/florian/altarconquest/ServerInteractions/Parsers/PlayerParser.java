@@ -112,7 +112,6 @@ public class PlayerParser {
                     break;
                 case "teamColor":
                     teamColor = (readTag(parser, "teamColor"));
-                    Log.i("TEAM COLOR PARSER", teamColor);
                     break;
                 default:
                     skip(parser);

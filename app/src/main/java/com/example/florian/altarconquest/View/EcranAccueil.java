@@ -3,6 +3,7 @@ package com.example.florian.altarconquest.View;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -14,6 +15,7 @@ public class EcranAccueil extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accueil);
+        Log.i("density", ""+getApplicationContext().getResources().getDisplayMetrics().density);
 
         ImageButton bouton_jouer = (ImageButton) findViewById(R.id.bouton_jouer);
         ImageButton bouton_regles = (ImageButton) findViewById(R.id.bouton_regles);
@@ -32,6 +34,8 @@ public class EcranAccueil extends Activity {
         });
 
     }
+
+
 
     public void ouvrirCreationPartie() {
         Intent intent = new Intent(this, EcranGestion_Partie.class);

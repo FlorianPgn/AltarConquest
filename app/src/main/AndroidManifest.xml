@@ -66,6 +66,9 @@
       
         <activity android:name=".View.EcranQuestions"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".View.EcranJeu"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

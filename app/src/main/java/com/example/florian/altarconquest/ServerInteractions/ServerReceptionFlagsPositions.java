@@ -30,7 +30,6 @@ public class ServerReceptionFlagsPositions extends ServerReceptionData {
     private EcranJeu ecranJeu;
 
     public ServerReceptionFlagsPositions(Game game, EcranJeu ecranJeu){
-        super(ecranJeu);
         this.game = game;
         this.ecranJeu = ecranJeu;
     }

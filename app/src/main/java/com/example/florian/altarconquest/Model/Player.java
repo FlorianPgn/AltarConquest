@@ -74,6 +74,10 @@ public class Player {
         EcranJeu.setDefencetoken(defenceTokenAvailable); // Pour l'affichage des jetons
     }
 
+    public void setCoordonnees(LatLng coordonnees) {
+        this.coordonnees = coordonnees;
+    }
+
 
 }
 

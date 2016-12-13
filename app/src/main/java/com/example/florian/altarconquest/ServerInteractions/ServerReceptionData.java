@@ -25,13 +25,6 @@ import java.util.List;
  */
 
 public abstract class ServerReceptionData extends android.os.AsyncTask<String,Void,String> {
-    private String s;
-    private Context context;
-
-
-    public ServerReceptionData(Context context){
-        this.context = context;
-    }
 
     @Override
     protected String doInBackground(String... params) {
