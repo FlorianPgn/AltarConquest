@@ -3,7 +3,6 @@ package com.example.florian.altarconquest.View;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -16,6 +15,7 @@ import com.example.florian.altarconquest.R;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionPlayersProperties;
 import com.example.florian.altarconquest.ServerInteractions.ServerSendDeletedPlayer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -29,9 +29,6 @@ import java.util.TimerTask;
 public class EcranLobby_Partie extends Activity {
 
     private String pseudo;
-    private String gameId;
-    private String nbJoueursMax;
-    List<String> listeJoueurs;
 
     Timer timer;
     Game game;
@@ -49,29 +46,22 @@ public class EcranLobby_Partie extends Activity {
 
         Bundle bundle = getIntent().getExtras();
         game = bundle.getParcelable("game");
-
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
                 pseudo = null;
-                gameId = null;
-                nbJoueursMax = null;
             } else {
                 pseudo = extras.getString("STRING_PSEUDO");
-                gameId = extras.getString("STRING_GAMEID");
-                nbJoueursMax = extras.getString("STRING_JMAX");
             }
         } else {
             pseudo = (String) savedInstanceState.getSerializable("STRING_PSEUDO");
-            gameId = (String) savedInstanceState.getSerializable("STRING_GAMEID");
-            nbJoueursMax = (String) savedInstanceState.getSerializable("STRING_JMAX");
         }
 
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 ServerReceptionPlayersProperties srpp = new ServerReceptionPlayersProperties(EcranLobby_Partie.this);
-                srpp.execute(gameId);
+                srpp.execute(String.valueOf(game.getId()));
             }
         };
 
@@ -115,32 +105,40 @@ public class EcranLobby_Partie extends Activity {
         ListView lView = (ListView)findViewById(R.id.liste_joueurs);
         lView.setAdapter(adapter);
 
-        if(Integer.parseInt(nbJoueursMax) == listPlayer.size()) {
-
-
+        if(game.getNbJoueursMax() == listPlayer.size()) {
+            boolean colorsAreSet = true;
+            TeamColor teamColor = null;
             for (Player player:listPlayer) {
-                if (player.getColor() == TeamColor.BLUE) {
-
-                } else {
-
+                if (player.getColor() == null) {
+                    colorsAreSet = false;
                 }
-
+                if (player.getPseudo().equals(pseudo)) {
+                    teamColor = player.getColor();
+                }
             }
 
-            Intent intent = new Intent(this, EcranJeu.class);
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("game", game);
-            intent.putExtra("STRING_PSEUDO", pseudo);
-            intent.putExtra("STRING_GAMEID", gameId);
-            intent.putExtras(bundle);
-            startActivity(intent);
+            if (colorsAreSet) {
+                timer.cancel();
+
+                Intent intent = new Intent(this, EcranJeu.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("game", game);
+                intent.putExtra("STRING_PSEUDO", pseudo);
+                intent.putExtra("STRING_COLOR", teamColor.toString());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        timer.cancel();
+    }
+
+    @Override
+    public void onBackPressed() {
+        ouvrirRejoindrePartie();
     }
 }
 
