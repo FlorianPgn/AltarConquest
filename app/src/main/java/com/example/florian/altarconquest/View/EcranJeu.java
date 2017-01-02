@@ -246,6 +246,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         GroundOverlay imageOverlay = mMap.addGroundOverlay(groundOverlayOptions);
 
 
+
         demanderPermissionGps();
         launchServerRequest(game);
 
@@ -287,6 +288,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     public void demanderPermissionGps(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mMap.getUiSettings().setCompassEnabled(false);
+            mMap.getUiSettings().set
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
         }
