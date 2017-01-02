@@ -3,7 +3,6 @@ package com.example.florian.altarconquest.View;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -17,8 +16,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class EcranRejoindre_Partie extends Activity
-{
+public class EcranRejoindre_Partie extends Activity {
     public static Activity context;
 
     private Timer timer;
@@ -50,7 +48,6 @@ public class EcranRejoindre_Partie extends Activity
     }
 
     public void generateListContent(List<Game> list) {
-        Log.i("generate","");
         //instantiate custom adapter
         MyListGameAdapter adapter = new MyListGameAdapter(list, this);
 

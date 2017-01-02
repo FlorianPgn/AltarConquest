@@ -1,5 +1,7 @@
 package com.example.florian.altarconquest.View;
 
+import com.example.florian.altarconquest.Model.Player;
+import com.example.florian.altarconquest.Model.TeamColor;
 import com.example.florian.altarconquest.R;
 import android.Manifest;
 import android.content.Intent;
@@ -26,6 +28,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -33,6 +37,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,8 +54,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     private ArrayList<Button> boutonsDeployables;
     public ImageView imageEconomie;
 
+    Map<String, Circle> coordinates;
+
     private String pseudo;
-    private String gameId;
+    private TeamColor myTeamColor;
+
     private Game game;
 
     private final int REQUEST_CODE = 128;
@@ -70,33 +79,51 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         Bundle bundle = getIntent().getExtras();
         game = bundle.getParcelable("game");
 
+        String color;
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
-                gameId = null;
+                pseudo = null;
+                color = null;
             } else {
-                gameId = extras.getString("STRING_GAMEID");
+                pseudo = extras.getString("STRING_PSEUDO");
+                color = extras.getString("STRING_COLOR");
             }
         } else {
-            gameId = (String) savedInstanceState.getSerializable("STRING_GAMEID");
+            pseudo = (String) savedInstanceState.getSerializable("STRING_PSEUDO");
+            color = (String) savedInstanceState.getSerializable("STRING_COLOR");
         }
 
+        if (color.equals(TeamColor.BLUE.toString())) {
+            myTeamColor = TeamColor.BLUE;
+        } else if (color.equals(TeamColor.RED.toString())) {
+            myTeamColor = TeamColor.RED;
+        }
+
+        coordinates = new HashMap<>();
 
         initialisationBoutons();
+    }
 
+    public void afficherJoueurs(){
+        for(Player player : game.getTeam(myTeamColor).getListeDesPlayers()) {
+            updateCircles(player);
+        }
+    }
 
-        Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                ServerReceptionCoordinates src = new ServerReceptionCoordinates(game);
-                src.execute(gameId);
+    public void updateCircles(Player player){
+        Circle circle = coordinates.get(player.getPseudo());
+        if (circle == null) {
+            // Instantiates a new CircleOptions object and defines the center and radius
+            CircleOptions circleOptions = new CircleOptions()
+                    .center(player.getCoordonnees())
+                    .radius(2); // In meters
 
-            }
-        };
-
-        timer.schedule(timerTask, 0, 1000 * 2);
-
+            circle = mMap.addCircle(circleOptions);
+            coordinates.put(player.getPseudo(), circle);
+        } else {
+            circle.setCenter(player.getCoordonnees());
+        }
     }
 
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -222,6 +249,21 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         demanderPermissionGps();
         launchServerRequest(game);
 
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                ServerReceptionCoordinates src = new ServerReceptionCoordinates(game);
+                src.execute(String.valueOf(game.getId()));
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        afficherJoueurs();
+                    }
+                });
+            }
+        };
+        timer.schedule(timerTask, 0, 1000 * 2);
+
     }
 
     public void launchServerRequest(Game game){
@@ -240,9 +282,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         for (Flag flag : game.getRedTeam().getListofFlags()) {
             mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
         }
-
-        Log.i("Liste des drapeaux b", ""+game.getBlueTeam().getListofFlags());
-        Log.i("Liste des drapeaux r", ""+game.getRedTeam().getListofFlags());
     }
 
     public void demanderPermissionGps(){

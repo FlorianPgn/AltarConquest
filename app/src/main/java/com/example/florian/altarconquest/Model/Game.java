@@ -100,6 +100,14 @@ public class Game implements Parcelable {
         return redTeam;
     }
 
+    public Team getTeam(TeamColor teamColor) {
+        if (teamColor.equals(TeamColor.BLUE)) {
+            return blueTeam;
+        } else {
+            return redTeam;
+        }
+    }
+
     public void setNbJoueurs(int nbJoueurs) { this.nbJoueurs = nbJoueurs; }
 
     @Override
@@ -116,6 +124,16 @@ public class Game implements Parcelable {
     }
 
     public void updatePlayersCoordinates(List<Player> listPlayer){
+        if(getBlueTeam().getListeDesPlayers().size() == 0) {
+            for (Player player : listPlayer) {
+                if (player.getColor() == TeamColor.BLUE) {
+                    getBlueTeam().ajouterJoueur(player);
+                } else {
+                    getRedTeam().ajouterJoueur(player);
+                }
+            }
+        }
+
         for (Player player:listPlayer) {
             if (player.getColor() == TeamColor.BLUE) {
                 for (Player inGamePlayer:getBlueTeam().getListeDesPlayers()) {
@@ -130,8 +148,6 @@ public class Game implements Parcelable {
                     }
                 }
             }
-
         }
-
     }
 }

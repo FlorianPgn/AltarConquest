@@ -50,7 +50,8 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".View.EcranCreation_Partie"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:noHistory="true"/>
 
         <activity android:name=".View.EcranRejoindre_Partie"
             android:screenOrientation="portrait"/>

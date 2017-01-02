@@ -60,6 +60,7 @@ public class MyListPlayerAdapter extends BaseAdapter implements ListAdapter {
         TextView listItemText = (TextView)view.findViewById(R.id.list_item_text);
         listItemText.setText(list.get(position).getPseudo());
         Log.i("COULEUR", "" + list.get(position).getColor());
+
         if (list.get(position).getColor() == TeamColor.RED) {
             listItemText.setTextColor(Color.RED);
         }
