@@ -9,7 +9,6 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.hugo.altarconquest.Accueil"
     android:background="@drawable/fond" >
 
     <ImageView
@@ -31,14 +30,32 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dignissim at risus eget posuere. Quisque efficitur nunc gravida velit posuere, quis efficitur massa lobortis. Morbi eros turpis, blandit et nunc vitae, posuere facilisis massa. Praesent ut gravida libero, a dapibus ipsum. Quisque eu eleifend lacus. Mauris ut ultricies nulla. In sodales blandit purus, in malesuada dolor vulputate et. Nam velit turpis, tempor a sem volutpat, finibus finibus sapien. In mi lorem, ullamcorper ac ex at, luctus luctus ligula. Nunc vitae pharetra lacus. Morbi dignissim aliquam mi id vehicula. Ut dapibus in ligula in varius. Nullam ultricies cursus nisi, non euismod dui. Proin mattis orci vitae lobortis tempor. Donec laoreet lectus eget urna commodo, porta molestie quam blandit."
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:id="@+id/texte_regles"
-        android:layout_below="@+id/liste_partie"
-        android:layout_alignStart="@+id/liste_partie"
-        android:textColor="@android:color/black" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/liste_partie">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="1"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp">
+
+            <TextView
+                android:text="@string/regles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:id="@+id/texte_regles"
+                android:layout_below="@+id/liste_partie"
+                android:layout_alignStart="@+id/liste_partie"
+                android:textColor="@android:color/black"
+                android:layout_weight="0.54"
+                android:textSize="19sp"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

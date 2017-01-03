@@ -1,4 +1,40 @@
 <resources>
     <string name="app_name">Altar Conquest</string>
     <string name="title_activity_main_game">Main Game Page</string>
+    <string name="regles">
+        Bienvenue dans ALTAR CONQUEST !\n\n
+
+        <b>---------- BUT DU JEU ----------</b>\n
+        Remporter la partie en rapportant le plus de points à son équipe avant la fin du temps imparti.\n
+
+        Ce jeu est un "Capture the flag", en français "Capture le drapeau" et se joue entre 2 et 12 joueurs.\n
+        Ces joueurs composent deux <b>EQUIPES</b> une <b>ROUGE</b> et une <b>BLEUE</b>.\n
+        Chaque <b>EQUIPE</b> possède une <b>BASE</b> ainsi que des <b>DRAPEAUX</b> à protéger.\n
+        Ces <b>DRAPEAUX</b> sont au nombre de 6 par EQUIPE, mais seulement 4 d\'entres eux, aléatoirement choisis, seront disponibles par partie.\n
+        Chaque <b>JOUEUR</b> possède, dès le lancement de la partie, 2 <b>JETONS</b> : 1 <b>JETON D\'ATTAQUE</b> et 1 <b>JETON DE DEFENSE</b>,
+        permettant pour le premier la capture d\'un <b>DRAPEAU</b> ennemi, et la défense d\'un <b>DRAPEAU</b> allié pour le second.\n
+        La partie dure 15 minutes.\n\n
+
+        <b>---------- ATTAQUE ----------</b>\n
+        Pour remporter la partie, il faudra gagner des points en "volant" un <b>DRAPEAU</b> adverse.\n
+        Pour cela rien de plus simple, il suffit de scanner successivement le QR Code d\'un <b>DRAPEAU</b> ennemi puis celui de sa propre <b>BASE</b>. Cela ajoutera 1 point à son équipe.\n
+        Pour scanner un QR Code de <b>DRAPEAU</b>, il faut possèder un <b>JETON D\'ATTAQUE</b>, sinon cela ne fonctionnera pas.\n
+        Si vous n\'avez plus de <b>JETON D\'ATTAQUE</b>, il faudra aller scanner le QR Code de sa base afin de se récupérer un <b>JETON D\'ATTAQUE</b>.\n\n
+
+        <b>---------- DEFENSE ----------</b>\n
+        Pour éviter que l\'ennemi ne remporte la partie, il faudra défendre se base en "récupérant" un <b>DRAPEAU</b> allié.\n
+        Pour cela rien de plus simple, il suffit d\'appuyer sur le bouton de défense dans un rayon de 3m autour d\'un ennemi possédant un de vos <b>DRAPEAUX</b>.\n
+        (Un joueur ennemi possèdant un de vos <b>DRAPEAUX</b> sur lui apparaitra sur la carte).\n
+        Pour récupérer un <b>DRAPEAU</b> allié que l\'ennemi à volé, il faut possèder un <b>JETON DE DEFENSE</b>, sinon cela ne fonctionnera pas.\n
+        Si vous n\'avez plus de <b>JETON</b> DE DEFESNE, il faudra aller scanner le QR Code de sa base afin de se récupérer un <b>JETON DE DEFENSE</b>.\n\n
+
+        <b>---------- AUTEL SACRE ----------</b>\n
+        Afin de remporter la partie, il y a un autre moyen que d\'uniquement gagner de points, vous pouvez aussi trouver l\'<b>AUTEL SACRE</b>.\n
+        Pour vous aider à le trouver, des questions sur le parc vous seront posées lors de l\'ajout d\'un point à votre équipe.\n
+        Si vous répondez bon, un indice sur l\'emplacement de l\'<b>AUTEL SACRE</b> vous sera donné.\n
+        Si vous pensez avoir trouvé l\'<b>AUTEL SACRE</b>, allez donc vous positionner 30 secondes dans un périmêtre de 3m autour de lui.\n
+        La partie sera alors remportée par votre équipe.\n\n
+
+        BONNE CHANCE DE LA PART DE TOUTE L\'EQUIPE !
+    </string>
 </resources>
