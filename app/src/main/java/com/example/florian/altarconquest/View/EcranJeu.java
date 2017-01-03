@@ -7,6 +7,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +25,8 @@ import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionCoordinates;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionFlagsPositions;
+import com.example.florian.altarconquest.ServerInteractions.ServerSendCoordinates;
+import android.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -42,7 +47,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
+public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
     public GoogleMap mMap;
     public EcomieEnergie economieEnergie;
@@ -58,6 +63,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
     private String pseudo;
     private TeamColor myTeamColor;
+    private Location location;
 
     private Game game;
 
@@ -107,7 +113,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
 
     public void afficherJoueurs(){
         for(Player player : game.getTeam(myTeamColor).getListeDesPlayers()) {
-            updateCircles(player);
+            if(!player.getPseudo().equals(pseudo))
+                updateCircles(player);
         }
     }
 
@@ -246,6 +253,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         GroundOverlay imageOverlay = mMap.addGroundOverlay(groundOverlayOptions);
 
 
+
         demanderPermissionGps();
         launchServerRequest(game);
 
@@ -260,6 +268,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
                         afficherJoueurs();
                     }
                 });
+
+                ServerSendCoordinates ssc = new ServerSendCoordinates();
+
+                ssc.execute(pseudo, String.valueOf(game.getId()), String.valueOf(location.getLatitude()),  String.valueOf(location.getLongitude()));
             }
         };
         timer.schedule(timerTask, 0, 1000 * 2);
@@ -287,10 +299,24 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
     public void demanderPermissionGps(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mMap.getUiSettings().setCompassEnabled(false);
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
         }
+
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String bestProvider = locationManager.getBestProvider(criteria, true);
+        location = locationManager.getLastKnownLocation(bestProvider);
+        if (location != null) {
+            onLocationChanged(location);
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, this);
+        Log.i("Location", location.getLatitude()+" "+location.getLongitude());
     }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -348,6 +374,27 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback {
         else{
             attackToken.setImageResource(R.drawable.jeton_noir_et_tour);
         }
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        this.location = location;
+        Log.i("Location", location.getLatitude()+" "+location.getLongitude());
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 }
