@@ -159,12 +159,13 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                     }
                 });
                 ServerSendCoordinates ssc = new ServerSendCoordinates();
-                ssc.execute(pseudo, String.valueOf(game.getId()), String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+                if (location != null)
+                    ssc.execute(pseudo, String.valueOf(game.getId()), String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
             }
         };
         timer.schedule(timerTask, 0, 1000 * 2);
     }
-    
+
 
     //Méthodes pour afficher les drapeaux au démarage de l'activité
     public void afficherDrapeaux(Game game) {
@@ -221,14 +222,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             }
         });
     }
-
-    //Met à jour les coordonnées du joueur si elles ont changées
-    @Override
-    public void onLocationChanged(Location location) {
-        this.location = location;
-        Log.i("Location", location.getLatitude()+" "+location.getLongitude());
-    }
-
 
     //Methodes pour le menu déployable en bas de l'écran
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -344,9 +337,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             );
         }
         location = locationManager.getLastKnownLocation(bestProvider);
-        /*if (location != null) {
+        if (location != null) {
             onLocationChanged(location);
-        }*/
+        }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, this);
     }
 
@@ -383,6 +376,13 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         else{
             attackToken.setImageResource(R.drawable.jeton_noir_et_tour);
         }
+    }
+
+    //Met à jour les coordonnées du joueur si elles ont changées
+    @Override
+    public void onLocationChanged(Location location) {
+        this.location = location;
+        Log.i("Location", location.getLatitude()+" "+location.getLongitude());
     }
 
     @Override
