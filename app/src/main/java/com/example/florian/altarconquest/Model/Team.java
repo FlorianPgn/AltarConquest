@@ -32,6 +32,14 @@ public class Team {
         listofFlags.add(flag);
     }
 
+    public Player getJoueur(String pseudo) {
+        for (Player player : listOfPlayers) {
+            if (player.getPseudo().equals(pseudo))
+                return player;
+        }
+        return null;
+    }
+
 
     //Getters and Setters
     public TeamColor getTeamColor() {
