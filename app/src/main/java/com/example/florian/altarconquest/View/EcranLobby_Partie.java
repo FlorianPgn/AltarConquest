@@ -138,6 +138,7 @@ public class EcranLobby_Partie extends Activity {
 
     @Override
     public void onBackPressed() {
+        timer.cancel();
         ouvrirRejoindrePartie();
     }
 }
