@@ -1,5 +1,6 @@
 package com.example.florian.altarconquest.Model;
 
+import com.example.florian.altarconquest.View.EcranJeu;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -32,6 +33,8 @@ public class Player {
         return pseudo;
     }
 
+    public TeamColor getColor() { return teamColor; }
+
     public LatLng getCoordonnees() {
         return coordonnees;
     }
@@ -63,11 +66,18 @@ public class Player {
 
     public void setAttackTokenAvailable(boolean attackTokenAvailable) {
         this.attackTokenAvailable = attackTokenAvailable;
+        EcranJeu.setAttackToken(attackTokenAvailable); // Pour l'affichage des jetons
     }
 
     public void setDefenseTokenAvailable(boolean defenceTokenAvailable) {
         this.defenseTokenAvailable = defenceTokenAvailable;
+        EcranJeu.setDefencetoken(defenceTokenAvailable); // Pour l'affichage des jetons
     }
+
+    public void setCoordonnees(LatLng coordonnees) {
+        this.coordonnees = coordonnees;
+    }
+
 
 }
 

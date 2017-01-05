@@ -1,7 +1,9 @@
 package com.example.florian.altarconquest.View;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.TextView;
 
 import com.example.florian.altarconquest.Model.Question;
 import com.example.florian.altarconquest.R;
+
+import static com.example.florian.altarconquest.View.EcranRejoindre_Partie.context;
 
 public class EcranQuestions extends AppCompatActivity {
 
@@ -23,18 +27,16 @@ public class EcranQuestions extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ecran_questions);
 
-        intitule = (TextView) findViewById(R.id.intituleQuestion);
+        intitule = (TextView) findViewById(R.id.tv_question);
 
-        reponse1 = (Button) findViewById(R.id.reponseA);
-        reponse2 = (Button) findViewById(R.id.reponseB);
-        reponse3 = (Button) findViewById(R.id.reponseC);
-        reponse4 = (Button) findViewById(R.id.reponseD);
+        reponse1 = (Button) findViewById(R.id.boutonA);
+        reponse2 = (Button) findViewById(R.id.boutonB);
+        reponse3 = (Button) findViewById(R.id.boutonC);
+        reponse4 = (Button) findViewById(R.id.boutonD);
 
         Intent intent = getIntent();
         idQuestion = intent.getIntExtra("Questions", 0);
         nbReponses = intent.getIntExtra("NbReponses", 0);
-        Log.i("zr", "onCreate: " + nbReponses);
-        System.out.println(idQuestion);
 
         question = new Question(idQuestion);
 
@@ -44,11 +46,42 @@ public class EcranQuestions extends AppCompatActivity {
         reponse3.setText(question.getReponse3());
         reponse4.setText(question.getReponse4());
 
+        AlertDialog.Builder builderMauvaiseReponse = new AlertDialog.Builder(EcranQuestions.this);
+        builderMauvaiseReponse.setMessage("Mauvaise reponse");
+        builderMauvaiseReponse.setCancelable(true);
+
+        builderMauvaiseReponse.setNeutralButton(
+                "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        quitter();
+                    }
+                });
+
+        AlertDialog.Builder builderBonneReponse = new AlertDialog.Builder(EcranQuestions.this);
+        builderBonneReponse.setMessage("Bonne réponse, +1 point");
+        builderBonneReponse.setCancelable(true);
+
+        builderBonneReponse.setNeutralButton(
+                "Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        suivant();
+                    }
+                });
+
+        final AlertDialog alerteMauvaiseReponse = builderMauvaiseReponse.create();
+        final AlertDialog messageBonneReponse = builderBonneReponse.create();
+
         reponse1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (verifierReponse(question.getReponse1()))
-                    suivant();
+                    messageBonneReponse.show();
+                else
+                    alerteMauvaiseReponse.show();
             }
         });
 
@@ -56,7 +89,9 @@ public class EcranQuestions extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (verifierReponse(question.getReponse2()))
-                    suivant();
+                    messageBonneReponse.show();
+                else
+                    alerteMauvaiseReponse.show();
             }
         });
 
@@ -64,7 +99,10 @@ public class EcranQuestions extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (verifierReponse(question.getReponse3()))
-                    suivant();
+                    messageBonneReponse.show();
+                else
+                    alerteMauvaiseReponse.show();
+
             }
         });
 
@@ -72,7 +110,9 @@ public class EcranQuestions extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (verifierReponse(question.getReponse4()))
-                    suivant();
+                    messageBonneReponse.show();
+                else
+                    alerteMauvaiseReponse.show();
             }
         });
 
@@ -80,10 +120,12 @@ public class EcranQuestions extends AppCompatActivity {
     }
 
     private void suivant() {
-        if (nbReponses<3){
+        if (nbReponses<2){
             Intent intent = new Intent(this, EcranQuestions.class);
-            intent.putExtra("Questions", idQuestion++);
-            intent.putExtra("NbReponses", nbReponses++);
+            idQuestion += 1;
+            nbReponses += 1;
+            intent.putExtra("Questions", idQuestion);
+            intent.putExtra("NbReponses", nbReponses);
             startActivity(intent);
             finish();
         }

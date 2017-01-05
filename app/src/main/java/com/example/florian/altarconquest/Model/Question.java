@@ -24,13 +24,13 @@ public class Question {
             {"1", "La forêt des landes est peuplé de :", "Pins", "Sapins", "Baobabs", "Chênes"},
             {"4", "Les plus gros arbres sont les :", "Sapins", "Marroniers", "Séquoia", "Baobabs"},
             {"3", "Les arbres dit “feuillus” sont appelés ainsi car :"
-                    , "Ils ont beaucoup de feuilles", "Ils n'ont pas de feuilles"
-                    , "Ils perdent leurs feuilles", "Ils ne perdent jamais leurs feuilles"},
+                    , "Ils ont beaucoup\nde feuilles", "Ils n'ont pas\nde feuilles"
+                    , "Ils perdent\nleurs feuilles", "Ils ne perdent\njamais leurs feuilles"},
             {"2", "Qu’est ce qui peut être un danger pour un arbre?"
                     , "Les vaches", "Le gui", "Le lierre", "Les vignes"},
             {"3", "Comment peut t on calculer l’âge d’un arbre?"
                     , "Grâce à sa hauteur", "Grâce à son épaisseur"
-                    , "Grâce aux nombres de cercles situés dans le tronc", "On ne peut pas"},
+                    , "Grâce aux nombres\nde cercles dans\nle tronc", "On ne peut pas"},
             {"1", "La première étape du cycle de vie d’un arbre se nomme :"
                     , "Germination", "Naissance", "Plantation", "Enracinement"},
             {"4", "Un arbre se reproduit grâce à :", "Ses feuilles", "Ses branches", "Son tronc", "Ses graines"},
@@ -39,7 +39,6 @@ public class Question {
     public Question(int id) {
         this.id = id;
         this.intitule = lesQuestions[this.id][1];
-
         this.reponse1 = lesQuestions[this.id][2];
         this.reponse2 = lesQuestions[this.id][3];
         this.reponse3 = lesQuestions[this.id][4];

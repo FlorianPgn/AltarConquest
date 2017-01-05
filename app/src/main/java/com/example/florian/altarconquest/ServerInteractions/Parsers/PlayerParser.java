@@ -1,5 +1,6 @@
 package com.example.florian.altarconquest.ServerInteractions.Parsers;
 
+import android.util.Log;
 import android.util.Xml;
 
 import com.example.florian.altarconquest.Model.Player;
@@ -119,10 +120,12 @@ public class PlayerParser {
         }
         // retourner une nouvelle Entry avec le nom et message extrait du
 
-        if (teamColor == "rouge") {
+        if (teamColor.equals("rouge")) {
             return new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), TeamColor.RED); }
-        else {
+        else if (teamColor.equals("bleue")) {
             return new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), TeamColor.BLUE); }
+        else {
+            return new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), null); }
     }
 
 

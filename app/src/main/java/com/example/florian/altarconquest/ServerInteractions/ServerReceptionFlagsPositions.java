@@ -1,23 +1,16 @@
 package com.example.florian.altarconquest.ServerInteractions;
 
-import android.util.Log;
-
 import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.ServerInteractions.Parsers.FlagParser;
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.View.EcranJeu;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -27,11 +20,9 @@ import java.util.List;
 
 public class ServerReceptionFlagsPositions extends ServerReceptionData {
     public Game game;
-    private String s;
     private EcranJeu ecranJeu;
 
     public ServerReceptionFlagsPositions(Game game, EcranJeu ecranJeu){
-        super(ecranJeu);
         this.game = game;
         this.ecranJeu = ecranJeu;
     }
@@ -53,7 +44,7 @@ public class ServerReceptionFlagsPositions extends ServerReceptionData {
                 game.ajouterDrapeau(flag);
             }
 
-            ecranJeu.initialisationObjetsLocalises(game);
+            ecranJeu.afficherDrapeaux(game);
 
         } catch (XmlPullParserException e) {
             e.printStackTrace();

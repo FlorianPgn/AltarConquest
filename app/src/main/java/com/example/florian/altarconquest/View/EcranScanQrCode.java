@@ -2,9 +2,9 @@ package com.example.florian.altarconquest.View;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,44 +21,39 @@ public class EcranScanQrCode extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ecran_scan_qr_code);
 
-        Button mybutton = (Button) findViewById(R.id.scan_button);
-        mybutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.getId() == R.id.scan_button) {
-                    // on lance le scanner au clic sur notre bouton
-                    new IntentIntegrator(EcranScanQrCode.this).initiateScan();
-                }
-            }
-        });
+        //new IntentIntegrator(EcranScanQrCode.this).initiateScan();
+        try {
+            Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+            intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+
+            startActivityForResult(intent, 0);
+        } catch (Exception e) {
+            Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
+            Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+            startActivity(marketIntent);
+            finish();
+        }
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
         // nous utilisons la classe IntentIntegrator et sa fonction parseActivityResult pour parser le résultat du scan
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanningResult != null) {
+        if(requestCode == 0) {
+            if (resultCode == RESULT_OK) {
 
-            // nous récupérons le contenu du code barre
-            String scanContent = scanningResult.getContents();
+                // nous récupérons le contenu du code barre
+                String scanContent = intent.getStringExtra("SCAN_RESULT");
 
-            // nous récupérons le format du code barre
-            String scanFormat = scanningResult.getFormatName();
-
-            TextView scan_format = (TextView) findViewById(R.id.scan_format);
-            TextView scan_content = (TextView) findViewById(R.id.scan_content);
-
-            gestionQRcodes(scanContent);
-
-            // nous affichons le résultat dans nos TextView
-
-            scan_format.setText("FORMAT: " + scanFormat);
-            scan_content.setText("CONTENT: " + scanContent);
-        } else {
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "Aucune donnée reçu!", Toast.LENGTH_SHORT);
-            toast.show();
+                gestionQRcodes(scanContent);
+            } else {
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Aucune donnée reçu!", Toast.LENGTH_SHORT);
+                toast.show();
+            }
         }
+
 
     }
 
@@ -69,21 +64,33 @@ public class EcranScanQrCode extends Activity {
             case "1":
                 intent = new Intent(this, EcranQuestions.class);
                 intent.putExtra("Questions", 1);
+                Log.e("Ce qu'on a récupérer",""+scanContent);
+                break;
             case "2":
                 intent = new Intent(this, EcranQuestions.class);
                 intent.putExtra("Questions", 4);
+                Log.e("Ce qu'on a récupérer",""+scanContent);
+                break;
             case "3":
                 intent = new Intent(this, EcranQuestions.class);
                 intent.putExtra("Questions", 7);
+                Log.e("Ce qu'on a récupérer",""+scanContent);
+                break;
             case "4":
                 intent = new Intent(this, EcranQuestions.class);
                 intent.putExtra("Questions", 10);
+                Log.e("Ce qu'on a récupérer",""+scanContent);
+                break;
             case "5":
                 intent = new Intent(this, EcranQuestions.class);
                 intent.putExtra("Questions", 13);
+                Log.e("Ce qu'on a récupérer",""+scanContent);
+                break;
             case "6":
                 intent = new Intent(this, EcranQuestions.class);
                 intent.putExtra("Questions", 16);
+                Log.e("Ce qu'on a récupérer",""+scanContent);
+                break;
         }
 
         startActivity(intent);

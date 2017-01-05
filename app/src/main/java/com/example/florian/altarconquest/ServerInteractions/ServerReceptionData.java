@@ -25,13 +25,6 @@ import java.util.List;
  */
 
 public abstract class ServerReceptionData extends android.os.AsyncTask<String,Void,String> {
-    private String s;
-    private Context context;
-
-
-    public ServerReceptionData(Context context){
-        this.context = context;
-    }
 
     @Override
     protected String doInBackground(String... params) {
@@ -56,14 +49,10 @@ public abstract class ServerReceptionData extends android.os.AsyncTask<String,Vo
 
         // attraper et concatener la réponse du serveur en un block
         BufferedReader bufferReader = null;
-        try {
-            bufferReader = new BufferedReader((new InputStreamReader(conn.getInputStream())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         StringBuilder sb = new StringBuilder();
         String line = null;
         try {
+            bufferReader = new BufferedReader((new InputStreamReader(conn.getInputStream())));
             while((line = bufferReader.readLine()) != null){
                 sb.append(line);
             }
