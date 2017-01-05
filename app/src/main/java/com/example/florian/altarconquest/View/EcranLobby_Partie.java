@@ -12,10 +12,9 @@ import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.Model.Player;
 import com.example.florian.altarconquest.Model.TeamColor;
 import com.example.florian.altarconquest.R;
-import com.example.florian.altarconquest.ServerInteractions.ServerReceptionPlayersProperties;
+import com.example.florian.altarconquest.ServerInteractions.ServerReceptionPlayersLobby;
 import com.example.florian.altarconquest.ServerInteractions.ServerSendDeletedPlayer;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -60,7 +59,7 @@ public class EcranLobby_Partie extends Activity {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                ServerReceptionPlayersProperties srpp = new ServerReceptionPlayersProperties(EcranLobby_Partie.this);
+                ServerReceptionPlayersLobby srpp = new ServerReceptionPlayersLobby(EcranLobby_Partie.this);
                 srpp.execute(String.valueOf(game.getId()));
             }
         };
