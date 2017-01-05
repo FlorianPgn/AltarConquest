@@ -79,7 +79,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
 
         coordinates = new HashMap<>();
