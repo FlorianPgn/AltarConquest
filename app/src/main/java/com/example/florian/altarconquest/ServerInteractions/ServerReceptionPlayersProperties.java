@@ -41,7 +41,6 @@ public class ServerReceptionPlayersProperties extends ServerReceptionData {
 
             context.generateListContent(resultats);
 
-
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {

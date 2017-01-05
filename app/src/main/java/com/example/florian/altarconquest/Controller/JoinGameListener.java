@@ -51,6 +51,7 @@ public class JoinGameListener implements View.OnClickListener {
                     ServerSendPlayerProperties ssp = new ServerSendPlayerProperties();
                     ssp.execute(pseudo, String.valueOf(game.getId()));
 
+                    //Serialize l'objet game
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("game", game);
 

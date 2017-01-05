@@ -88,13 +88,12 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         economieEnergie.start();
 
         //Récupère l'objet Game du lobby
-        Bundle bundle = getIntent().getExtras();
-        game = bundle.getParcelable("game");
+        Bundle extras = getIntent().getExtras();
+        game = extras.getParcelable("game");
 
         //Récupère et sécurise les données passées depuis le lobby
         String color;
         if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
             if (extras == null) {
                 pseudo = null;
                 color = null;
@@ -136,17 +135,18 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 17.0f));
         retirerMouvementCameraMarkers();
 
+        //Ajout de la carte d'Ecologia en background
         GroundOverlayOptions groundOverlayOptions = new GroundOverlayOptions();
         BitmapDescriptor image = BitmapDescriptorFactory.fromResource(R.drawable.echologia_map);
-
-        groundOverlayOptions.image(image).position(new LatLng(48.10872932860948, -0.7233687971115112), 380f).transparency(0.2f);
+        groundOverlayOptions.image(image).position(new LatLng(48.10872932860948, -0.7233687971115112), 380f).transparency(0.2f); //Positions de la carte
         GroundOverlay imageOverlay = mMap.addGroundOverlay(groundOverlayOptions);
 
+        //Initialisation de la partie
         creationMenuDeroulant();
         demanderPermissionGps();
         recupererLesDrapeauxSurLeServeur(game);
 
-        //Timer qui fait toutes les requêtes à faire durant la partie
+        //Timer qui lance toutes les requêtes serveur pour les coordonnéesà toutes les 2 sec
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -178,7 +178,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     }
 
     public void recupererLesDrapeauxSurLeServeur(Game game) {
-        Log.i("Début", "requete serveur flags");
         ServerReceptionFlagsPositions srf = new ServerReceptionFlagsPositions(game, this);
         srf.execute();
     }
