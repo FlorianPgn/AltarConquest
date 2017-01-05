@@ -32,7 +32,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyBYlilhWNyNBWgm3KvbPB_8WprvNI7QKxk" />
 
 
         <activity
@@ -46,6 +46,9 @@
         </activity>
 
         <activity android:name=".View.EcranRegles"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".View.EcranCredits"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".View.EcranGestion_Partie"
@@ -71,7 +74,11 @@
             android:screenOrientation="portrait" />
 
         <activity android:name=".View.EcranJeu"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" /><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

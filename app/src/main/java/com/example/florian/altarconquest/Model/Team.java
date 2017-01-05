@@ -33,6 +33,7 @@ public class Team {
     }
 
     public Player getJoueur(String pseudo) {
+        Log.i("LOP :" + listOfPlayers, "#SWAG");
         for (Player player : listOfPlayers) {
             if (player.getPseudo().equals(pseudo))
                 return player;
