@@ -182,6 +182,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         srf.execute();
     }
 
+    public void recupererLesBasesSurLeServeur(Game game) {
+
+    }
+
 
     //Méthodes pour afficher la position des joueurs dont on est censé avoir la position
     public void afficherJoueurs() {

@@ -19,10 +19,10 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.List;
 
-public class ServerReceptionPlayersProperties extends ServerReceptionData {
+public class ServerReceptionPlayersLobby extends ServerReceptionData {
     private EcranLobby_Partie context;
 
-    public ServerReceptionPlayersProperties(EcranLobby_Partie context) {
+    public ServerReceptionPlayersLobby (EcranLobby_Partie context) {
         this.context = context;
     }
 
