@@ -12,32 +12,40 @@
     tools:context="com.example.florian.altarconquest.View.EcranAccueil"
     android:background="@drawable/fond" >
 
-    <ImageView
-        android:background="@drawable/altar_conquest"
-        android:id="@+id/imageView2"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_above="@+id/bouton_jouer"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp" />
-
     <ImageButton
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:background="@drawable/bouton_regles"
         android:id="@+id/bouton_regles"
-        android:layout_marginBottom="65dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_alignStart="@+id/bouton_jouer" />
+        android:layout_marginBottom="16dp"
+        android:layout_above="@+id/bouton_credits"
+        android:layout_alignStart="@+id/bouton_credits" />
 
     <ImageButton
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:background="@drawable/jouer"
         android:id="@+id/bouton_jouer"
-        android:layout_marginBottom="30dp"
         android:layout_above="@+id/bouton_regles"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="17dp" />
+
+    <ImageButton
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:background="@drawable/bouton_credits"
+        android:id="@+id/bouton_credits"
+        android:layout_marginBottom="28dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/bouton_jouer" />
+
+    <ImageView
+        android:background="@drawable/altar_conquest"
+        android:id="@+id/logo"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp" />
 
 </RelativeLayout>

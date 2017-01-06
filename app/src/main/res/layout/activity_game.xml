@@ -19,48 +19,45 @@
       android:layout_height="wrap_content"
       android:orientation="horizontal">
 
-      <ImageView
-          android:layout_width="50dp"
-          android:layout_height="50dp"
-          android:src="@drawable/blue_flag_icon" />
+  <ImageView
+      android:layout_width="50dp"
+      android:layout_height="50dp"
+      android:src="@drawable/blue_flag_icon" />
 
-      <TextView
-          android:id="@+id/compteurDrapeauBleu"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="0"
-          android:textColor="#0000CD"
-          android:textSize="50dp"
-          android:textStyle="bold" />
+  <TextView
+      android:id="@+id/compteurDrapeauBleu"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="0"
+      android:textColor="#0000CD"
+      android:textSize="50dp"
+      android:textStyle="bold" />
 
-      <ImageView
-          android:layout_width="50dp"
-          android:layout_height="50dp"
-          android:src="@drawable/red_flag_icon" />
+  <ImageView
+      android:layout_width="50dp"
+      android:layout_height="50dp"
+      android:src="@drawable/red_flag_icon" />
 
-      <TextView
-          android:id="@+id/compteurDrapeauRouge"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_weight="20"
-          android:text="0"
-          android:textSize="50dp"
-          android:textStyle="bold"
-          android:textColor="#FF0000"/>
-      <ImageView
-          android:id="@+id/attackToken"
-          android:layout_width="50dp"
-          android:layout_height="50dp"
-          android:layout_weight="1"
-          android:src="@drawable/jeton_noir_et_tour"
-          />
-      <ImageView
-          android:id="@+id/defencetoken"
-          android:src="@drawable/jeton_blanc_et_tour"
-          android:layout_width="50dp"
-          android:layout_height="50dp"
-          android:layout_weight="1"
-          />
+   <TextView
+      android:id="@+id/compteurDrapeauRouge"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_weight="20"
+      android:text="0"
+      android:textSize="50dp"
+      android:textStyle="bold"
+      android:textColor="#FF0000"/>
+  <ImageView
+      android:id="@+id/attackToken"
+      android:layout_width="50dp"
+      android:layout_height="50dp"
+      android:layout_weight="1"
+      />
+  <ImageView
+      android:id="@+id/defenceToken"
+      android:layout_width="50dp"
+      android:layout_height="50dp"
+      android:layout_weight="1"/>
 
   </LinearLayout>
   <Button
