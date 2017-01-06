@@ -33,6 +33,7 @@ public class JoinGameListener implements View.OnClickListener {
     private Game game;
     char charList[] = {'-', '\"', '~', '\'', '_', '(',')','@','[',']','{','}','#'};
     private List<Player> playerList;
+    boolean listeUpdated = false;
 
 
     public JoinGameListener(Context context, Game game){
@@ -43,6 +44,9 @@ public class JoinGameListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
+        ServerReceptionPlayersBeforeLobby srpbl = new ServerReceptionPlayersBeforeLobby(JoinGameListener.this);
+        srpbl.execute(String.valueOf(game.getId()));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Saisissez votre pseudo (mininum 4 caractères) :");
@@ -57,9 +61,9 @@ public class JoinGameListener implements View.OnClickListener {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ServerReceptionPlayersBeforeLobby srpbl;
                 String pseudo = input.getText().toString();
-                if(validation(input)) {
+
+                if(validation(input) && listeUpdated==true) {
                     ServerSendPlayerProperties ssp = new ServerSendPlayerProperties();
                     ssp.execute(pseudo, String.valueOf(game.getId()));
 
@@ -91,8 +95,18 @@ public class JoinGameListener implements View.OnClickListener {
      * @return false si le String contient un caractère interdit
      */
     private boolean isPseudoValid(String pseudo) {
-
+        
+        for(Player p : playerList){
+            Log.i(TAG, "isPseudoValid: " + p.getPseudo());
+            if (p.getPseudo().equals(pseudo))
+                return false;
+            Log.i(TAG, "isPseudoValid: ok");
+        }
+        
         for (int i = 0; i < charList.length; i++) {
+
+            
+
             if (pseudo.contains(Character.toString(charList[i])))
                 return false;
         }
@@ -129,6 +143,7 @@ public class JoinGameListener implements View.OnClickListener {
 
     public void updateListJoueurs(List<Player> list){
         this.playerList = list;
+        listeUpdated = true;
     }
 
 }
