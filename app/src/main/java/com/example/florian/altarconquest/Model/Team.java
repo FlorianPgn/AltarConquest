@@ -33,7 +33,6 @@ public class Team {
     }
 
     public Player getJoueur(String pseudo) {
-        Log.i("LOP :" + listOfPlayers, "#SWAG");
         for (Player player : listOfPlayers) {
             if (player.getPseudo().equals(pseudo))
                 return player;
@@ -57,5 +56,9 @@ public class Team {
 
     public Base getBase() {
         return base;
+    }
+
+    public void setBase(Base base) {
+        this.base = base;
     }
 }

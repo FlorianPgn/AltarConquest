@@ -21,4 +21,16 @@ public class Base  {
         player.setAttackTokenAvailable(true);
         player.setDefenseTokenAvailable(true);
     }
+
+    public String getName(){
+        return name;
+    }
+    public LatLng getCoordonnees() {
+        return coordonnees;
+    }
+
+    public TeamColor getTeamColor(){
+        return teamColor;
+    }
+
 }

@@ -1,10 +1,11 @@
-package com.example.florian.altarconquest.ServerInteractions; /**
- * Created by Hugo on 08/12/2016.
- */
+package com.example.florian.altarconquest.ServerInteractions;
 
+import com.example.florian.altarconquest.Controller.JoinGameListener;
 import com.example.florian.altarconquest.Model.Player;
 import com.example.florian.altarconquest.ServerInteractions.Parsers.PlayerParser;
+import com.example.florian.altarconquest.ServerInteractions.ServerReceptionData;
 import com.example.florian.altarconquest.View.EcranLobby_Partie;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedWriter;
@@ -17,13 +18,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ServerReceptionPlayersProperties extends ServerReceptionData {
-    private EcranLobby_Partie context;
+public class ServerReceptionPlayersBeforeLobby extends ServerReceptionData {
+    private JoinGameListener listener;
 
-    public ServerReceptionPlayersProperties(EcranLobby_Partie context) {
-        this.context = context;
+
+    public ServerReceptionPlayersBeforeLobby(JoinGameListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -39,7 +42,7 @@ public class ServerReceptionPlayersProperties extends ServerReceptionData {
 
             List<Player> resultats = playerParser.parse(stream);
 
-            context.generateListContent(resultats);
+            listener.updateListJoueurs(resultats);
 
 
         } catch (XmlPullParserException e) {

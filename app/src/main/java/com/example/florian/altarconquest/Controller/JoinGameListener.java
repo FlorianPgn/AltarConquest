@@ -6,15 +6,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.Model.Player;
-import com.example.florian.altarconquest.Model.TeamColor;
+import com.example.florian.altarconquest.ServerInteractions.ServerReceptionPlayersBeforeLobby;
+import com.example.florian.altarconquest.ServerInteractions.ServerSendGameProperties;
 import com.example.florian.altarconquest.ServerInteractions.ServerSendPlayerProperties;
 import com.example.florian.altarconquest.View.EcranLobby_Partie;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.google.android.gms.wearable.DataMap.TAG;
 
 /**
  * Created by Florian on 05/12/2016.
@@ -24,17 +31,21 @@ public class JoinGameListener implements View.OnClickListener {
 
     private Context context;
     private Game game;
+    char charList[] = {'-', '\"', '~', '\'', '_', '(',')','@','[',']','{','}','#'};
+    private List<Player> playerList;
+
 
     public JoinGameListener(Context context, Game game){
         this.game = game;
         this.context = context;
+        this.playerList = new ArrayList<>();
     }
 
     @Override
     public void onClick(View v) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Saisissez votre pseudo :");
+        builder.setTitle("Saisissez votre pseudo (mininum 4 caractères) :");
 
         // Set up the input
         final EditText input = new EditText(context);
@@ -46,11 +57,13 @@ public class JoinGameListener implements View.OnClickListener {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ServerReceptionPlayersBeforeLobby srpbl;
                 String pseudo = input.getText().toString();
-                if(!pseudo.equals("")) {
+                if(validation(input)) {
                     ServerSendPlayerProperties ssp = new ServerSendPlayerProperties();
                     ssp.execute(pseudo, String.valueOf(game.getId()));
 
+                    //Serialize l'objet game
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("game", game);
 
@@ -72,4 +85,51 @@ public class JoinGameListener implements View.OnClickListener {
 
         builder.show();
     }
+
+    /**
+     *
+     * @param pseudo
+     * @return false si le String contient un caractère interdit
+     */
+    private boolean isPseudoValid(String pseudo) {
+
+        for (int i = 0; i < charList.length; i++) {
+            if (pseudo.contains(Character.toString(charList[i])))
+                return false;
+        }
+        return true;
+
+    }
+
+    /**
+     * fonction vérifiant les entrées et permettant ou non la création de la partie
+     */
+    private boolean validation(EditText input) {
+
+        //enregistre les Strings venant des textEdits
+        String name = input.getText().toString();
+        boolean cancel = false;
+        View focusView = null;
+
+        if (TextUtils.isEmpty(name)) {
+            input.setError("Ce champs est obligatoire");
+            focusView = input;
+            cancel = true;
+        } else if (!isPseudoValid(name)) {
+            input.setError("Caractères interdits dans le nom");
+            focusView = input;
+            cancel = true;
+        }
+
+        if (cancel) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void updateListJoueurs(List<Player> list){
+        this.playerList = list;
+    }
+
 }

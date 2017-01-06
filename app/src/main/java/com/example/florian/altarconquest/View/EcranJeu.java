@@ -27,13 +27,13 @@ import android.widget.RelativeLayout;
 import com.example.florian.altarconquest.Model.EcomieEnergie;
 import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.Model.Game;
+import com.example.florian.altarconquest.ServerInteractions.ServerReceptionBasesPositions;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionCoordinates;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionFlagsPositions;
 import com.example.florian.altarconquest.ServerInteractions.ServerSendCoordinates;
 
 import android.location.LocationListener;
 import android.widget.Toast;
-
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
@@ -99,7 +99,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
 
         coordinates = new HashMap<>();
@@ -108,13 +108,13 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         economieEnergie.start();
 
         //Récupère l'objet Game du lobby
-        Bundle bundle = getIntent().getExtras();
-        game = bundle.getParcelable("game");
+
+        Bundle extras = getIntent().getExtras();
+        game = extras.getParcelable("game");
 
         //Récupère et sécurise les données passées depuis le lobby
         String color;
         if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
             if (extras == null) {
                 pseudo = null;
                 color = null;
@@ -133,9 +133,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         } else if (color.equals(TeamColor.RED.toString())) {
             myTeamColor = TeamColor.RED;
         }
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
     }
 
     /**
@@ -159,19 +161,21 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 17.0f));
         retirerMouvementCameraMarkers();
 
+
+        //Ajout de la carte d'Ecologia en background
         GroundOverlayOptions groundOverlayOptions = new GroundOverlayOptions();
         BitmapDescriptor image = BitmapDescriptorFactory.fromResource(R.drawable.echologia_map);
-
-        groundOverlayOptions.image(image).position(new LatLng(48.10872932860948, -0.7233687971115112), 380f).transparency(0.2f);
+        groundOverlayOptions.image(image).position(new LatLng(48.10872932860948, -0.7233687971115112), 380f).transparency(0.2f); //Positions de la carte
         GroundOverlay imageOverlay = mMap.addGroundOverlay(groundOverlayOptions);
 
+        //Initialisation de la partie
         creationMenuDeroulant();
         demanderPermissionGps();
-        recupererLesDrapeauxSurLeServeur(game);
+        recupererLesDrapeauxSurLeServeur();
+        recupererLesBasesSurLeServeur();
 
-        //Timer qui fait toutes les requêtes à faire durant la partie
+        //Timer qui lance toutes les requêtes serveur pour les coordonnéesà toutes les 2 sec
         Timer timer = new Timer();
-
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -193,11 +197,12 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
         setAttackToken(true);
         setDefencetoken(true);
+
     }
 
 
     //Méthodes pour afficher les drapeaux au démarage de l'activité
-    public void afficherDrapeaux(Game game) {
+    public void afficherDrapeaux() {
         for (Flag flag : game.getBlueTeam().getListofFlags()) {
             mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
         }
@@ -206,10 +211,21 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         }
     }
 
-    public void recupererLesDrapeauxSurLeServeur(Game game) {
-        Log.i("Début", "requete serveur flags");
-        ServerReceptionFlagsPositions srf = new ServerReceptionFlagsPositions(game, this);
+
+    public void recupererLesDrapeauxSurLeServeur() {
+        ServerReceptionFlagsPositions srf = new ServerReceptionFlagsPositions(this);
         srf.execute();
+    }
+
+    //Méthodes pour afficher les bases au démarage de l'activité
+    public void afficherBases() {
+        mMap.addMarker(new MarkerOptions().position(game.getBlueTeam().getBase().getCoordonnees()).title(game.getBlueTeam().getBase().getName()));
+        mMap.addMarker(new MarkerOptions().position(game.getRedTeam().getBase().getCoordonnees()).title(game.getRedTeam().getBase().getName()));
+    }
+
+    public void recupererLesBasesSurLeServeur() {
+        ServerReceptionBasesPositions srbp = new ServerReceptionBasesPositions(this);
+        srbp.execute();
     }
 
 
@@ -236,10 +252,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     }
 
     //Retire le mouvement de caméra quand on clic sur un Marker
-    public void retirerMouvementCameraMarkers() {
+    public void retirerMouvementCameraMarkers(){
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             Marker currentShown;
-
             public boolean onMarkerClick(Marker marker) {
                 if (marker.equals(currentShown)) {
                     marker.hideInfoWindow();
@@ -450,7 +465,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             finish();
         }
     }
-
     //Méthodes en rapport avec la demande d'accès au GPS
     public void demanderPermissionGps() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -469,20 +483,13 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             locationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
                         @Override
-                        public void onStatusChanged(String provider, int status, Bundle extras) {
-                        }
-
+                        public void onStatusChanged(String provider, int status, Bundle extras) {}
                         @Override
-                        public void onProviderEnabled(String provider) {
-                        }
-
+                        public void onProviderEnabled(String provider) {}
                         @Override
-                        public void onProviderDisabled(String provider) {
-                        }
-
+                        public void onProviderDisabled(String provider) {}
                         @Override
-                        public void onLocationChanged(final Location location) {
-                        }
+                        public void onLocationChanged(final Location location) {}
                     }
             );
         }
@@ -583,4 +590,20 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
     }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    public Game getGame(){
+        return game;
+    }
+
+
 }
