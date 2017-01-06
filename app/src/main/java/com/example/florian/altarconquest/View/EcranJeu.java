@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import com.example.florian.altarconquest.Model.EcomieEnergie;
 import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.Model.Game;
+import com.example.florian.altarconquest.ServerInteractions.ServerReceptionBasesPositions;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionCoordinates;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionFlagsPositions;
 import com.example.florian.altarconquest.ServerInteractions.ServerSendCoordinates;
@@ -144,7 +145,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         //Initialisation de la partie
         creationMenuDeroulant();
         demanderPermissionGps();
-        recupererLesDrapeauxSurLeServeur(game);
+        recupererLesDrapeauxSurLeServeur();
+        recupererLesBasesSurLeServeur();
 
         //Timer qui lance toutes les requêtes serveur pour les coordonnéesà toutes les 2 sec
         Timer timer = new Timer();
@@ -153,9 +155,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             public void run() {
                 ServerReceptionCoordinates src = new ServerReceptionCoordinates(game);
                 src.execute(String.valueOf(game.getId()));
+
                 runOnUiThread(new Runnable() {
                     public void run() {
                         afficherJoueurs();
+
                     }
                 });
                 ServerSendCoordinates ssc = new ServerSendCoordinates();
@@ -168,7 +172,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
 
     //Méthodes pour afficher les drapeaux au démarage de l'activité
-    public void afficherDrapeaux(Game game) {
+    public void afficherDrapeaux() {
         for (Flag flag : game.getBlueTeam().getListofFlags()) {
             mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
         }
@@ -177,13 +181,20 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         }
     }
 
-    public void recupererLesDrapeauxSurLeServeur(Game game) {
-        ServerReceptionFlagsPositions srf = new ServerReceptionFlagsPositions(game, this);
+    public void recupererLesDrapeauxSurLeServeur() {
+        ServerReceptionFlagsPositions srf = new ServerReceptionFlagsPositions(this);
         srf.execute();
     }
 
-    public void recupererLesBasesSurLeServeur(Game game) {
+    //Méthodes pour afficher les bases au démarage de l'activité
+    public void afficherBases() {
+        mMap.addMarker(new MarkerOptions().position(game.getBlueTeam().getBase().getCoordonnees()).title(game.getBlueTeam().getBase().getName()));
+        mMap.addMarker(new MarkerOptions().position(game.getRedTeam().getBase().getCoordonnees()).title(game.getRedTeam().getBase().getName()));
+    }
 
+    public void recupererLesBasesSurLeServeur() {
+        ServerReceptionBasesPositions srbp = new ServerReceptionBasesPositions(this);
+        srbp.execute();
     }
 
 
@@ -402,4 +413,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     public void onProviderDisabled(String provider) {
 
     }
+
+    public Game getGame(){
+        return game;
+    }
+
+
 }

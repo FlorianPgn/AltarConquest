@@ -57,4 +57,8 @@ public class Team {
     public Base getBase() {
         return base;
     }
+
+    public void setBase(Base base) {
+        this.base = base;
+    }
 }

@@ -19,11 +19,9 @@ import java.util.List;
  */
 
 public class ServerReceptionFlagsPositions extends ServerReceptionData {
-    public Game game;
     private EcranJeu ecranJeu;
 
-    public ServerReceptionFlagsPositions(Game game, EcranJeu ecranJeu){
-        this.game = game;
+    public ServerReceptionFlagsPositions(EcranJeu ecranJeu){
         this.ecranJeu = ecranJeu;
     }
 
@@ -41,10 +39,10 @@ public class ServerReceptionFlagsPositions extends ServerReceptionData {
             List<Flag> resultats = flagParser.parse(stream);
 
             for (Flag flag: resultats) {
-                game.ajouterDrapeau(flag);
+                ecranJeu.getGame().ajouterDrapeau(flag);
             }
 
-            ecranJeu.afficherDrapeaux(game);
+            ecranJeu.afficherDrapeaux();
 
         } catch (XmlPullParserException e) {
             e.printStackTrace();
