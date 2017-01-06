@@ -2,6 +2,7 @@ package com.example.florian.altarconquest.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.List;
 
@@ -148,6 +149,14 @@ public class Game implements Parcelable {
                     }
                 }
             }
+        }
+    }
+
+    public void ajouterBase(Base base) {
+        if(base.getTeamColor().equals(TeamColor.BLUE)){
+            getBlueTeam().setBase(base);
+        } else {
+            getRedTeam().setBase(base);
         }
     }
 }

@@ -41,12 +41,12 @@ public class EcranLobby_Partie extends Activity {
         ImageButton bouton_red = (ImageButton) findViewById(R.id.bouton_red);
         ImageButton bouton_blue = (ImageButton) findViewById(R.id.bouton_blue);
 
-        timer =  new Timer();
+        //On récupère la game serializé
+        Bundle extras = getIntent().getExtras();
+        game = extras.getParcelable("game");
 
-        Bundle bundle = getIntent().getExtras();
-        game = bundle.getParcelable("game");
+        //On récupère le pseudo du joueur
         if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
             if(extras == null) {
                 pseudo = null;
             } else {
@@ -56,6 +56,7 @@ public class EcranLobby_Partie extends Activity {
             pseudo = (String) savedInstanceState.getSerializable("STRING_PSEUDO");
         }
 
+        //Requête de la liste des joueurs de la partie toutes les 0.5 sec
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -63,9 +64,11 @@ public class EcranLobby_Partie extends Activity {
                 srpp.execute(String.valueOf(game.getId()));
             }
         };
-
+        timer =  new Timer();
         timer.schedule(timerTask, 0, 500);
 
+
+        //Initialisation des listeners des boutons
         bouton_retour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,11 +92,12 @@ public class EcranLobby_Partie extends Activity {
     }
 
     public void ouvrirRejoindrePartie() {
+        //Si on quitte le lobby on est supprimé de la partie en BDD
         ServerSendDeletedPlayer ssdp = new ServerSendDeletedPlayer();
         ssdp.execute(pseudo);
+
         Intent intent = new Intent(this, EcranRejoindre_Partie.class);
         startActivity(intent);
-
     }
 
     public void generateListContent(List<Player> listPlayer) {
@@ -104,35 +108,36 @@ public class EcranLobby_Partie extends Activity {
         ListView lView = (ListView)findViewById(R.id.liste_joueurs);
         lView.setAdapter(adapter);
 
+        //Lorsque la partie est compléte
         if(game.getNbJoueursMax() == listPlayer.size()) {
             boolean colorsAreSet = true;
             TeamColor teamColor = null;
+
+            //On vérifie que tous les joueurs ont choisis leur team
             for (Player player:listPlayer) {
                 if (player.getColor() == null) {
                     colorsAreSet = false;
                 }
-                if (player.getPseudo().equals(pseudo)) {
+                if (player.getPseudo().equals(pseudo)) { //On récupère notre couleur de team
                     teamColor = player.getColor();
                 }
             }
 
             if (colorsAreSet) {
-                timer.cancel();
+                timer.cancel(); //On arrête les requêtes serveur pour avoir les joueurs du lobby
 
-                Intent intent = new Intent(this, EcranJeu.class);
+                //Serialize l'objet game
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("game", game);
+
+                //Passe à l'écran de jeu le pseudo et la couleur de team
+                Intent intent = new Intent(this, EcranJeu.class);
                 intent.putExtra("STRING_PSEUDO", pseudo);
                 intent.putExtra("STRING_COLOR", teamColor.toString());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     @Override

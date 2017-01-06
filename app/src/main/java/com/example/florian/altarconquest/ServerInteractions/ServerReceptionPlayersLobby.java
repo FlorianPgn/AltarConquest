@@ -22,7 +22,7 @@ import java.util.List;
 public class ServerReceptionPlayersLobby extends ServerReceptionData {
     private EcranLobby_Partie context;
 
-    public ServerReceptionPlayersLobby(EcranLobby_Partie context) {
+    public ServerReceptionPlayersLobby (EcranLobby_Partie context) {
         this.context = context;
     }
 
@@ -40,7 +40,6 @@ public class ServerReceptionPlayersLobby extends ServerReceptionData {
             List<Player> resultats = playerParser.parse(stream);
 
             context.generateListContent(resultats);
-
 
         } catch (XmlPullParserException e) {
             e.printStackTrace();
