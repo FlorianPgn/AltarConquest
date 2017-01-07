@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.Model.Player;
@@ -31,12 +32,13 @@ public class JoinGameListener implements View.OnClickListener {
 
     private Context context;
     private Game game;
-    char charList[] = {'-', '\"', '~', '\'', '_', '(',')','@','[',']','{','}','#'};
+    char charList[] = {'²', '&', '"', '\'', '(', '-', '_', ')', '=', '^', '$', '*', ',', ';', ':', '!', '<', '/', '*', '-', '+', '*', '°', '+', '¨', '£', '%', 'µ', '?', '.', '/', '§', '~', '#', '{', '[', '|', '`', '\\', '^', '@', ']', '¤', ']', '}'};
     private List<Player> playerList;
     boolean listeUpdated = false;
+    String erreurPseudo = "Caractère(s) interdit(s)";
 
 
-    public JoinGameListener(Context context, Game game){
+    public JoinGameListener(Context context, Game game) {
         this.game = game;
         this.context = context;
         this.playerList = new ArrayList<>();
@@ -63,7 +65,7 @@ public class JoinGameListener implements View.OnClickListener {
             public void onClick(DialogInterface dialog, int which) {
                 String pseudo = input.getText().toString();
 
-                if(validation(input) && listeUpdated==true) {
+                if (validation(input) && listeUpdated == true) {
                     ServerSendPlayerProperties ssp = new ServerSendPlayerProperties();
                     ssp.execute(pseudo, String.valueOf(game.getId()));
 
@@ -90,25 +92,28 @@ public class JoinGameListener implements View.OnClickListener {
     }
 
     /**
-     *
      * @param pseudo
      * @return false si le String contient un caractère interdit
      */
     private boolean isPseudoValid(String pseudo) {
-        
-        for(Player p : playerList){
-            Log.i(TAG, "isPseudoValid: " + p.getPseudo());
-            if (p.getPseudo().equals(pseudo))
-                return false;
-            Log.i(TAG, "isPseudoValid: ok");
+
+
+        if (pseudo.length() < 3) {
+            erreurPseudo = "Ce pseudonyme est trop court ";
+            return false;
         }
-        
+
+        for (Player p : playerList) {
+            if (p.getPseudo().equals(pseudo))
+                erreurPseudo = "Ce pseudonyme est déjà utilisé";
+            return false;
+        }
+
         for (int i = 0; i < charList.length; i++) {
 
-            
-
-            if (pseudo.contains(Character.toString(charList[i])))
+            if (pseudo.contains(Character.toString(charList[i]))) {
                 return false;
+            }
         }
         return true;
 
@@ -122,15 +127,14 @@ public class JoinGameListener implements View.OnClickListener {
         //enregistre les Strings venant des textEdits
         String name = input.getText().toString();
         boolean cancel = false;
-        View focusView = null;
 
         if (TextUtils.isEmpty(name)) {
-            input.setError("Ce champs est obligatoire");
-            focusView = input;
+            input.setError("Ce champ est obligatoire");
+            Toast.makeText(context, input.getError(), Toast.LENGTH_SHORT).show();
             cancel = true;
         } else if (!isPseudoValid(name)) {
-            input.setError("Caractères interdits dans le nom");
-            focusView = input;
+            input.setError(erreurPseudo);
+            Toast.makeText(context, input.getError(), Toast.LENGTH_SHORT).show();
             cancel = true;
         }
 
@@ -141,7 +145,7 @@ public class JoinGameListener implements View.OnClickListener {
         }
     }
 
-    public void updateListJoueurs(List<Player> list){
+    public void updateListJoueurs(List<Player> list) {
         this.playerList = list;
         listeUpdated = true;
     }
