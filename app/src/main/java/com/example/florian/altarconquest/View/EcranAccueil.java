@@ -23,19 +23,28 @@ public class EcranAccueil extends Activity {
         setContentView(R.layout.activity_accueil);
         Log.i("density", ""+getApplicationContext().getResources().getDisplayMetrics().density);
 
-        ImageButton bouton_jouer = (ImageButton) findViewById(R.id.bouton_jouer);
-        ImageButton bouton_regles = (ImageButton) findViewById(R.id.bouton_regles);
-        bouton_jouer.setOnClickListener(new View.OnClickListener() {
+        ImageButton boutonJouer = (ImageButton) findViewById(R.id.bouton_jouer);
+        ImageButton boutonRegles = (ImageButton) findViewById(R.id.bouton_regles);
+        ImageButton boutonCredits = (ImageButton) findViewById(R.id.bouton_credits);
+
+        boutonJouer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ouvrirCreationPartie();
             }
         });
 
-        bouton_regles.setOnClickListener(new View.OnClickListener() {
+        boutonRegles.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ouvrirRegles();
+            }
+        });
+
+        boutonCredits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ouvrirCredits();
             }
         });
 
@@ -54,6 +63,11 @@ public class EcranAccueil extends Activity {
 
     public void ouvrirRegles() {
         Intent intent = new Intent(this, EcranRegles.class);
+        startActivity(intent);
+    }
+
+    public void ouvrirCredits() {
+        Intent intent = new Intent(this, EcranCredits.class);
         startActivity(intent);
     }
 }
