@@ -30,8 +30,8 @@ public class ServerReceptionGamesProperties extends ServerReceptionData {
         this.context = context;
     }
 
-    public String getScriptUrl() {
-        return "http://altarconquest.hol.es/scripts/get_games.php";
+    public String getScriptName() {
+        return "get_games.php";
     }
 
     @Override

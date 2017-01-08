@@ -10,7 +10,7 @@ import java.net.URLEncoder;
 public class ServerSendCoordinates extends ServerSendData {
 
     @Override
-    public String getScriptUrl() {
+    public String getScriptName() {
         return "http://altarconquest.hol.es/scripts/send_coordinates.php";
     }
 

@@ -5,7 +5,6 @@ import com.example.florian.altarconquest.Model.TeamColor;
 import com.example.florian.altarconquest.R;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,7 +13,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -55,6 +53,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -77,6 +76,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     Map<String, Circle> coordinates;
 
     public Context context = this;
+
+    private Calendar calendar;
+    int startingMinutes;
+    int endingMinutes;
 
     private String pseudo;
     private TeamColor myTeamColor;
@@ -107,8 +110,12 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         economieEnergie = new EcomieEnergie(this);
         economieEnergie.start();
 
-        //Récupère l'objet Game du lobby
+        calendar = Calendar.getInstance();
+        startingMinutes = calendar.get(Calendar.MINUTE);
+        endingMinutes = (startingMinutes + 15)%60;
+        Log.i("Minutes", startingMinutes+"  "+endingMinutes);
 
+        //Récupère l'objet Game du lobby
         Bundle extras = getIntent().getExtras();
         game = extras.getParcelable("game");
 
@@ -137,7 +144,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-
     }
 
     /**
@@ -161,7 +167,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 17.0f));
         retirerMouvementCameraMarkers();
 
-
         //Ajout de la carte d'Ecologia en background
         GroundOverlayOptions groundOverlayOptions = new GroundOverlayOptions();
         BitmapDescriptor image = BitmapDescriptorFactory.fromResource(R.drawable.echologia_map);
@@ -179,6 +184,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
+                if(endingMinutes == calendar.get(Calendar.MINUTE))
+                    finish();
                 ServerReceptionCoordinates src = new ServerReceptionCoordinates(game);
                 src.execute(String.valueOf(game.getId()));
                 runOnUiThread(new Runnable() {
@@ -210,7 +217,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
         }
     }
-
 
     public void recupererLesDrapeauxSurLeServeur() {
         ServerReceptionFlagsPositions srf = new ServerReceptionFlagsPositions(this);
@@ -545,15 +551,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.

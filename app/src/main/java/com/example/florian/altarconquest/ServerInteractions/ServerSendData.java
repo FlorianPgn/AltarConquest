@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.florian.altarconquest.View.EcranCreation_Partie;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -16,7 +14,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 
 /**
  * Created by Florian on 09/12/2016.
@@ -41,7 +38,7 @@ public abstract class ServerSendData extends AsyncTask<String, Void, String> {
         // creation de la connection HTTP
         URL url = null;
         try {
-            url = new URL(getScriptUrl());
+            url = new URL("http://fpellegrin.fr/altarconquest/scripts/"+ getScriptName());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -109,7 +106,7 @@ public abstract class ServerSendData extends AsyncTask<String, Void, String> {
         Log.i("Retour serveur", "Message retourné = " + s);
     }
 
-    public abstract String getScriptUrl();
+    public abstract String getScriptName();
 
     public abstract String encodeData();
 }
