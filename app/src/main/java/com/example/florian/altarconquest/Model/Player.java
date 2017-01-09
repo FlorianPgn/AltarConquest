@@ -78,6 +78,8 @@ public class Player {
         this.coordonnees = coordonnees;
     }
 
-
+    public void setHoldingAFlag(boolean holdingAFlag) {
+        this.holdingAFlag = holdingAFlag;
+    }
 }
 

@@ -429,67 +429,51 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     }
 
     private void gestionQRcodes(String scanContent) {
-        Intent intent = null;
-
         Player player = game.getTeam(myTeamColor).getJoueur(pseudo);
 
         switch (scanContent) {
-            case "0":
+            case "base":
                 if (lastFlagCaptured != 0){
                     player.setAttackTokenAvailable(true);
                     score = score + 1;
                     lastFlagCaptured = 0;
-                    Toast.makeText(this, "BRAVO VOUS AVEZ GAGNÉ UN POINT !", Toast.LENGTH_LONG);
+                    Toast.makeText(this, "BRAVO VOUS AVEZ GAGNÉ UN POINT !", Toast.LENGTH_LONG).show();
                 }
                 else {
                     player.setAttackTokenAvailable(true);
                     player.setDefenseTokenAvailable(true);
-                    Toast.makeText(this, "Vous avez rechargé votre Jeton d'Attaque et Défense", Toast.LENGTH_LONG);
+                    Toast.makeText(this, "Vous avez rechargé votre Jeton d'Attaque et Défense", Toast.LENGTH_LONG).show();
+
                 }
                 break;
             case "1":
-                lastFlagCaptured = 1;
-                player.setAttackTokenAvailable(false);
-                intent = new Intent(this, EcranQuestions.class);
-                intent.putExtra("Questions", 1);
-                Log.e("Ce qu'on a récupérer","" + scanContent);
+                scanQuestion(1, 1, player, scanContent);
                 break;
             case "2":
-                lastFlagCaptured = 2;
-                player.setAttackTokenAvailable(false);
-                intent = new Intent(this, EcranQuestions.class);
-                intent.putExtra("Questions", 4);
-                Log.e("Ce qu'on a récupérer","" + scanContent);
+                scanQuestion(4, 2, player, scanContent);
                 break;
             case "3":
-                lastFlagCaptured = 3;
-                player.setAttackTokenAvailable(false);
-                intent = new Intent(this, EcranQuestions.class);
-                intent.putExtra("Questions", 7);
-                Log.e("Ce qu'on a récupérer","" + scanContent);
+                scanQuestion(7, 3, player, scanContent);
                 break;
             case "4":
-                lastFlagCaptured = 4;
-                player.setAttackTokenAvailable(false);
-                intent = new Intent(this, EcranQuestions.class);
-                intent.putExtra("Questions", 10);
-                Log.e("Ce qu'on a récupérer","" + scanContent);
+                scanQuestion(10, 4, player, scanContent);
                 break;
             case "5":
-                lastFlagCaptured = 5;
-                player.setAttackTokenAvailable(false);
-                intent = new Intent(this, EcranQuestions.class);
-                intent.putExtra("Questions", 13);
-                Log.e("Ce qu'on a récupérer","" + scanContent);
+                scanQuestion(13, 5, player, scanContent);
                 break;
             case "6":
-                lastFlagCaptured = 6;
-                player.setAttackTokenAvailable(false);
-                intent = new Intent(this, EcranQuestions.class);
-                intent.putExtra("Questions", 16);
-                Log.e("Ce qu'on a récupérer","" + scanContent);
+                scanQuestion(16, 6, player, scanContent);
                 break;
         }
+
+    }
+
+    public void scanQuestion(int numLotQuestion, int lastFlagCaptured, Player player, String scanContent){
+        this.lastFlagCaptured = lastFlagCaptured;
+        player.setAttackTokenAvailable(false);
+        Intent intent = new Intent(this, EcranQuestions.class);
+        intent.putExtra("Questions", numLotQuestion);
+        Log.e("Ce qu'on a récupérer","" + scanContent);
         startActivity(intent);
     }
 
