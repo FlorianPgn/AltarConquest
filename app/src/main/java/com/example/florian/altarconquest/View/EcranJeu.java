@@ -85,6 +85,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private int lastFlagCaptured = 0;
     private int score = 0;
 
+    private int minutes = 15;
+    private int seconds = 0;
+
     private String pseudo;
     private TeamColor myTeamColor;
     private Location location;
@@ -118,7 +121,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         calendar = Calendar.getInstance();
         startingMinutes = calendar.get(Calendar.MINUTE);
         endingMinutes = (startingMinutes + 15)%60;
-        Log.i("Minutes", startingMinutes+"  "+endingMinutes);
 
         //Récupère l'objet Game du lobby
         Bundle extras = getIntent().getExtras();
@@ -186,7 +188,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         recupererLesBasesSurLeServeur();
 
         //Timer qui lance toutes les requêtes serveur pour les coordonnéesà toutes les 2 sec
-        Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -204,11 +205,25 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                 if (location != null) {
                     ssc.execute(pseudo, String.valueOf(game.getId()), String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
                 }
-                updateTimer();
+
             }
 
         };
+        Timer timer = new Timer();
         timer.schedule(timerTask, 0, 1000 * 2);
+
+        TimerTask timerTaskUpdateTimer = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        updateTimer();
+                    }
+                });
+            }
+        };
+        Timer timerUpdateTimer = new Timer();
+        timerUpdateTimer.schedule(timerTaskUpdateTimer, 0, 500);
 
         setAttackToken(true);
         setDefencetoken(true);
@@ -217,7 +232,13 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     //Méthode pour le timer
     public void updateTimer() {
-        
+        if(seconds == -1) {
+            minutes--;
+            seconds = 59;
+        }
+        if (timerTextView != null) {
+            timerTextView.setText((minutes<10?"0"+minutes:minutes)+":"+(seconds<10?"0"+seconds:seconds));
+        }
     }
 
     //Méthodes pour afficher les drapeaux au démarage de l'activité
