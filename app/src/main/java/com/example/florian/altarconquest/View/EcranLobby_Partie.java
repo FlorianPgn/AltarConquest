@@ -149,6 +149,7 @@ public class EcranLobby_Partie extends Activity {
 
         nbJoueursEquipeBleu = 0;
         nbJoueursEquipeRouge = 0;
+        colorsAreSet = true;
 
         //Lorsque la partie est compléte
         if(game.getNbJoueursMax() == listPlayer.size()) {
@@ -156,36 +157,42 @@ public class EcranLobby_Partie extends Activity {
 
             //On vérifie que tous les joueurs ont choisis leur team
             for (Player player:listPlayer) {
-                if (player.getColor() == null) {
-                    colorsAreSet = false;
-                }
+                Log.i("TestCouleur", "if");
                 if (player.getPseudo().equals(pseudo)) { //On récupère notre couleur de team
                     teamColor = player.getColor();
                 }
-               if(player.getColor() == teamColor.BLUE){
+
+                if (player.getColor() == null) {
+                    colorsAreSet = false;
+                }
+
+                else if(player.getColor().equals(teamColor.BLUE)){
+                    Log.i("TestCouleur", "bleu++");
                     nbJoueursEquipeBleu++;
                 }
-                if(player.getColor() == teamColor.RED){
+
+                else if(player.getColor().equals(teamColor.RED)){
+                    Log.i("TestCouleur", "rouge++");
                     nbJoueursEquipeRouge++;
                 }
 
             }
+            Log.i("TestCouleur", "colorsAreSet"+colorsAreSet);
+            Log.i("TestCouleur", "nbJoueursEquipeRouge"+nbJoueursEquipeRouge);
+            Log.i("TestCouleur", "nbJoueursEquipeBleu"+nbJoueursEquipeBleu);
+            Log.i("TestCouleur", "jmax"+game.getNbJoueursMax()/2);
+            if (colorsAreSet && nbJoueursEquipeRouge == game.getNbJoueursMax()/2 && nbJoueursEquipeBleu == game.getNbJoueursMax()/2) {
+                timer.cancel();  //On arrête les requêtes serveur pour avoir les joueurs du lobby
 
-            if (colorsAreSet) {
-               if(nbJoueursEquipeRouge == game.getNbJoueursMax()/2 && nbJoueursEquipeBleu == game.getNbJoueursMax()/2) {
-
-                    timer.cancel();  //On arrête les requêtes serveur pour avoir les joueurs du lobby
-
-                    //Serialize l'objet game
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("game", game);
-                    //Passe à l'écran de jeu le pseudo et la couleur de team
-                    Intent intent = new Intent(this, EcranJeu.class);
-                    intent.putExtra("STRING_PSEUDO", pseudo);
-                    intent.putExtra("STRING_COLOR", teamColor.toString());
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
+                //Serialize l'objet game
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("game", game);
+                //Passe à l'écran de jeu le pseudo et la couleur de team
+                Intent intent = new Intent(this, EcranJeu.class);
+                intent.putExtra("STRING_PSEUDO", pseudo);
+                intent.putExtra("STRING_COLOR", teamColor.toString());
+                intent.putExtras(bundle);
+                startActivity(intent);
 
             }
 

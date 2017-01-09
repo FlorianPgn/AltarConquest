@@ -64,7 +64,7 @@ public class JoinGameListener implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String pseudo = input.getText().toString();
-
+                Log.i("Char", "onClick");
                 if (validation(input) && listeUpdated == true) {
                     ServerSendPlayerProperties ssp = new ServerSendPlayerProperties();
                     ssp.execute(pseudo, String.valueOf(game.getId()));
@@ -97,21 +97,19 @@ public class JoinGameListener implements View.OnClickListener {
      * @return false si le String contient un caractère interdit
      */
     private boolean isPseudoValid(String pseudo) {
-
-
         if (pseudo.length() < 3) {
             erreurPseudo = "Ce pseudonyme est trop court ";
             return false;
         }
 
         for (Player p : playerList) {
-            if (p.getPseudo().equals(pseudo))
+            if (p.getPseudo().equals(pseudo)) {
                 erreurPseudo = "Ce pseudonyme est déjà utilisé";
-            return false;
+                return false;
+            }
         }
 
         for (int i = 0; i < charList.length; i++) {
-
             if (pseudo.contains(Character.toString(charList[i]))) {
                 return false;
             }
@@ -124,7 +122,6 @@ public class JoinGameListener implements View.OnClickListener {
      * fonction vérifiant les entrées et permettant ou non la création de la partie
      */
     private boolean validation(EditText input) {
-
         //enregistre les Strings venant des textEdits
         String name = input.getText().toString();
         boolean cancel = false;

@@ -31,6 +31,7 @@ import com.example.florian.altarconquest.ServerInteractions.ServerReceptionFlags
 import com.example.florian.altarconquest.ServerInteractions.ServerSendCoordinates;
 
 import android.location.LocationListener;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -63,23 +64,26 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     public GoogleMap mMap;
     public EcomieEnergie economieEnergie;
+
     private Button mapButton, flagButton, qrCodeButton, treeButton, unactiveTreeButton;
-    private int lastFlagCaptured = 0;
-    private int score = 0;
     private static ImageView attackToken;
     private static ImageView defenceToken;
     private Boolean attackTokenAvailable = true, defenseTokenAvailable = true;
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
     public ImageView imageEconomie;
+    private TextView timerTextView;
 
     Map<String, Circle> coordinates;
 
     public Context context = this;
 
     private Calendar calendar;
-    int startingMinutes;
-    int endingMinutes;
+    private int startingMinutes;
+    private int endingMinutes;
+
+    private int lastFlagCaptured = 0;
+    private int score = 0;
 
     private String pseudo;
     private TeamColor myTeamColor;
@@ -104,6 +108,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         mapFragment.getMapAsync(this);
         
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
+        timerTextView = (TextView) findViewById(R.id.timerTextView);
 
         coordinates = new HashMap<>();
 
@@ -161,9 +166,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
         double depInfoLat = 48.08574927627401, depInfoLng = -0.7584989108085632;
         double echologiaLat = 48.10922932860948, echologiaLng = -0.7235687971115112;
+        double hugoLat = 48.069250, hugoLng = -0.774704;
 
         // Initialisation de la position de départ de la caméra
-        LatLng startCameraPosition = new LatLng(depInfoLat, depInfoLng);
+        LatLng startCameraPosition = new LatLng(hugoLat, hugoLng);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 17.0f));
         retirerMouvementCameraMarkers();
 
@@ -184,8 +190,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                if(endingMinutes == calendar.get(Calendar.MINUTE))
+                if(endingMinutes == calendar.get(Calendar.MINUTE)) {
                     finish();
+                }
                 ServerReceptionCoordinates src = new ServerReceptionCoordinates(game);
                 src.execute(String.valueOf(game.getId()));
                 runOnUiThread(new Runnable() {
@@ -197,6 +204,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                 if (location != null) {
                     ssc.execute(pseudo, String.valueOf(game.getId()), String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
                 }
+                updateTimer();
             }
 
         };
@@ -207,6 +215,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
+    //Méthode pour le timer
+    public void updateTimer() {
+        
+    }
 
     //Méthodes pour afficher les drapeaux au démarage de l'activité
     public void afficherDrapeaux() {
