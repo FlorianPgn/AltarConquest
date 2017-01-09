@@ -157,7 +157,8 @@ public class Game implements Parcelable {
                         }
                         else {
                             inGamePlayer.setHoldingAFlag(false);
-                        }                    }
+                        }
+                    }
                 }
             }
         }
