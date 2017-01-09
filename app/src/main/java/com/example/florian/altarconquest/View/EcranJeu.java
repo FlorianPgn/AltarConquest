@@ -67,11 +67,13 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private Button mapButton, flagButton, qrCodeButton, treeButton, unactiveTreeButton;
     private int lastFlagCaptured = 0;
     private int score = 0;
+    private float DISTANCE_MAXIMUM_REQCUISE = 5;
     private static ImageView attackToken;
     private static ImageView defenceToken;
     private Boolean attackTokenAvailable = true, defenseTokenAvailable = true;
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
+    private ArrayList<Player> joueursAvecDrapeau;
     public ImageView imageEconomie;
 
     Map<String, Circle> coordinates;
@@ -80,6 +82,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     private String pseudo;
     private TeamColor myTeamColor;
+    private TeamColor enemyTeamColor;
     private Location location;
 
     private Game game;
@@ -99,7 +102,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        
+
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
 
         coordinates = new HashMap<>();
@@ -130,8 +133,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         //Initialise la team du joueur pendant cette partie
         if (color.equals(TeamColor.BLUE.toString())) {
             myTeamColor = TeamColor.BLUE;
+            enemyTeamColor = TeamColor.RED;
         } else if (color.equals(TeamColor.RED.toString())) {
             myTeamColor = TeamColor.RED;
+            enemyTeamColor = TeamColor.BLUE;
         }
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -235,6 +240,17 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             if (!player.getPseudo().equals(pseudo))
                 updateAffichagePositionJoueurs(player);
         }
+        afficherJoueursEnnemiesAvecDrapeau();
+    }
+
+    public void afficherJoueursEnnemiesAvecDrapeau() {
+        joueursAvecDrapeau = new ArrayList<Player>();
+        for (Player player : game.getTeam(enemyTeamColor).getListeDesPlayers()) {
+            if (player.isHoldingAFlag() == true) {
+                updateAffichagePositionJoueurs(player);
+                joueursAvecDrapeau.add(player);
+            }
+        }
     }
 
     public void updateAffichagePositionJoueurs(Player player) {
@@ -332,8 +348,17 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         flagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Code pour intercepter un drapeau ennemi
-                // A compléter
+                Player player = game.getTeam(myTeamColor).getJoueur(pseudo);
+                for (int i = 0; i >= joueursAvecDrapeau.size(); i++) {
+                    if (DISTANCE_MAXIMUM_REQCUISE >= calculEcartCoor(player.getCoordonnees(), joueursAvecDrapeau.get(i).getCoordonnees())) {
+                        Toast.makeText(EcranJeu.this, "Le drapeau a été recupéré",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(EcranJeu.this, "L'ennemi n'est pas a portée",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
 
@@ -385,6 +410,21 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             }
         }
 
+    }
+
+    public float calculEcartCoor(LatLng coordonneesPlayer, LatLng coordonneesEnemy) {
+        float distance = 0;
+        Location locPlayer = new Location("");
+        locPlayer.setLatitude(coordonneesPlayer.latitude);
+        locPlayer.setLongitude(coordonneesPlayer.longitude);
+
+        Location locEnemy = new Location("");
+        locEnemy.setLatitude(coordonneesEnemy.latitude);
+        locEnemy.setLongitude(coordonneesEnemy.longitude);
+
+        distance = locPlayer.distanceTo(locEnemy);
+
+        return distance;
     }
 
     private void gestionQRcodes(String scanContent) {
