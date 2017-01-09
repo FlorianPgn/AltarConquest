@@ -635,4 +635,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     public Game getGame(){
         return game;
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
+
 }
