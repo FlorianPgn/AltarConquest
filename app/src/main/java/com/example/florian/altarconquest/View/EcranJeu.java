@@ -33,8 +33,6 @@ import com.example.florian.altarconquest.ServerInteractions.ServerSendCoordinate
 import android.location.LocationListener;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.florian.altarconquest.View.EcranQuestions;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
@@ -219,9 +217,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     //Méthode pour le timer
     public void updateTimer() {
-       /*Log.i("tt",""+timerTextView);
-        if (timerTextView != null)
-            timerTextView.setText(""+(endingMinutes-startingMinutes));*/
+        
     }
 
     //Méthodes pour afficher les drapeaux au démarage de l'activité
