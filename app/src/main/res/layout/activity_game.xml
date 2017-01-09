@@ -22,7 +22,7 @@
                 android:layout_height="50dp"
                 android:src="@drawable/blue_flag_icon" />
             <TextView
-                android:id="@+id/compteurDrapeauBleu"
+                android:id="@+id/scoreBlueTeamTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
@@ -36,7 +36,7 @@
                 android:src="@drawable/red_flag_icon" />
 
             <TextView
-                android:id="@+id/compteurDrapeauRouge"
+                android:id="@+id/scoreRedTeamTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"

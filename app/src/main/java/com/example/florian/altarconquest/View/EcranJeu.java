@@ -72,7 +72,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
     public ImageView imageEconomie;
-    private TextView timerTextView;
+    private TextView timerTextView, scoreBlueTeamTextView, scoreRedTeamTextView;
 
     Map<String, Circle> coordinates;
 
@@ -90,6 +90,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     private String pseudo;
     private TeamColor myTeamColor;
+    private TeamColor enemyTeamColor;
     private Location location;
 
     private Game game;
@@ -112,6 +113,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
         timerTextView = (TextView) findViewById(R.id.timerTextView);
+        scoreBlueTeamTextView = (TextView) findViewById(R.id.scoreBlueTeamTextView);
+        scoreRedTeamTextView = (TextView) findViewById(R.id.scoreRedTeamTextView);
 
         coordinates = new HashMap<>();
 
@@ -144,8 +147,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         //Initialise la team du joueur pendant cette partie
         if (color.equals(TeamColor.BLUE.toString())) {
             myTeamColor = TeamColor.BLUE;
+            enemyTeamColor = TeamColor.RED;
         } else if (color.equals(TeamColor.RED.toString())) {
             myTeamColor = TeamColor.RED;
+            enemyTeamColor = TeamColor.BLUE;
         }
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -199,6 +204,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                 runOnUiThread(new Runnable() {
                     public void run() {
                         afficherJoueurs();
+                        updateScores();
                     }
                 });
                 ServerSendCoordinates ssc = new ServerSendCoordinates();
@@ -228,6 +234,19 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         setAttackToken(true);
         setDefencetoken(true);
 
+    }
+
+    //Méthode pour gérer les compteurs de drapeaux
+    public void updateScores(){
+    }
+
+    public TextView selectFlagCount(TeamColor teamColor){
+        if (teamColor == TeamColor.BLUE) {
+            Log.i("nulls",""+scoreBlueTeamTextView);
+            return scoreBlueTeamTextView;
+        } else {
+            return scoreRedTeamTextView;
+        }
     }
 
     //Méthode pour le timer
@@ -435,7 +454,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             case "base":
                 if (lastFlagCaptured != 0){
                     player.setAttackTokenAvailable(true);
-                    score = score + 1;
+                    game.getTeam(myTeamColor).getJoueur(pseudo).incrementerScore();
                     lastFlagCaptured = 0;
                     Toast.makeText(this, "BRAVO VOUS AVEZ GAGNÉ UN POINT !", Toast.LENGTH_LONG).show();
                 }
