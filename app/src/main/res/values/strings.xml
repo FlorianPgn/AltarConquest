@@ -8,10 +8,10 @@
         Remporter la partie en rapportant le plus de points à son équipe avant la fin du temps imparti.\n
 
         Ce jeu est un "Capture the flag", en français "Capture le drapeau" et se joue entre 2 et 12 joueurs.\n
-        Ces joueurs composent deux <b>EQUIPES</b> une <b>ROUGE</b> et une <b>BLEUE</b>.\n
-        Chaque <b>EQUIPE</b> possède une <b>BASE</b> ainsi que des <b>DRAPEAUX</b> à protéger.\n
+        Ces joueurs composent deux <b>ÉQUIPES</b> une <b>ROUGE</b> et une <b>BLEUE</b>.\n
+        Chaque <b>ÉQUIPE</b> possède une <b>BASE</b> ainsi que des <b>DRAPEAUX</b> à protéger.\n
         Ces <b>DRAPEAUX</b> sont au nombre de 6 par EQUIPE, mais seulement 4 d\'entres eux, aléatoirement choisis, seront disponibles par partie.\n
-        Chaque <b>JOUEUR</b> possède, dès le lancement de la partie, 2 <b>JETONS</b> : 1 <b>JETON D\'ATTAQUE</b> et 1 <b>JETON DE DEFENSE</b>,
+        Chaque <b>JOUEUR</b> possède, dès le lancement de la partie, 2 <b>JETONS</b> : 1 <b>JETON D\'ATTAQUE</b> et 1 <b>JETON DE DÉFENSE</b>,
         permettant pour le premier la capture d\'un <b>DRAPEAU</b> ennemi, et la défense d\'un <b>DRAPEAU</b> allié pour le second.\n
         La partie dure 15 minutes.\n\n
 
@@ -25,16 +25,40 @@
         Pour éviter que l\'ennemi ne remporte la partie, il faudra défendre sa base en "récupérant" un <b>DRAPEAU</b> allié.\n
         Pour cela rien de plus simple, il suffit d\'appuyer sur le bouton de défense dans un rayon de 3m autour d\'un ennemi possédant un de vos <b>DRAPEAUX</b>.\n
         (Un joueur ennemi possèdant un de vos <b>DRAPEAUX</b> sur lui apparaitra sur la carte).\n
-        Pour récupérer un <b>DRAPEAU</b> allié que l\'ennemi à volé, il faut possèder un <b>JETON DE DEFENSE</b>, sinon cela ne fonctionnera pas.\n
-        Si vous n\'avez plus de <b>JETON DE DEFENSE</b>, il faudra aller scanner le QR Code de sa base afin de se récupérer un <b>JETON DE DEFENSE</b>.\n\n
+
+        Pour récupérer un <b>DRAPEAU</b> allié que l\'ennemi à volé, il faut possèder un <b>JETON DE DÉFENSE</b>, sinon cela ne fonctionnera pas.\n
+        Si vous n\'avez plus de <b>JETON DE DÉFENSE</b>, il faudra aller scanner le QR Code de sa base afin de se récupérer un <b>JETON DE DEFENSE</b>.\n\n
 
         <b>---------- AUTEL SACRE ----------</b>\n
-        Afin de remporter la partie, il y a un autre moyen que d\'uniquement gagner de points, vous pouvez aussi trouver l\'<b>AUTEL SACRE</b>.\n
+        Afin de remporter la partie, il y a un autre moyen que d\'uniquement gagner de points, vous pouvez aussi trouver l\'<b>AUTEL SACRÉ</b>.\n
         Pour vous aider à le trouver, des questions sur le parc vous seront posées lors de l\'ajout d\'un point à votre équipe.\n
-        Si vous répondez bon, un indice sur l\'emplacement de l\'<b>AUTEL SACRE</b> vous sera donné.\n
-        Si vous pensez avoir trouvé l\'<b>AUTEL SACRE</b>, allez donc vous positionner 30 secondes dans un périmêtre de 3m autour de lui.\n
+        Si vous répondez bon, un indice sur l\'emplacement de l\'<b>AUTEL SACRÉ</b> vous sera donné.\n
+        Si vous pensez avoir trouvé l\'<b>AUTEL SACRÉ</b>, allez donc vous positionner 30 secondes dans un périmêtre de 3m autour de lui.\n
         La partie sera alors remportée par votre équipe.\n\n
 
-        BONNE CHANCE DE LA PART DE TOUTE L\'EQUIPE !
+        BONNE CHANCE DE LA PART DE TOUTE L\'ÉQUIPE !
+    </string>
+    <string name="credits">
+        <b>ALTAT CONQUEST 2016/2017\n\n</b>
+
+        Jeu créé dans le cadre du Projet Tuteuré de Semestre 3 du DUT Informatique de LAVAL pour le Parc Ecologia (en Mayenne) par :\n\n
+
+        <b>Florian PELLEGRIN</b>\n
+        (Chef de Projet/Programmeur)\n\n
+
+        <b>Hugo MORALI</b>\n
+        (Designer/Programmeur)\n\n
+
+        <b>Thomas RAINEAU</b>\n
+        (Chargé de documents/Programmeur)\n\n
+
+        <b>Matthieu LE BIAVANT</b>\n
+        (Chargé de documents/Programmeur)\n\n
+
+        <b>Nicolas GIRAULT</b>\n
+        (Euh on sait pas trop, vous savez, il n\'était pas vraiment présent, et puis chez lui il n\'a pas fait grand chose...)\n\n
+
+        Et au nom de toute l\'équipe : \n\n
+        <b>MERCI À VOUS D\'AVOIR INSTALLÉ ALTAR CONQUEST !</b>
     </string>
 </resources>
