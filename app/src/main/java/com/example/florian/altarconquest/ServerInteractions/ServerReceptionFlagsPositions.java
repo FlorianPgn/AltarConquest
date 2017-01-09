@@ -26,8 +26,8 @@ public class ServerReceptionFlagsPositions extends ServerReceptionData {
     }
 
     @Override
-    public String getScriptUrl() {
-        return "http://altarconquest.hol.es/scripts/getflags.php";
+    public String getScriptName() {
+        return "getflags.php";
     }
 
     @Override

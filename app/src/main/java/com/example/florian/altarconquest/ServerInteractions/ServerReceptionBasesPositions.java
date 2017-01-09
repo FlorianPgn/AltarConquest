@@ -28,8 +28,8 @@ public class ServerReceptionBasesPositions extends ServerReceptionData {
     }
 
     @Override
-    public String getScriptUrl() {
-        return "http://altarconquest.hol.es/scripts/get_bases.php";
+    public String getScriptName() {
+        return "get_bases.php";
     }
 
     @Override

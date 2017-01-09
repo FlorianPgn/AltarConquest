@@ -9,8 +9,8 @@ import java.net.URLEncoder;
 
 public class ServerSendDeletedPlayer extends ServerSendData {
     @Override
-    public String getScriptUrl() {
-        return "http://altarconquest.hol.es/scripts/send_deleted_player.php";
+    public String getScriptName() {
+        return "send_deleted_player.php";
     }
 
     @Override

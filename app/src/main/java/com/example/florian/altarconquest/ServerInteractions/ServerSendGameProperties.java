@@ -17,8 +17,8 @@ public class ServerSendGameProperties extends ServerSendData{
     }
 
     @Override
-    public String getScriptUrl() {
-        return "http://altarconquest.hol.es/scripts/sendgameproperties.php";
+    public String getScriptName() {
+        return "sendgameproperties.php";
     }
 
     @Override

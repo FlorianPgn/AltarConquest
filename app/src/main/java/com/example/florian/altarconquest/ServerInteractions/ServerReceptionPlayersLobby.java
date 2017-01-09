@@ -27,8 +27,8 @@ public class ServerReceptionPlayersLobby extends ServerReceptionData {
     }
 
     @Override
-    public String getScriptUrl() {
-        return "http://altarconquest.hol.es/scripts/get_players.php";
+    public String getScriptName() {
+        return "get_players.php";
     }
 
     @Override
