@@ -89,6 +89,7 @@ public class PlayerParser {
         String latitude = null;
         String longitude = null;
         String teamColor = null;
+        String holdAFlag = null;
 
 
         // tand que l'élément suivant n'est pas une balise fermante </..>
@@ -113,6 +114,8 @@ public class PlayerParser {
                 case "teamColor":
                     teamColor = (readTag(parser, "teamColor"));
                     break;
+                case "holdAFlag":
+                    holdAFlag = readTag(parser, "holdAFlag");
                 default:
                     skip(parser);
                     break;
@@ -121,11 +124,23 @@ public class PlayerParser {
         // retourner une nouvelle Entry avec le nom et message extrait du
 
         if (teamColor.equals("rouge")) {
-            return new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), TeamColor.RED); }
+            Player player = new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), TeamColor.RED);
+            if (holdAFlag.equals("1")) {
+                player.setHoldingAFlag(true);
+            }
+            return player; }
         else if (teamColor.equals("bleue")) {
-            return new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), TeamColor.BLUE); }
+            Player player = new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), TeamColor.BLUE);
+            if (holdAFlag.equals("1")) {
+                player.setHoldingAFlag(true);
+            }
+            return player; }
         else {
-            return new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), null); }
+            Player player = new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), null);
+            if (holdAFlag.equals("1")) {
+                player.setHoldingAFlag(true);
+            }
+            return player; }
     }
 
 
