@@ -1,8 +1,12 @@
 package com.example.florian.altarconquest.View;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -28,6 +32,8 @@ import java.util.TimerTask;
 public class EcranLobby_Partie extends Activity {
 
     private String pseudo;
+    private int nbJoueursEquipeRouge, nbJoueursEquipeBleu;
+    boolean colorsAreSet = true;
 
     Timer timer;
     Game game;
@@ -40,6 +46,17 @@ public class EcranLobby_Partie extends Activity {
         ImageButton bouton_retour = (ImageButton) findViewById(R.id.bouton_retour);
         ImageButton bouton_red = (ImageButton) findViewById(R.id.bouton_red);
         ImageButton bouton_blue = (ImageButton) findViewById(R.id.bouton_blue);
+
+        final AlertDialog.Builder equipeNonEquilibreBuilder = new AlertDialog.Builder(EcranLobby_Partie.this);
+        equipeNonEquilibreBuilder.setTitle("Les équipes ne sont pas équilibrés:");
+        equipeNonEquilibreBuilder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        timer =  new Timer();
 
         //On récupère la game serializé
         Bundle extras = getIntent().getExtras();
@@ -80,6 +97,17 @@ public class EcranLobby_Partie extends Activity {
             @Override
             public void onClick(View v) {
                 new ChoixEquipeListener(pseudo, "rouge");
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!(nbJoueursEquipeRouge == game.getNbJoueursMax()/2
+                                && nbJoueursEquipeBleu == game.getNbJoueursMax()/2) && colorsAreSet){
+                            equipeNonEquilibreBuilder.show();
+                        }
+                    }
+                }, 2000);
             }
         });
 
@@ -87,6 +115,17 @@ public class EcranLobby_Partie extends Activity {
             @Override
             public void onClick(View v) {
                 new ChoixEquipeListener(pseudo, "bleue");
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!(nbJoueursEquipeRouge == game.getNbJoueursMax()/2
+                                && nbJoueursEquipeBleu == game.getNbJoueursMax()/2) && colorsAreSet){
+                            equipeNonEquilibreBuilder.show();
+                        }
+                    }
+                }, 2000);
             }
         });
     }
@@ -108,9 +147,11 @@ public class EcranLobby_Partie extends Activity {
         ListView lView = (ListView)findViewById(R.id.liste_joueurs);
         lView.setAdapter(adapter);
 
+        nbJoueursEquipeBleu = 0;
+        nbJoueursEquipeRouge = 0;
+
         //Lorsque la partie est compléte
         if(game.getNbJoueursMax() == listPlayer.size()) {
-            boolean colorsAreSet = true;
             TeamColor teamColor = null;
 
             //On vérifie que tous les joueurs ont choisis leur team
@@ -121,22 +162,33 @@ public class EcranLobby_Partie extends Activity {
                 if (player.getPseudo().equals(pseudo)) { //On récupère notre couleur de team
                     teamColor = player.getColor();
                 }
+               if(player.getColor() == teamColor.BLUE){
+                    nbJoueursEquipeBleu++;
+                }
+                if(player.getColor() == teamColor.RED){
+                    nbJoueursEquipeRouge++;
+                }
+
             }
 
             if (colorsAreSet) {
-                timer.cancel(); //On arrête les requêtes serveur pour avoir les joueurs du lobby
+               if(nbJoueursEquipeRouge == game.getNbJoueursMax()/2 && nbJoueursEquipeBleu == game.getNbJoueursMax()/2) {
 
-                //Serialize l'objet game
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("game", game);
+                    timer.cancel();  //On arrête les requêtes serveur pour avoir les joueurs du lobby
 
-                //Passe à l'écran de jeu le pseudo et la couleur de team
-                Intent intent = new Intent(this, EcranJeu.class);
-                intent.putExtra("STRING_PSEUDO", pseudo);
-                intent.putExtra("STRING_COLOR", teamColor.toString());
-                intent.putExtras(bundle);
-                startActivity(intent);
+                    //Serialize l'objet game
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("game", game);
+                    //Passe à l'écran de jeu le pseudo et la couleur de team
+                    Intent intent = new Intent(this, EcranJeu.class);
+                    intent.putExtra("STRING_PSEUDO", pseudo);
+                    intent.putExtra("STRING_COLOR", teamColor.toString());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+
             }
+
         }
     }
 
