@@ -238,6 +238,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     //Méthode pour gérer les compteurs de drapeaux
     public void updateScores(){
+        selectFlagCount(myTeamColor).setText(String.valueOf(game.getTeam(myTeamColor).getScore()));
+        selectFlagCount(enemyTeamColor).setText(String.valueOf(game.getTeam(enemyTeamColor).getScore()));
     }
 
     public TextView selectFlagCount(TeamColor teamColor){
