@@ -223,7 +223,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             }
         };
         Timer timerUpdateTimer = new Timer();
-        timerUpdateTimer.schedule(timerTaskUpdateTimer, 0, 500);
+        timerUpdateTimer.schedule(timerTaskUpdateTimer, 0, 1000);
 
         setAttackToken(true);
         setDefencetoken(true);
@@ -232,9 +232,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     //Méthode pour le timer
     public void updateTimer() {
-        if(seconds == -1) {
+        if(seconds == 0) {
             minutes--;
             seconds = 59;
+        } else {
+            seconds--;
         }
         if (timerTextView != null) {
             timerTextView.setText((minutes<10?"0"+minutes:minutes)+":"+(seconds<10?"0"+seconds:seconds));
@@ -633,6 +635,4 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     public Game getGame(){
         return game;
     }
-
-
 }
