@@ -140,13 +140,24 @@ public class Game implements Parcelable {
                 for (Player inGamePlayer:getBlueTeam().getListeDesPlayers()) {
                     if(inGamePlayer.getPseudo().equals(player.getPseudo())) {
                         inGamePlayer.setCoordonnees(player.getCoordonnees());
+                        if (player.isHoldingAFlag()==true) {
+                            inGamePlayer.setHoldingAFlag(true);
+                        }
+                        else {
+                            inGamePlayer.setHoldingAFlag(false);
+                        }
                     }
                 }
             } else {
                 for (Player inGamePlayer:getRedTeam().getListeDesPlayers()) {
                     if(inGamePlayer.getPseudo().equals(player.getPseudo())) {
                         inGamePlayer.setCoordonnees(player.getCoordonnees());
-                    }
+                        if (player.isHoldingAFlag()==true) {
+                            inGamePlayer.setHoldingAFlag(true);
+                        }
+                        else {
+                            inGamePlayer.setHoldingAFlag(false);
+                        }                    }
                 }
             }
         }
