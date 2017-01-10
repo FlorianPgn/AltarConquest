@@ -27,6 +27,9 @@ public class Player {
 
 
     //Methods
+    public void incrementerScore() {
+        score++;
+    }
 
     //Getters
     public String getPseudo() {
