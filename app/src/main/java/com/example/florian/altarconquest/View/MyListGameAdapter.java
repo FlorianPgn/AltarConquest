@@ -14,6 +14,8 @@ import com.example.florian.altarconquest.Controller.JoinGameListener;
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.R;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -26,7 +28,14 @@ public class MyListGameAdapter extends BaseAdapter implements ListAdapter {
     private Context context;
 
     public MyListGameAdapter(List<Game> list, Context context) {
-        this.list = list;
+        this.list = new ArrayList<>();
+        Iterator it = list.iterator();
+        while (it.hasNext()) {
+            Game game = (Game) it.next();
+            if (!game.isEnCours()) {
+                this.list.add(game);
+            }
+        }
         this.context = context;
     }
 
@@ -55,19 +64,18 @@ public class MyListGameAdapter extends BaseAdapter implements ListAdapter {
         }
 
         //Handle TextView and display string from your list
-        TextView listItemText = (TextView)view.findViewById(R.id.list_item_text);
+        TextView listItemText = (TextView) view.findViewById(R.id.list_item_text);
         listItemText.setText(list.get(position).getName());
 
-        TextView listNbJoueurs = (TextView)view.findViewById(R.id.list_nb_joueurs);
+        TextView listNbJoueurs = (TextView) view.findViewById(R.id.list_nb_joueurs);
         listNbJoueurs.setText("Nombre de joueurs : " + list.get(position).getNbJoueurs() + "/" + list.get(position).getNbJoueursMax());
 
         //Handle buttons and add onClickListeners
-        Button joinBtn = (Button)view.findViewById(R.id.list_item_button);
+        Button joinBtn = (Button) view.findViewById(R.id.list_item_button);
 
-        if(!(list.get(position).getNbJoueurs() >= list.get(position).getNbJoueursMax())) {
+        if (!(list.get(position).getNbJoueurs() >= list.get(position).getNbJoueursMax())) {
             joinBtn.setOnClickListener(new JoinGameListener(context, list.get(position)));
         }
-
         return view;
     }
 }
