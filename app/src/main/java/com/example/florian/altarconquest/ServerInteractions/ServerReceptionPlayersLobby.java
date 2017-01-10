@@ -40,7 +40,6 @@ public class ServerReceptionPlayersLobby extends ServerReceptionData {
             InputStream stream = new ByteArrayInputStream(s.getBytes(Charset.defaultCharset()));
 
             List<Player> resultats = playerParser.parse(stream);
-            Log.i("df", ""+resultats);
             context.generateListContent(resultats);
 
         } catch (XmlPullParserException e) {
