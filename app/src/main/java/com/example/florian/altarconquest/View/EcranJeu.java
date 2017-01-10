@@ -434,11 +434,25 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             @Override
             public void onClick(View v) {
                 boolean someoneHaveAFlag = false;
-                for (Player enemy : game.getTeam(enemyTeamColor).getListeDesPlayers()) {
+                for (final Player enemy : game.getTeam(enemyTeamColor).getListeDesPlayers()) {
                     if (enemy.isHoldingAFlag()){
                         someoneHaveAFlag = true;
                         if (DISTANCE_MAXIMUM_REQCUISE >= calculEcartCoor(game.getTeam(myTeamColor).getJoueur(pseudo).getCoordonnees(), enemy.getCoordonnees())) {
-                            Toast.makeText(EcranJeu.this, "Le drapeau a été recupéré", Toast.LENGTH_LONG).show();
+                            Toast.makeText(EcranJeu.this, "Le drapeau est a portée appuyez longtemps pour le capturer !", Toast.LENGTH_LONG).show();
+                            flagButton.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View v) {
+                                    if (game.getTeam(myTeamColor).getJoueur(pseudo).isDefenceTokenAvailable() == true) {
+                                        ServerSendPlayerHoldAFlag ssphaf = new ServerSendPlayerHoldAFlag();
+                                        ssphaf.execute(enemy.getPseudo(), String.valueOf(game.getId()), "0");
+                                        game.getTeam(myTeamColor).getJoueur(pseudo).setDefenseTokenAvailable(false);
+                                    }
+                                    else {
+                                        Toast.makeText(EcranJeu.this, "Vous n'avez pas de jeton de défense disponible !", Toast.LENGTH_LONG).show();
+                                    }
+                                    return true;
+                                }
+                            });
                         }
                         else {
                             Toast.makeText(EcranJeu.this, "L'ennemi n'est pas a portée", Toast.LENGTH_LONG).show();
@@ -447,7 +461,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
                 }
                 if (!someoneHaveAFlag) {
-                    Toast.makeText(EcranJeu.this, "Il n'y a pas de drapeau entrain d'être volé", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EcranJeu.this, "Il n'y a pas de drapeau entrain d'être volé à proximité", Toast.LENGTH_LONG).show();
                 }
             }
         });
