@@ -81,12 +81,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     public Context context = this;
 
-    private Calendar calendar;
-    private int startingMinutes;
-    private int endingMinutes;
 
     private int lastFlagCaptured = 0;
-    private int score = 0;
 
     private int minutes = 15;
     private int seconds = 0;
@@ -132,10 +128,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
         economieEnergie = new EcomieEnergie(this);
         economieEnergie.start();
-
-        calendar = Calendar.getInstance();
-        startingMinutes = calendar.get(Calendar.MINUTE);
-        endingMinutes = (startingMinutes + 15)%60;
 
         //Récupère l'objet Game du lobby
         Bundle extras = getIntent().getExtras();
@@ -208,9 +200,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                if(endingMinutes == calendar.get(Calendar.MINUTE)) {
-                    finish();
-                }
                 ServerReceptionPlayersInformations src = new ServerReceptionPlayersInformations(game);
                 src.execute(String.valueOf(game.getId()));
                 runOnUiThread(new Runnable() {
@@ -266,6 +255,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     //Méthode pour le timer
     public void updateTimer() {
+        if (minutes == 0 && seconds == 0) {
+            Intent intent = new Intent(this, EcranFinJeu.class);
+            startActivity(intent);
+            finish();
+        }
         if(seconds == 0) {
             minutes--;
             seconds = 59;
