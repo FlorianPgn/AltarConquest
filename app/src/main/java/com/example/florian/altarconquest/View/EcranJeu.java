@@ -428,16 +428,21 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         flagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Player player = game.getTeam(myTeamColor).getJoueur(pseudo);
-                for (int i = 0; i >= joueursAvecDrapeau.size(); i++) {
-                    if (DISTANCE_MAXIMUM_REQCUISE >= calculEcartCoor(player.getCoordonnees(), joueursAvecDrapeau.get(i).getCoordonnees())) {
-                        Toast.makeText(EcranJeu.this, "Le drapeau a été recupéré",
-                                Toast.LENGTH_LONG).show();
+                boolean someoneHaveAFlag = false;
+                for (Player enemy : game.getTeam(enemyTeamColor).getListeDesPlayers()) {
+                    if (enemy.isHoldingAFlag()){
+                        someoneHaveAFlag = true;
+                        if (DISTANCE_MAXIMUM_REQCUISE >= calculEcartCoor(game.getTeam(myTeamColor).getJoueur(pseudo).getCoordonnees(), enemy.getCoordonnees())) {
+                            Toast.makeText(EcranJeu.this, "Le drapeau a été recupéré", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(EcranJeu.this, "L'ennemi n'est pas a portée", Toast.LENGTH_LONG).show();
+                        }
                     }
-                    else {
-                        Toast.makeText(EcranJeu.this, "L'ennemi n'est pas a portée",
-                                Toast.LENGTH_LONG).show();
-                    }
+
+                }
+                if (!someoneHaveAFlag) {
+                    Toast.makeText(EcranJeu.this, "Il n'y a pas de drapeau entrain d'être volé", Toast.LENGTH_LONG).show();
                 }
             }
         });
