@@ -88,6 +88,7 @@ public class GameParser {
             String password = null;
             int nbJoueursActuel = 0;
             int nbJoueursMax = 0;
+            int inGame = 0;
 
             // tand que l'élément suivant n'est pas une balise fermante </..>
             while (parser.next() != XmlPullParser.END_TAG) {
@@ -114,6 +115,9 @@ public class GameParser {
                     case "nbJoueursActuel":
                         nbJoueursActuel = Integer.parseInt(readTag(parser, "nbJoueursActuel"));
                         break;
+                    case "inGame":
+                        inGame = Integer.parseInt(readTag(parser, "inGame"));
+                        break;
                     default:
                         skip(parser);
                         break;
@@ -122,7 +126,7 @@ public class GameParser {
             // retourner une nouvelle Entry avec le nom et message extrait du
 
             Game game = new Game(id, name, nbJoueursMax, password);
-
+            game.setEnCours(inGame==1?true:false);
             game.setNbJoueurs(nbJoueursActuel);
             return game;
         }
