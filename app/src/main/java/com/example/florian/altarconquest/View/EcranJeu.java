@@ -13,6 +13,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -28,7 +29,7 @@ import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionBasesPositions;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionPlayersInformations;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionFlagsPositions;
-import com.example.florian.altarconquest.ServerInteractions.ServerSendCoordinates;
+import com.example.florian.altarconquest.ServerInteractions.ServerSendPlayersInformations;
 
 import android.location.LocationListener;
 import android.widget.TextView;
@@ -80,12 +81,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     public Context context = this;
 
-    private Calendar calendar;
-    private int startingMinutes;
-    private int endingMinutes;
 
     private int lastFlagCaptured = 0;
-    private int score = 0;
 
     private int minutes = 15;
     private int seconds = 0;
@@ -115,17 +112,22 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
         timerTextView = (TextView) findViewById(R.id.timerTextView);
+
         scoreBlueTeamTextView = (TextView) findViewById(R.id.scoreBlueTeamTextView);
         scoreRedTeamTextView = (TextView) findViewById(R.id.scoreRedTeamTextView);
 
+
+        mapButton = (Button) findViewById(R.id.mapButton);
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                ouvrirEcranAutel();
+            }
+        });
         coordinates = new HashMap<>();
 
         economieEnergie = new EcomieEnergie(this);
         economieEnergie.start();
-
-        calendar = Calendar.getInstance();
-        startingMinutes = calendar.get(Calendar.MINUTE);
-        endingMinutes = (startingMinutes + 15)%60;
 
         //Récupère l'objet Game du lobby
         Bundle extras = getIntent().getExtras();
@@ -198,9 +200,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                if(endingMinutes == calendar.get(Calendar.MINUTE)) {
-                    finish();
-                }
                 ServerReceptionPlayersInformations src = new ServerReceptionPlayersInformations(game);
                 src.execute(String.valueOf(game.getId()));
                 runOnUiThread(new Runnable() {
@@ -209,7 +208,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                         updateScores();
                     }
                 });
-                ServerSendCoordinates ssc = new ServerSendCoordinates();
+                ServerSendPlayersInformations ssc = new ServerSendPlayersInformations();
                 if (location != null) {
                     ssc.execute(pseudo, String.valueOf(game.getId()), String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
                 }
@@ -238,6 +237,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
+
     //Méthodes pour gérer les compteurs de drapeaux
     public void updateScores(){
         selectFlagCount(myTeamColor).setText(String.valueOf(game.getTeam(myTeamColor).getScore()));
@@ -252,8 +252,14 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         }
     }
 
+
     //Méthode pour le timer
     public void updateTimer() {
+        if (minutes == 0 && seconds == 0) {
+            Intent intent = new Intent(this, EcranFinJeu.class);
+            startActivity(intent);
+            finish();
+        }
         if(seconds == 0) {
             minutes--;
             seconds = 59;
@@ -263,6 +269,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         if (timerTextView != null) {
             timerTextView.setText((minutes<10?"0"+minutes:minutes)+":"+(seconds<10?"0"+seconds:seconds));
         }
+        if (minutes == 0 && seconds == 0){
+            Intent intent = new Intent(this, EcranFinJeu.class);
+            intent.putExtra("Score", game);
+        }
+
     }
 
     //Méthodes pour afficher les drapeaux au démarage de l'activité
@@ -505,6 +516,13 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         Intent intent = new Intent(this, EcranQuestions.class);
         intent.putExtra("Questions", numLotQuestion);
         Log.e("Ce qu'on a récupérer","" + scanContent);
+	    startActivity(intent);
+    }
+
+    public void ouvrirEcranAutel() {
+        Intent intent = new Intent(this, EcranAutel.class);
+        intent.putExtra("game", game);
+
         startActivity(intent);
     }
 
