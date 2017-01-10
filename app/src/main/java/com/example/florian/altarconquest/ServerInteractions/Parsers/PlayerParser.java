@@ -89,6 +89,7 @@ public class PlayerParser {
         String latitude = null;
         String longitude = null;
         String teamColor = null;
+        String score = null;
 
 
         // tand que l'élément suivant n'est pas une balise fermante </..>
@@ -113,6 +114,9 @@ public class PlayerParser {
                 case "teamColor":
                     teamColor = (readTag(parser, "teamColor"));
                     break;
+                case "score":
+                    score = (readTag(parser, "score"));
+                    break;
                 default:
                     skip(parser);
                     break;
@@ -121,11 +125,20 @@ public class PlayerParser {
         // retourner une nouvelle Entry avec le nom et message extrait du
 
         if (teamColor.equals("rouge")) {
-            return new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), TeamColor.RED); }
+            Player player = new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), TeamColor.RED);
+            player.setScore(Integer.valueOf(score));
+            return player;
+        }
         else if (teamColor.equals("bleue")) {
-            return new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), TeamColor.BLUE); }
+            Player player = new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), TeamColor.BLUE);
+            player.setScore(Integer.valueOf(score));
+            return player;
+        }
         else {
-            return new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), null); }
+            Player player = new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), null);
+            player.setScore(Integer.valueOf(score));
+            return player;
+        }
     }
 
 
