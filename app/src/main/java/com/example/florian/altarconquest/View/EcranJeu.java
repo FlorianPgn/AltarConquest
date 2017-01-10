@@ -74,6 +74,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private Boolean attackTokenAvailable = true, defenseTokenAvailable = true;
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
+    private ArrayList<Player> joueursAvecDrapeau;
     public ImageView imageEconomie;
     private TextView timerTextView, scoreBlueTeamTextView, scoreRedTeamTextView;
 
@@ -81,13 +82,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     public Context context = this;
 
-    private Calendar calendar;
-    private int startingMinutes;
-    private int endingMinutes;
 
     private int lastFlagCaptured = 0;
-    private int score = 0;
 
+    private int score = 0;
+    private float DISTANCE_MAXIMUM_REQCUISE = 5;
     private int minutes = 15;
     private int seconds = 0;
 
@@ -107,6 +106,14 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            Intent i = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivityForResult(i, 1);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
@@ -115,7 +122,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         mapFragment.getMapAsync(this);
         
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
-        timerTextView = (TextView) findViewById(R.id.timerTextView);
+        //timerTextView = (TextView) findViewById(R.id.timerTextView);
 
         scoreBlueTeamTextView = (TextView) findViewById(R.id.scoreBlueTeamTextView);
         scoreRedTeamTextView = (TextView) findViewById(R.id.scoreRedTeamTextView);
@@ -132,10 +139,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
         economieEnergie = new EcomieEnergie(this);
         economieEnergie.start();
-
-        calendar = Calendar.getInstance();
-        startingMinutes = calendar.get(Calendar.MINUTE);
-        endingMinutes = (startingMinutes + 15)%60;
 
         //Récupère l'objet Game du lobby
         Bundle extras = getIntent().getExtras();
@@ -208,9 +211,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                if(endingMinutes == calendar.get(Calendar.MINUTE)) {
-                    finish();
-                }
                 ServerReceptionPlayersInformations src = new ServerReceptionPlayersInformations(game);
                 src.execute(String.valueOf(game.getId()));
                 runOnUiThread(new Runnable() {
@@ -266,6 +266,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     //Méthode pour le timer
     public void updateTimer() {
+        if (minutes == 0 && seconds == 0) {
+            Intent intent = new Intent(this, EcranFinJeu.class);
+            startActivity(intent);
+            finish();
+        }
         if(seconds == 0) {
             minutes--;
             seconds = 59;
@@ -293,6 +298,17 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             MarkerOptions marker = new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName());
             marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.drapeaurouge));
             mMap.addMarker(marker);
+        }
+        afficherJoueursEnnemiesAvecDrapeau();
+    }
+
+    public void afficherJoueursEnnemiesAvecDrapeau() {
+        joueursAvecDrapeau = new ArrayList<Player>();
+        for (Player player : game.getTeam(enemyTeamColor).getListeDesPlayers()) {
+            if (player.isHoldingAFlag() == true) {
+                updateAffichagePositionJoueurs(player);
+                joueursAvecDrapeau.add(player);
+            }
         }
     }
 
@@ -420,8 +436,17 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         flagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Code pour intercepter un drapeau ennemi
-                // A compléter
+                Player player = game.getTeam(myTeamColor).getJoueur(pseudo);
+                for (int i = 0; i >= joueursAvecDrapeau.size(); i++) {
+                    if (DISTANCE_MAXIMUM_REQCUISE >= calculEcartCoor(player.getCoordonnees(), joueursAvecDrapeau.get(i).getCoordonnees())) {
+                        Toast.makeText(EcranJeu.this, "Le drapeau a été recupéré",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(EcranJeu.this, "L'ennemi n'est pas a portée",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
 
@@ -473,6 +498,21 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             }
         }
 
+    }
+
+    public float calculEcartCoor(LatLng coordonneesPlayer, LatLng coordonneesEnemy) {
+        float distance = 0;
+        Location locPlayer = new Location("");
+        locPlayer.setLatitude(coordonneesPlayer.latitude);
+        locPlayer.setLongitude(coordonneesPlayer.longitude);
+
+        Location locEnemy = new Location("");
+        locEnemy.setLatitude(coordonneesEnemy.latitude);
+        locEnemy.setLongitude(coordonneesEnemy.longitude);
+
+        distance = locPlayer.distanceTo(locEnemy);
+
+        return distance;
     }
 
     private void gestionQRcodes(String scanContent) {

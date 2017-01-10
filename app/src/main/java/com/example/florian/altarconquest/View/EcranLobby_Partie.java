@@ -1,11 +1,20 @@
 package com.example.florian.altarconquest.View;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -37,6 +46,8 @@ public class EcranLobby_Partie extends Activity {
 
     Timer timer;
     Game game;
+    TeamColor teamColor;
+    Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +67,7 @@ public class EcranLobby_Partie extends Activity {
             }
         });
 
-        timer =  new Timer();
+        timer = new Timer();
 
         //On récupère la game serializé
         Bundle extras = getIntent().getExtras();
@@ -81,7 +92,7 @@ public class EcranLobby_Partie extends Activity {
                 srpp.execute(String.valueOf(game.getId()));
             }
         };
-        timer =  new Timer();
+        timer = new Timer();
         timer.schedule(timerTask, 0, 500);
 
 
@@ -185,18 +196,40 @@ public class EcranLobby_Partie extends Activity {
                 timer.cancel();  //On arrête les requêtes serveur pour avoir les joueurs du lobby
 
                 //Serialize l'objet game
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("game", game);
+
                 //Passe à l'écran de jeu le pseudo et la couleur de team
-                Intent intent = new Intent(this, EcranJeu.class);
-                intent.putExtra("STRING_PSEUDO", pseudo);
-                intent.putExtra("STRING_COLOR", teamColor.toString());
-                intent.putExtras(bundle);
-                startActivity(intent);
+                final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+                if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+                    builder1.setMessage("Veuillez activer votre GPS.");
+                    builder1.setCancelable(true);
 
+                    builder1.setPositiveButton(
+                            "J'active mon GPS !",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    lancerPartie();
+                                }
+                            });
+                    AlertDialog alert1 = builder1.create();
+                    alert1.setCancelable(false);
+                    alert1.show();
+                }
+                else {
+                    lancerPartie();
+                }
             }
-
         }
+    }
+
+    public void lancerPartie() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("game", game);
+        Intent intent = new Intent(context, EcranJeu.class);
+        intent.putExtra("STRING_PSEUDO", pseudo);
+        intent.putExtra("STRING_COLOR", teamColor.toString());
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override
