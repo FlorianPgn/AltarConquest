@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.florian.altarconquest.Model.Game;
+import com.example.florian.altarconquest.Model.TeamColor;
 import com.example.florian.altarconquest.R;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionPlayersInformations;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,6 +19,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 /**
  * Created by Hugo on 10/01/2017.
  */
@@ -25,6 +28,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class EcranAutel extends FragmentActivity implements OnMapReadyCallback {
 
     private Game game;
+    private LatLng coord;
+    private ArrayList<LatLng> listCoord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,7 @@ public class EcranAutel extends FragmentActivity implements OnMapReadyCallback {
 
         Bundle extras = getIntent().getExtras();
         game = extras.getParcelable("game");
+        coord = game.getRedTeam().getListeDesPlayers().get(0).getCoordonnees();
 
         ServerReceptionPlayersInformations src = new ServerReceptionPlayersInformations(game);
         src.execute(String.valueOf(game.getId()));
@@ -50,12 +56,16 @@ public class EcranAutel extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap map) {
-        // Add a marker in Sydney, Australia, and move the camera.
-        double hugoLat = 48.069250, hugoLng = -0.774704;
         // Initialisation de la position de départ de la caméra
-        LatLng startCameraPosition = new LatLng(hugoLat, hugoLng);
+        LatLng startCameraPosition = new LatLng(coord.latitude, coord.longitude);
         BitmapDescriptor autel = BitmapDescriptorFactory.fromResource(R.drawable.etoile);
         map.addMarker(new MarkerOptions().position(startCameraPosition).title("Autel").icon(autel));
+
+        for (int i = 0; i < 20; i++) {
+            listCoord.add(new LatLng(coord.latitude + Math.random(), coord.longitude + Math.random()));
+            map.addMarker(new MarkerOptions().position(startCameraPosition).title("Autel Fake").icon(autel));
+        }
+
         map.moveCamera(CameraUpdateFactory.newLatLng(startCameraPosition));
     }
 
