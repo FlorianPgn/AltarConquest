@@ -177,16 +177,13 @@ public class EcranLobby_Partie extends Activity {
                 }
 
             }
-            Log.i("TestCouleur", "colorsAreSet"+colorsAreSet);
-            Log.i("TestCouleur", "nbJoueursEquipeRouge"+nbJoueursEquipeRouge);
-            Log.i("TestCouleur", "nbJoueursEquipeBleu"+nbJoueursEquipeBleu);
-            Log.i("TestCouleur", "jmax"+game.getNbJoueursMax()/2);
             if (colorsAreSet && nbJoueursEquipeRouge == game.getNbJoueursMax()/2 && nbJoueursEquipeBleu == game.getNbJoueursMax()/2) {
                 timer.cancel();  //On arrête les requêtes serveur pour avoir les joueurs du lobby
 
                 //Serialize l'objet game
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("game", game);
+                game.setEnCours(true);
                 //Passe à l'écran de jeu le pseudo et la couleur de team
                 Intent intent = new Intent(this, EcranJeu.class);
                 intent.putExtra("STRING_PSEUDO", pseudo);
