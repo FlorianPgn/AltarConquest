@@ -74,6 +74,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private Boolean attackTokenAvailable = true, defenseTokenAvailable = true;
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
+    private ArrayList<Player> joueursAvecDrapeau;
     public ImageView imageEconomie;
     private TextView timerTextView, scoreBlueTeamTextView, scoreRedTeamTextView;
 
@@ -84,6 +85,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     private int lastFlagCaptured = 0;
 
+    private int score = 0;
+    private float DISTANCE_MAXIMUM_REQCUISE = 5;
     private int minutes = 15;
     private int seconds = 0;
 
@@ -111,7 +114,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         mapFragment.getMapAsync(this);
         
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
-        timerTextView = (TextView) findViewById(R.id.timerTextView);
+        //timerTextView = (TextView) findViewById(R.id.timerTextView);
 
         scoreBlueTeamTextView = (TextView) findViewById(R.id.scoreBlueTeamTextView);
         scoreRedTeamTextView = (TextView) findViewById(R.id.scoreRedTeamTextView);
@@ -288,6 +291,17 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.drapeaurouge));
             mMap.addMarker(marker);
         }
+        afficherJoueursEnnemiesAvecDrapeau();
+    }
+
+    public void afficherJoueursEnnemiesAvecDrapeau() {
+        joueursAvecDrapeau = new ArrayList<Player>();
+        for (Player player : game.getTeam(enemyTeamColor).getListeDesPlayers()) {
+            if (player.isHoldingAFlag() == true) {
+                updateAffichagePositionJoueurs(player);
+                joueursAvecDrapeau.add(player);
+            }
+        }
     }
 
     public void recupererLesDrapeauxSurLeServeur() {
@@ -414,8 +428,17 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         flagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Code pour intercepter un drapeau ennemi
-                // A compléter
+                Player player = game.getTeam(myTeamColor).getJoueur(pseudo);
+                for (int i = 0; i >= joueursAvecDrapeau.size(); i++) {
+                    if (DISTANCE_MAXIMUM_REQCUISE >= calculEcartCoor(player.getCoordonnees(), joueursAvecDrapeau.get(i).getCoordonnees())) {
+                        Toast.makeText(EcranJeu.this, "Le drapeau a été recupéré",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(EcranJeu.this, "L'ennemi n'est pas a portée",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
 
@@ -467,6 +490,21 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             }
         }
 
+    }
+
+    public float calculEcartCoor(LatLng coordonneesPlayer, LatLng coordonneesEnemy) {
+        float distance = 0;
+        Location locPlayer = new Location("");
+        locPlayer.setLatitude(coordonneesPlayer.latitude);
+        locPlayer.setLongitude(coordonneesPlayer.longitude);
+
+        Location locEnemy = new Location("");
+        locEnemy.setLatitude(coordonneesEnemy.latitude);
+        locEnemy.setLongitude(coordonneesEnemy.longitude);
+
+        distance = locPlayer.distanceTo(locEnemy);
+
+        return distance;
     }
 
     private void gestionQRcodes(String scanContent) {

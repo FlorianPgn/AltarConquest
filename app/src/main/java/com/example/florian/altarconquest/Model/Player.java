@@ -84,5 +84,6 @@ public class Player {
     public void setHoldingAFlag(boolean holdingAFlag) {
         this.holdingAFlag = holdingAFlag;
     }
+
 }
 
