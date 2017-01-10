@@ -520,7 +520,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     public void ouvrirEcranAutel() {
         Intent intent = new Intent(this, EcranAutel.class);
-        intent.putExtra("coord", (Parcelable) coordinates);
+        intent.putExtra("game", game);
+        startActivity(intent);
     }
 
     public void ouvrirScanQrCode() {
