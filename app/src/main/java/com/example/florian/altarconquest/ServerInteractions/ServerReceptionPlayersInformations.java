@@ -24,11 +24,11 @@ import java.nio.charset.Charset;
  * Created by Florian on 12/12/2016.
  */
 
-public class ServerReceptionCoordinates extends ServerReceptionData {
+public class ServerReceptionPlayersInformations extends ServerReceptionData {
 
     Game game;
 
-    public ServerReceptionCoordinates(Game game) {
+    public ServerReceptionPlayersInformations(Game game) {
        this.game = game;
     }
 

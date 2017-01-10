@@ -13,6 +13,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -26,11 +27,12 @@ import com.example.florian.altarconquest.Model.EcomieEnergie;
 import com.example.florian.altarconquest.Model.Flag;
 import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionBasesPositions;
-import com.example.florian.altarconquest.ServerInteractions.ServerReceptionCoordinates;
+import com.example.florian.altarconquest.ServerInteractions.ServerReceptionPlayersInformations;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionFlagsPositions;
-import com.example.florian.altarconquest.ServerInteractions.ServerSendCoordinates;
+import com.example.florian.altarconquest.ServerInteractions.ServerSendPlayersInformations;
 
 import android.location.LocationListener;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -64,22 +66,27 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     public GoogleMap mMap;
     public EcomieEnergie economieEnergie;
     private Button mapButton, flagButton, qrCodeButton, treeButton, unactiveTreeButton;
-    private int lastFlagCaptured = 0;
-    private int score = 0;
     private static ImageView attackToken;
     private static ImageView defenceToken;
     private Boolean attackTokenAvailable = true, defenseTokenAvailable = true;
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
     public ImageView imageEconomie;
+    private TextView timerTextView, scoreBlueTeamTextView, scoreRedTeamTextView;
 
     Map<String, Circle> coordinates;
 
     public Context context = this;
 
     private Calendar calendar;
-    int startingMinutes;
-    int endingMinutes;
+    private int startingMinutes;
+    private int endingMinutes;
+
+    private int lastFlagCaptured = 0;
+    private int score = 0;
+
+    private int minutes = 15;
+    private int seconds = 0;
 
     private String pseudo;
     private TeamColor myTeamColor;
@@ -104,7 +111,15 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         mapFragment.getMapAsync(this);
         
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
+        timerTextView = (TextView) findViewById(R.id.timerTextView);
 
+        mapButton = (Button) findViewById(R.id.mapButton);
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                ouvrirEcranAutel();
+            }
+        });
         coordinates = new HashMap<>();
 
         economieEnergie = new EcomieEnergie(this);
@@ -113,7 +128,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         calendar = Calendar.getInstance();
         startingMinutes = calendar.get(Calendar.MINUTE);
         endingMinutes = (startingMinutes + 15)%60;
-        Log.i("Minutes", startingMinutes+"  "+endingMinutes);
 
         //Récupère l'objet Game du lobby
         Bundle extras = getIntent().getExtras();
@@ -161,9 +175,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
         double depInfoLat = 48.08574927627401, depInfoLng = -0.7584989108085632;
         double echologiaLat = 48.10922932860948, echologiaLng = -0.7235687971115112;
+        double hugoLat = 48.069250, hugoLng = -0.774704;
 
         // Initialisation de la position de départ de la caméra
-        LatLng startCameraPosition = new LatLng(depInfoLat, depInfoLng);
+        LatLng startCameraPosition = new LatLng(hugoLat, hugoLng);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 17.0f));
         retirerMouvementCameraMarkers();
 
@@ -180,33 +195,64 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         recupererLesBasesSurLeServeur();
 
         //Timer qui lance toutes les requêtes serveur pour les coordonnéesà toutes les 2 sec
-        Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                if(endingMinutes == calendar.get(Calendar.MINUTE))
+                if(endingMinutes == calendar.get(Calendar.MINUTE)) {
                     finish();
-                ServerReceptionCoordinates src = new ServerReceptionCoordinates(game);
+                }
+                ServerReceptionPlayersInformations src = new ServerReceptionPlayersInformations(game);
                 src.execute(String.valueOf(game.getId()));
                 runOnUiThread(new Runnable() {
                     public void run() {
                         afficherJoueurs();
                     }
                 });
-                ServerSendCoordinates ssc = new ServerSendCoordinates();
+                ServerSendPlayersInformations ssc = new ServerSendPlayersInformations();
                 if (location != null) {
                     ssc.execute(pseudo, String.valueOf(game.getId()), String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
                 }
+
             }
 
         };
+        Timer timer = new Timer();
         timer.schedule(timerTask, 0, 1000 * 2);
+
+        TimerTask timerTaskUpdateTimer = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        updateTimer();
+                    }
+                });
+            }
+        };
+        Timer timerUpdateTimer = new Timer();
+        timerUpdateTimer.schedule(timerTaskUpdateTimer, 0, 1000);
 
         setAttackToken(true);
         setDefencetoken(true);
 
     }
 
+    //Méthode pour le timer
+    public void updateTimer() {
+        if(seconds == 0) {
+            minutes--;
+            seconds = 59;
+        } else {
+            seconds--;
+        }
+        if (timerTextView != null) {
+            timerTextView.setText((minutes<10?"0"+minutes:minutes)+":"+(seconds<10?"0"+seconds:seconds));
+        }
+        if (minutes == 0 && seconds == 0){
+            Intent intent = new Intent(this, EcranFinJeu.class);
+            intent.putExtra("Score", game);
+        }
+    }
 
     //Méthodes pour afficher les drapeaux au démarage de l'activité
     public void afficherDrapeaux() {
@@ -393,69 +439,88 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
-    private void gestionQRcodes(String scanContent) {
-        Intent intent = null;
+    public TextView selectFlagCount(TeamColor teamColor){
+        if (teamColor == TeamColor.BLUE) {
+            Log.i("nulls",""+scoreBlueTeamTextView);
+            return scoreBlueTeamTextView;
+        } else {
+            return scoreRedTeamTextView;
+        }
+    }
 
+    private void gestionQRcodes(String scanContent) {
         Player player = game.getTeam(myTeamColor).getJoueur(pseudo);
 
-        switch (scanContent) {
-            case "0":
-                if (lastFlagCaptured != 0){
-                    player.setAttackTokenAvailable(true);
-                    score = score + 1;
-                    lastFlagCaptured = 0;
-                    Toast.makeText(this, "BRAVO VOUS AVEZ GAGNÉ UN POINT !", Toast.LENGTH_LONG);
-                }
-                else {
+        if (player.isAttackTokenAvailable()) {
+            switch (scanContent) {
+                case "BASE":
+                    if (lastFlagCaptured != 0) {
+                        player.setAttackTokenAvailable(true);
+                        score = score + 1;
+                        Toast.makeText(this, "BRAVO VOUS AVEZ GAGNÉ UN POINT !", Toast.LENGTH_LONG).show();
+                    }
                     player.setAttackTokenAvailable(true);
                     player.setDefenseTokenAvailable(true);
-                    Toast.makeText(this, "Vous avez rechargé votre Jeton d'Attaque et Défense", Toast.LENGTH_LONG);
-                }
-                break;
-            case "1":
-                lastFlagCaptured = 1;
-                player.setAttackTokenAvailable(false);
-                intent = new Intent(this, EcranQuestions.class);
-                intent.putExtra("Questions", 1);
-                Log.e("Ce qu'on a récupérer","" + scanContent);
-                break;
-            case "2":
-                lastFlagCaptured = 2;
-                player.setAttackTokenAvailable(false);
-                intent = new Intent(this, EcranQuestions.class);
-                intent.putExtra("Questions", 4);
-                Log.e("Ce qu'on a récupérer","" + scanContent);
-                break;
-            case "3":
-                lastFlagCaptured = 3;
-                player.setAttackTokenAvailable(false);
-                intent = new Intent(this, EcranQuestions.class);
-                intent.putExtra("Questions", 7);
-                Log.e("Ce qu'on a récupérer","" + scanContent);
-                break;
-            case "4":
-                lastFlagCaptured = 4;
-                player.setAttackTokenAvailable(false);
-                intent = new Intent(this, EcranQuestions.class);
-                intent.putExtra("Questions", 10);
-                Log.e("Ce qu'on a récupérer","" + scanContent);
-                break;
-            case "5":
-                lastFlagCaptured = 5;
-                player.setAttackTokenAvailable(false);
-                intent = new Intent(this, EcranQuestions.class);
-                intent.putExtra("Questions", 13);
-                Log.e("Ce qu'on a récupérer","" + scanContent);
-                break;
-            case "6":
-                lastFlagCaptured = 6;
-                player.setAttackTokenAvailable(false);
-                intent = new Intent(this, EcranQuestions.class);
-                intent.putExtra("Questions", 16);
-                Log.e("Ce qu'on a récupérer","" + scanContent);
-                break;
+                    Toast.makeText(this, "Vous avez rechargé votre Jeton d'Attaque et Défense", Toast.LENGTH_LONG).show();
+                    lastFlagCaptured = 0;
+                    break;
+                case "DRAPEAU 1":
+                    scanQuestion(1, 1, player, scanContent);
+                    player.setAttackTokenAvailable(false);
+                    lastFlagCaptured = 1;
+                    break;
+                case "DRAPEAU 2":
+                    scanQuestion(4, 2, player, scanContent);
+                    player.setAttackTokenAvailable(false);
+                    lastFlagCaptured = 2;
+                    break;
+                case "DRAPEAU 3":
+                    scanQuestion(7, 3, player, scanContent);
+                    player.setAttackTokenAvailable(false);
+                    lastFlagCaptured = 3;
+                    break;
+                case "DRAPEAU 4":
+                    scanQuestion(10, 4, player, scanContent);
+                    player.setAttackTokenAvailable(false);
+                    lastFlagCaptured = 4;
+                    break;
+                case "DRAPEAU 5":
+                    scanQuestion(13, 5, player, scanContent);
+                    player.setAttackTokenAvailable(false);
+                    lastFlagCaptured = 5;
+                    break;
+                case "DRAPEAU 6":
+                    scanQuestion(16, 6, player, scanContent);
+                    player.setAttackTokenAvailable(false);
+                    lastFlagCaptured = 6;
+                    break;
+            }
         }
+        else {
+            if (scanContent.equals("BASE"))
+            {
+                player.setAttackTokenAvailable(true);
+                player.setDefenseTokenAvailable(true);
+                Toast.makeText(this, "Vous avez rechargé votre Jeton d'Attaque et Défense", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(this, "Vous devez recharger votre Jeton d'Attaque et Défense, petit coquinou", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public void scanQuestion(int numLotQuestion, int lastFlagCaptured, Player player, String scanContent){
+        this.lastFlagCaptured = lastFlagCaptured;
+        player.setAttackTokenAvailable(false);
+        Intent intent = new Intent(this, EcranQuestions.class);
+        intent.putExtra("Questions", numLotQuestion);
+        Log.e("Ce qu'on a récupérer","" + scanContent);
         startActivity(intent);
+    }
+
+    public void ouvrirEcranAutel() {
+        Intent intent = new Intent(this, EcranAutel.class);
+        intent.putExtra("coord", (Parcelable) coordinates);
     }
 
     public void ouvrirScanQrCode() {
@@ -599,6 +664,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     public Game getGame(){
         return game;
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 
 

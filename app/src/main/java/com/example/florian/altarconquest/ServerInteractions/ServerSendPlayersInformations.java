@@ -7,7 +7,7 @@ import java.net.URLEncoder;
  * Created by Florian on 03/01/2017.
  */
 
-public class ServerSendCoordinates extends ServerSendData {
+public class ServerSendPlayersInformations extends ServerSendData {
 
     @Override
     public String getScriptName() {

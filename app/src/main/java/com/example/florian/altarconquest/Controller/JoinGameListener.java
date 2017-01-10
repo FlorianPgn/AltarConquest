@@ -105,9 +105,10 @@ public class JoinGameListener implements View.OnClickListener {
         }
 
         for (Player p : playerList) {
-            if (p.getPseudo().equals(pseudo))
+            if (p.getPseudo().equals(pseudo)) {
                 erreurPseudo = "Ce pseudonyme est déjà utilisé";
-            return false;
+                return false;
+            }
         }
 
         for (int i = 0; i < charList.length; i++) {
