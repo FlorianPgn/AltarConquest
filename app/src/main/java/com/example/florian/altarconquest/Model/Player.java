@@ -27,6 +27,9 @@ public class Player {
 
 
     //Methods
+    public void incrementerScore() {
+        score++;
+    }
 
     //Getters
     public String getPseudo() {
@@ -81,7 +84,6 @@ public class Player {
     public void setHoldingAFlag(boolean holdingAFlag) {
         this.holdingAFlag = holdingAFlag;
     }
-
 
 }
 

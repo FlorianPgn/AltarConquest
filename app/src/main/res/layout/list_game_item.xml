@@ -12,13 +12,6 @@
         android:layout_height="50dp"
         android:layout_width="50dp" />
 
-    <TextView
-        android:text="Chargement de la partie..."
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/list_item_text"
-        android:layout_toEndOf="@id/list_item_pic" />
-
     <Button
         android:text="Rejoindre"
         android:layout_width="wrap_content"
@@ -29,10 +22,18 @@
 
     <TextView
         android:text="Nombre de joueurs..."
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/list_nb_joueurs"
         android:layout_alignBottom="@+id/list_item_pic"
+        android:layout_toEndOf="@+id/list_item_pic" />
+
+    <TextView
+        android:text="Chargement de la partie..."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_item_text"
+        android:layout_above="@+id/list_nb_joueurs"
         android:layout_toEndOf="@+id/list_item_pic" />
 
 </RelativeLayout>

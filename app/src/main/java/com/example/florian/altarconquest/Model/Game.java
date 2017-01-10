@@ -124,7 +124,7 @@ public class Game implements Parcelable {
         dest.writeInt(nbJoueursMax);
     }
 
-    public void updatePlayersCoordinates(List<Player> listPlayer){
+    public void updatePlayersInformation(List<Player> listPlayer){
         if(getBlueTeam().getListeDesPlayers().size() == 0) {
             for (Player player : listPlayer) {
                 if (player.getColor() == TeamColor.BLUE) {
@@ -140,18 +140,20 @@ public class Game implements Parcelable {
                 for (Player inGamePlayer:getBlueTeam().getListeDesPlayers()) {
                     if(inGamePlayer.getPseudo().equals(player.getPseudo())) {
                         inGamePlayer.setCoordonnees(player.getCoordonnees());
+                        inGamePlayer.setScore(player.getScore());
                         if (player.isHoldingAFlag()==true) {
                             inGamePlayer.setHoldingAFlag(true);
                         }
                         else {
                             inGamePlayer.setHoldingAFlag(false);
-                        }
+                        }  
                     }
                 }
             } else {
                 for (Player inGamePlayer:getRedTeam().getListeDesPlayers()) {
                     if(inGamePlayer.getPseudo().equals(player.getPseudo())) {
                         inGamePlayer.setCoordonnees(player.getCoordonnees());
+                         inGamePlayer.setScore(player.getScore());
                         if (player.isHoldingAFlag()==true) {
                             inGamePlayer.setHoldingAFlag(true);
                         }
