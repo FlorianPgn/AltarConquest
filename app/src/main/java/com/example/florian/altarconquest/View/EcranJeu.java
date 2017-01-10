@@ -105,6 +105,14 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            Intent i = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivityForResult(i, 1);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
