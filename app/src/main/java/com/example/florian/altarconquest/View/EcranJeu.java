@@ -259,6 +259,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     public void updateTimer() {
         if (minutes == 0 && seconds == 0) {
             Intent intent = new Intent(this, EcranFinJeu.class);
+            intent.putExtra("STRING_COLOR", game.getRedTeam().getScore()>game.getBlueTeam().getScore()?TeamColor.RED.toString():TeamColor.BLUE.toString());
             startActivity(intent);
             finish();
         }
@@ -691,7 +692,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     @Override
     public void onStart() {
         super.onStart();
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
@@ -701,8 +701,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     @Override
     public void onStop() {
         super.onStop();
-        ServerSendDeletedPlayer ssdp = new ServerSendDeletedPlayer();
-        ssdp.execute(pseudo);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
@@ -728,5 +726,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ServerSendDeletedPlayer ssdp = new ServerSendDeletedPlayer();
+        ssdp.execute(pseudo);
+    }
 }
