@@ -34,6 +34,8 @@ import com.example.florian.altarconquest.ServerInteractions.ServerSendPlayersInf
 import android.location.LocationListener;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.florian.altarconquest.ServerInteractions.ServerSendPlayerScore;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
@@ -65,6 +67,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     public GoogleMap mMap;
     public EcomieEnergie economieEnergie;
+
     private Button mapButton, flagButton, qrCodeButton, treeButton, unactiveTreeButton;
     private static ImageView attackToken;
     private static ImageView defenceToken;
@@ -90,6 +93,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     private String pseudo;
     private TeamColor myTeamColor;
+    private TeamColor enemyTeamColor;
     private Location location;
 
     private Game game;
@@ -112,6 +116,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
         timerTextView = (TextView) findViewById(R.id.timerTextView);
+
+        scoreBlueTeamTextView = (TextView) findViewById(R.id.scoreBlueTeamTextView);
+        scoreRedTeamTextView = (TextView) findViewById(R.id.scoreRedTeamTextView);
+
 
         mapButton = (Button) findViewById(R.id.mapButton);
         mapButton.setOnClickListener(new View.OnClickListener() {
@@ -151,8 +159,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         //Initialise la team du joueur pendant cette partie
         if (color.equals(TeamColor.BLUE.toString())) {
             myTeamColor = TeamColor.BLUE;
+            enemyTeamColor = TeamColor.RED;
         } else if (color.equals(TeamColor.RED.toString())) {
             myTeamColor = TeamColor.RED;
+            enemyTeamColor = TeamColor.BLUE;
         }
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -206,6 +216,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                 runOnUiThread(new Runnable() {
                     public void run() {
                         afficherJoueurs();
+                        updateScores();
                     }
                 });
                 ServerSendPlayersInformations ssc = new ServerSendPlayersInformations();
@@ -237,6 +248,22 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
+
+    //Méthodes pour gérer les compteurs de drapeaux
+    public void updateScores(){
+        selectFlagCount(myTeamColor).setText(String.valueOf(game.getTeam(myTeamColor).getScore()));
+        selectFlagCount(enemyTeamColor).setText(String.valueOf(game.getTeam(enemyTeamColor).getScore()));
+    }
+
+    public TextView selectFlagCount(TeamColor teamColor){
+        if (teamColor == TeamColor.BLUE) {
+            return scoreBlueTeamTextView;
+        } else {
+            return scoreRedTeamTextView;
+        }
+    }
+
+
     //Méthode pour le timer
     public void updateTimer() {
         if(seconds == 0) {
@@ -252,15 +279,20 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             Intent intent = new Intent(this, EcranFinJeu.class);
             intent.putExtra("Score", game);
         }
+
     }
 
     //Méthodes pour afficher les drapeaux au démarage de l'activité
     public void afficherDrapeaux() {
         for (Flag flag : game.getBlueTeam().getListofFlags()) {
-            mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
+            MarkerOptions marker = new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName());
+            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.drapeaubleu));
+            mMap.addMarker(marker);
         }
         for (Flag flag : game.getRedTeam().getListofFlags()) {
-            mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
+            MarkerOptions marker = new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName());
+            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.drapeaurouge));
+            mMap.addMarker(marker);
         }
     }
 
@@ -271,8 +303,12 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     //Méthodes pour afficher les bases au démarage de l'activité
     public void afficherBases() {
-        mMap.addMarker(new MarkerOptions().position(game.getBlueTeam().getBase().getCoordonnees()).title(game.getBlueTeam().getBase().getName()));
-        mMap.addMarker(new MarkerOptions().position(game.getRedTeam().getBase().getCoordonnees()).title(game.getRedTeam().getBase().getName()));
+        MarkerOptions marker = new MarkerOptions().position(game.getBlueTeam().getBase().getCoordonnees()).title(game.getBlueTeam().getBase().getName());
+        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.tour_bleue));
+        mMap.addMarker(marker);
+        marker = new MarkerOptions().position(game.getRedTeam().getBase().getCoordonnees()).title(game.getRedTeam().getBase().getName());
+        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.tour_rouge));
+        mMap.addMarker(marker);
     }
 
     public void recupererLesBasesSurLeServeur() {
@@ -439,74 +475,45 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
-    public TextView selectFlagCount(TeamColor teamColor){
-        if (teamColor == TeamColor.BLUE) {
-            Log.i("nulls",""+scoreBlueTeamTextView);
-            return scoreBlueTeamTextView;
-        } else {
-            return scoreRedTeamTextView;
-        }
-    }
-
     private void gestionQRcodes(String scanContent) {
         Player player = game.getTeam(myTeamColor).getJoueur(pseudo);
 
-        if (player.isAttackTokenAvailable()) {
-            switch (scanContent) {
-                case "BASE":
-                    if (lastFlagCaptured != 0) {
-                        player.setAttackTokenAvailable(true);
-                        score = score + 1;
-                        Toast.makeText(this, "BRAVO VOUS AVEZ GAGNÉ UN POINT !", Toast.LENGTH_LONG).show();
-                    }
+        switch (scanContent) {
+            case "base":
+                if (lastFlagCaptured != 0){
+                    player.setAttackTokenAvailable(true);
+                    Log.i("score", ""+player.getScore());
+                    ServerSendPlayerScore ssps = new ServerSendPlayerScore();
+                    ssps.execute(pseudo, String.valueOf(player.getScore()+1));
+                    lastFlagCaptured = 0;
+                    Toast.makeText(this, "BRAVO VOUS AVEZ GAGNÉ UN POINT !", Toast.LENGTH_LONG).show();
+                }
+                else {
                     player.setAttackTokenAvailable(true);
                     player.setDefenseTokenAvailable(true);
                     Toast.makeText(this, "Vous avez rechargé votre Jeton d'Attaque et Défense", Toast.LENGTH_LONG).show();
-                    lastFlagCaptured = 0;
-                    break;
-                case "DRAPEAU 1":
-                    scanQuestion(1, 1, player, scanContent);
-                    player.setAttackTokenAvailable(false);
-                    lastFlagCaptured = 1;
-                    break;
-                case "DRAPEAU 2":
-                    scanQuestion(4, 2, player, scanContent);
-                    player.setAttackTokenAvailable(false);
-                    lastFlagCaptured = 2;
-                    break;
-                case "DRAPEAU 3":
-                    scanQuestion(7, 3, player, scanContent);
-                    player.setAttackTokenAvailable(false);
-                    lastFlagCaptured = 3;
-                    break;
-                case "DRAPEAU 4":
-                    scanQuestion(10, 4, player, scanContent);
-                    player.setAttackTokenAvailable(false);
-                    lastFlagCaptured = 4;
-                    break;
-                case "DRAPEAU 5":
-                    scanQuestion(13, 5, player, scanContent);
-                    player.setAttackTokenAvailable(false);
-                    lastFlagCaptured = 5;
-                    break;
-                case "DRAPEAU 6":
-                    scanQuestion(16, 6, player, scanContent);
-                    player.setAttackTokenAvailable(false);
-                    lastFlagCaptured = 6;
-                    break;
-            }
+                }
+                break;
+            case "1":
+                scanQuestion(1, 1, player, scanContent);
+                break;
+            case "2":
+                scanQuestion(4, 2, player, scanContent);
+                break;
+            case "3":
+                scanQuestion(7, 3, player, scanContent);
+                break;
+            case "4":
+                scanQuestion(10, 4, player, scanContent);
+                break;
+            case "5":
+                scanQuestion(13, 5, player, scanContent);
+                break;
+            case "6":
+                scanQuestion(16, 6, player, scanContent);
+                break;
         }
-        else {
-            if (scanContent.equals("BASE"))
-            {
-                player.setAttackTokenAvailable(true);
-                player.setDefenseTokenAvailable(true);
-                Toast.makeText(this, "Vous avez rechargé votre Jeton d'Attaque et Défense", Toast.LENGTH_LONG).show();
-            }
-            else {
-                Toast.makeText(this, "Vous devez recharger votre Jeton d'Attaque et Défense, petit coquinou", Toast.LENGTH_LONG).show();
-            }
-        }
+
     }
 
     public void scanQuestion(int numLotQuestion, int lastFlagCaptured, Player player, String scanContent){
@@ -515,12 +522,13 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         Intent intent = new Intent(this, EcranQuestions.class);
         intent.putExtra("Questions", numLotQuestion);
         Log.e("Ce qu'on a récupérer","" + scanContent);
-        startActivity(intent);
+	    startActivity(intent);
     }
 
     public void ouvrirEcranAutel() {
         Intent intent = new Intent(this, EcranAutel.class);
         intent.putExtra("game", game);
+
         startActivity(intent);
     }
 

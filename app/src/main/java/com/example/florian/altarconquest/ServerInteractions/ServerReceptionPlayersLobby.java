@@ -2,6 +2,8 @@ package com.example.florian.altarconquest.ServerInteractions; /**
  * Created by Hugo on 08/12/2016.
  */
 
+import android.util.Log;
+
 import com.example.florian.altarconquest.Model.Player;
 import com.example.florian.altarconquest.ServerInteractions.Parsers.PlayerParser;
 import com.example.florian.altarconquest.View.EcranLobby_Partie;
@@ -38,7 +40,7 @@ public class ServerReceptionPlayersLobby extends ServerReceptionData {
             InputStream stream = new ByteArrayInputStream(s.getBytes(Charset.defaultCharset()));
 
             List<Player> resultats = playerParser.parse(stream);
-
+            Log.i("df", ""+resultats);
             context.generateListContent(resultats);
 
         } catch (XmlPullParserException e) {

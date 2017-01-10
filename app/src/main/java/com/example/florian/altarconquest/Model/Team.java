@@ -61,4 +61,12 @@ public class Team {
     public void setBase(Base base) {
         this.base = base;
     }
+
+    public int getScore() {
+        int score = 0;
+        for (Player player:listOfPlayers) {
+            score+=player.getScore();
+        }
+        return score;
+    }
 }

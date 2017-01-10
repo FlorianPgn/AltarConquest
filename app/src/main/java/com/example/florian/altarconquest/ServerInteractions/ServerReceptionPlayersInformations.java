@@ -1,11 +1,7 @@
 package com.example.florian.altarconquest.ServerInteractions;
 
-import android.content.Context;
-
 import com.example.florian.altarconquest.Model.Game;
-import com.example.florian.altarconquest.Model.Player;
 import com.example.florian.altarconquest.ServerInteractions.Parsers.PlayerParser;
-import com.example.florian.altarconquest.View.EcranJeu;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -75,7 +71,7 @@ public class ServerReceptionPlayersInformations extends ServerReceptionData {
         InputStream stream = new ByteArrayInputStream(s.getBytes(Charset.defaultCharset()));
 
         try {
-            game.updatePlayersCoordinates(parser.parse(stream));
+            game.updatePlayersInformation(parser.parse(stream));
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {

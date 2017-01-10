@@ -27,6 +27,9 @@ public class Player {
 
 
     //Methods
+    public void incrementerScore() {
+        score++;
+    }
 
     //Getters
     public String getPseudo() {
@@ -78,6 +81,8 @@ public class Player {
         this.coordonnees = coordonnees;
     }
 
-
+    public void setHoldingAFlag(boolean holdingAFlag) {
+        this.holdingAFlag = holdingAFlag;
+    }
 }
 
