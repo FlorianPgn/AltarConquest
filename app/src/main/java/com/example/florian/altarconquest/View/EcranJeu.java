@@ -268,10 +268,14 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     //Méthodes pour afficher les drapeaux au démarage de l'activité
     public void afficherDrapeaux() {
         for (Flag flag : game.getBlueTeam().getListofFlags()) {
-            mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
+            MarkerOptions marker = new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName());
+            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.drapeaubleu));
+            mMap.addMarker(marker);
         }
         for (Flag flag : game.getRedTeam().getListofFlags()) {
-            mMap.addMarker(new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName()));
+            MarkerOptions marker = new MarkerOptions().position(flag.getCoordonnees()).title(flag.getName());
+            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.drapeaurouge));
+            mMap.addMarker(marker);
         }
     }
 
@@ -282,8 +286,12 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     //Méthodes pour afficher les bases au démarage de l'activité
     public void afficherBases() {
-        mMap.addMarker(new MarkerOptions().position(game.getBlueTeam().getBase().getCoordonnees()).title(game.getBlueTeam().getBase().getName()));
-        mMap.addMarker(new MarkerOptions().position(game.getRedTeam().getBase().getCoordonnees()).title(game.getRedTeam().getBase().getName()));
+        MarkerOptions marker = new MarkerOptions().position(game.getBlueTeam().getBase().getCoordonnees()).title(game.getBlueTeam().getBase().getName());
+        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.tour_bleue));
+        mMap.addMarker(marker);
+        marker = new MarkerOptions().position(game.getRedTeam().getBase().getCoordonnees()).title(game.getRedTeam().getBase().getName());
+        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.tour_rouge));
+        mMap.addMarker(marker);
     }
 
     public void recupererLesBasesSurLeServeur() {
