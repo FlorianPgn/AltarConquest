@@ -206,18 +206,21 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         recupererLesBasesSurLeServeur();
 
         //Création de l'altar
-        int choixBloc = getRandomBloc();
-        if (choixBloc < 40) {
-            altarPos = new LatLng(getRandomPosInRange(bloc1LatMin,bloc1LatMax), getRandomPosInRange(bloc1LngMin,bloc1LngMax));
-        }
-        else if (choixBloc > 39 && choixBloc < 51) {
-            altarPos = new LatLng(getRandomPosInRange(bloc2LatMin,bloc2LatMax), getRandomPosInRange(bloc2LngMin,bloc2LngMax));
-        }
-        else {
-            altarPos = new LatLng(getRandomPosInRange(bloc3LatMin,bloc3LatMax), getRandomPosInRange(bloc3LngMin,bloc3LngMax));
+
+        if (game.getAltar() != null) {
+            int choixBloc = getRandomBloc();
+            if (choixBloc < 40) {
+                altarPos = new LatLng(getRandomPosInRange(bloc1LatMin,bloc1LatMax), getRandomPosInRange(bloc1LngMin,bloc1LngMax));
+            }
+            else if (choixBloc > 39 && choixBloc < 51) {
+                altarPos = new LatLng(getRandomPosInRange(bloc2LatMin,bloc2LatMax), getRandomPosInRange(bloc2LngMin,bloc2LngMax));
+            }
+            else {
+                altarPos = new LatLng(getRandomPosInRange(bloc3LatMin,bloc3LatMax), getRandomPosInRange(bloc3LngMin,bloc3LngMax));
+            }
+            game.setAltar(altarPos);
         }
 
-        mMap.addMarker(new MarkerOptions().position(altarPos).title("Altar"));
 
         //Timer qui lance toutes les requêtes serveur pour les coordonnées à toutes les 2 sec
         TimerTask timerTask = new TimerTask() {
