@@ -89,6 +89,7 @@ public class PlayerParser {
         String latitude = null;
         String longitude = null;
         String teamColor = null;
+        String holdAFlag = null;
         String score = null;
 
 
@@ -114,6 +115,9 @@ public class PlayerParser {
                 case "teamColor":
                     teamColor = (readTag(parser, "teamColor"));
                     break;
+                case "holdAFlag":
+                    holdAFlag = readTag(parser, "holdAFlag");
+                    break;
                 case "score":
                     score = (readTag(parser, "score"));
                     break;
@@ -127,16 +131,25 @@ public class PlayerParser {
         if (teamColor.equals("rouge")) {
             Player player = new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), TeamColor.RED);
             player.setScore(Integer.valueOf(score));
+            if (holdAFlag.equals("1")) {
+                player.setHoldingAFlag(true);
+            }
             return player;
         }
         else if (teamColor.equals("bleue")) {
             Player player = new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), TeamColor.BLUE);
             player.setScore(Integer.valueOf(score));
+            if (holdAFlag.equals("1")) {
+                player.setHoldingAFlag(true);
+            }
             return player;
         }
         else {
             Player player = new Player(pseudo, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), null);
             player.setScore(Integer.valueOf(score));
+            if (holdAFlag.equals("1")) {
+                player.setHoldingAFlag(true);
+            }
             return player;
         }
     }
