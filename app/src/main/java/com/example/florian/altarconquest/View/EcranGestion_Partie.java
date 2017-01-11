@@ -1,7 +1,9 @@
 package com.example.florian.altarconquest.View;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -14,12 +16,6 @@ public class EcranGestion_Partie extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            Intent i = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivityForResult(i, 1);
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gestion_partie);
 
