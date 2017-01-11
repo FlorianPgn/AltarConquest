@@ -107,13 +107,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            Intent i = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivityForResult(i, 1);
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
@@ -455,7 +448,12 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         qrCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ouvrirScanQrCode();
+                if (attackTokenAvailable) {
+                    ouvrirScanQrCode();
+                }
+                else {
+                    Toast.makeText(context, "Vous n'avez pas de jeton d'attaque, allez donc en chercher à votre base, petit coquinou que vous êtes", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -518,42 +516,28 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private void gestionQRcodes(String scanContent) {
         Player player = game.getTeam(myTeamColor).getJoueur(pseudo);
 
-        switch (scanContent) {
-            case "base":
-                if (lastFlagCaptured != 0){
-                    player.setAttackTokenAvailable(true);
-                    Log.i("score", ""+player.getScore());
-                    ServerSendPlayerScore ssps = new ServerSendPlayerScore();
-                    ssps.execute(pseudo, String.valueOf(player.getScore()+1));
-                    lastFlagCaptured = 0;
-                    Toast.makeText(this, "BRAVO VOUS AVEZ GAGNÉ UN POINT !", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    player.setAttackTokenAvailable(true);
-                    player.setDefenseTokenAvailable(true);
-                    Toast.makeText(this, "Vous avez rechargé votre Jeton d'Attaque et Défense", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case "1":
-                scanQuestion(1, 1, player, scanContent);
-                break;
-            case "2":
-                scanQuestion(4, 2, player, scanContent);
-                break;
-            case "3":
-                scanQuestion(7, 3, player, scanContent);
-                break;
-            case "4":
-                scanQuestion(10, 4, player, scanContent);
-                break;
-            case "5":
-                scanQuestion(13, 5, player, scanContent);
-                break;
-            case "6":
-                scanQuestion(16, 6, player, scanContent);
-                break;
+        if(scanContent.equals("base")) {
+            if (lastFlagCaptured == 0) {
+                Toast.makeText(this, "Allez donc chasser les drapeaux énnemis plutôt que de rester à votre base petit coquinou", Toast.LENGTH_LONG).show();
+            }
+            else {
+                player.setAttackTokenAvailable(false);
+                scanQuestion(-2 + lastFlagCaptured * 3, lastFlagCaptured, player, scanContent);
+                ServerSendPlayerScore ssps = new ServerSendPlayerScore();
+                ssps.execute(pseudo, String.valueOf(player.getScore() + 1));
+                Toast.makeText(this, "BRAVO VOUS AVEZ GAGNÉ UN POINT !", Toast.LENGTH_LONG).show();
+            }
+            lastFlagCaptured = 0;
+            player.setAttackTokenAvailable(true);
+            player.setDefenseTokenAvailable(true);
         }
-
+        else {
+            player.setAttackTokenAvailable(false);
+            lastFlagCaptured = Integer.parseInt(scanContent);
+            Toast.makeText(this, "Vous portez actuellement le drapeau énnemi n°"
+                    + lastFlagCaptured
+                    + ", allez vite le déposer à votre base pour faire gagner un point à votre équipe", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void scanQuestion(int numLotQuestion, int lastFlagCaptured, Player player, String scanContent){
@@ -561,7 +545,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         player.setAttackTokenAvailable(false);
         Intent intent = new Intent(this, EcranQuestions.class);
         intent.putExtra("Questions", numLotQuestion);
-        Log.e("Ce qu'on a récupérer","" + scanContent);
+        Log.e("Ce qu'on a récupéré","" + scanContent);
 	    startActivity(intent);
     }
 

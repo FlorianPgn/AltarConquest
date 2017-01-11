@@ -2,8 +2,12 @@ package com.example.florian.altarconquest.View;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -30,7 +34,7 @@ public class EcranAccueil extends Activity {
         boutonJouer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ouvrirCreationPartie();
+                checkGPS();
             }
         });
 
@@ -51,10 +55,30 @@ public class EcranAccueil extends Activity {
         if (!(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
         }
-
     }
 
+    public void checkGPS() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE );
+        if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setMessage("Veuillez activer votre GPS.");
+            builder1.setCancelable(true);
 
+            builder1.setPositiveButton(
+                    "J'active mon GPS !",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            ouvrirCreationPartie();
+                        }
+                    });
+            AlertDialog alert1 = builder1.create();
+            alert1.setCancelable(false);
+            alert1.show();
+        }
+        else {
+            ouvrirCreationPartie();
+        }
+    }
 
     public void ouvrirCreationPartie() {
         Intent intent = new Intent(this, EcranGestion_Partie.class);
