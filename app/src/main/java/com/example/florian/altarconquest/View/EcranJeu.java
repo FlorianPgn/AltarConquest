@@ -13,7 +13,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -59,7 +58,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -93,6 +91,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private TeamColor myTeamColor;
     private TeamColor enemyTeamColor;
     private Location location;
+
+    private final double START_CAMERA_LAT = 48.08574927627401, START_CAMERA_LNG = -0.7584989108085632;
 
     private Game game;
 
@@ -189,8 +189,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         double echologiaLat = 48.10922932860948, echologiaLng = -0.7235687971115112;
         double hugoLat = 48.069250, hugoLng = -0.774704;
 
+
+
         // Initialisation de la position de départ de la caméra
-        LatLng startCameraPosition = new LatLng(depInfoLat, depInfoLng);
+        LatLng startCameraPosition = new LatLng(START_CAMERA_LAT, START_CAMERA_LNG);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 17.0f));
         retirerMouvementCameraMarkers();
 
@@ -433,7 +435,14 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             @Override
             public void onClick(View v) {
                 // Ouvre la grande map avec l'altar
-                // A compléter
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("game", game);
+
+                Intent intent = new Intent(EcranJeu.this, EcranAutel.class);
+                intent.putExtras(bundle);
+                intent.putExtra("DOUBLE_LAT", START_CAMERA_LAT);
+                intent.putExtra("DOUBLE_LNG", START_CAMERA_LNG);
+                startActivity(intent);
             }
         });
 
@@ -548,28 +557,28 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                 }
                 break;
             case "1":
-                scanQuestion(1, 1, player, scanContent);
+                scanFlag(1, 1, player);
                 break;
             case "2":
-                scanQuestion(4, 2, player, scanContent);
+                scanFlag(4, 2, player);
                 break;
             case "3":
-                scanQuestion(7, 3, player, scanContent);
+                scanFlag(7, 3, player);
                 break;
             case "4":
-                scanQuestion(10, 4, player, scanContent);
+                scanFlag(10, 4, player);
                 break;
             case "5":
-                scanQuestion(13, 5, player, scanContent);
+                scanFlag(13, 5, player);
                 break;
             case "6":
-                scanQuestion(16, 6, player, scanContent);
+                scanFlag(16, 6, player);
                 break;
         }
 
     }
 
-    public void scanQuestion(int numLotQuestion, int lastFlagCaptured, Player player, String scanContent){
+    public void scanFlag(int numLotQuestion, int lastFlagCaptured, Player player ){
         this.lastFlagCaptured = lastFlagCaptured;
         player.setAttackTokenAvailable(false);
         player.setHoldingAFlag(true);
@@ -577,7 +586,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         ssphaf.execute(pseudo, String.valueOf(game.getId()), "1");
         Intent intent = new Intent(this, EcranQuestions.class);
         intent.putExtra("Questions", numLotQuestion);
-        Log.e("Ce qu'on a récupérer","" + scanContent);
 	    startActivity(intent);
     }
 
