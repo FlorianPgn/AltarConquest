@@ -185,7 +185,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         //position min et max des coordonnées des carrés sur l'iut pour l'altar
         double bloc1LatMin = 48.084972780102866, bloc1LatMax = 48.08618401591062, bloc1LngMin = -0.7599502801895142, bloc1LngMax = -0.7577294111251831;
         double bloc2LatMin = 48.086012007829495, bloc2LatMax = 48.08646352770626, bloc2LngMin = -0.7592207193374634, bloc2LngMax = -0.7568603754043579;
-        double bloc3LatMin = 48.08644919379935, bloc3LatMax = 48.08724471959043, bloc3LngMin = -0.7583838701248169, bloc3LngMax = -0.7567852735519409;
         LatLng altarPos;
 
         // Initialisation de la position de départ de la caméra
@@ -209,14 +208,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
         if (game.getAltar() != null) {
             int choixBloc = getRandomBloc();
-            if (choixBloc < 40) {
+            if (choixBloc < 90) {
                 altarPos = new LatLng(getRandomPosInRange(bloc1LatMin,bloc1LatMax), getRandomPosInRange(bloc1LngMin,bloc1LngMax));
             }
-            else if (choixBloc > 39 && choixBloc < 51) {
-                altarPos = new LatLng(getRandomPosInRange(bloc2LatMin,bloc2LatMax), getRandomPosInRange(bloc2LngMin,bloc2LngMax));
-            }
             else {
-                altarPos = new LatLng(getRandomPosInRange(bloc3LatMin,bloc3LatMax), getRandomPosInRange(bloc3LngMin,bloc3LngMax));
+                altarPos = new LatLng(getRandomPosInRange(bloc2LatMin,bloc2LatMax), getRandomPosInRange(bloc2LngMin,bloc2LngMax));
             }
             game.setAltar(altarPos);
         }
