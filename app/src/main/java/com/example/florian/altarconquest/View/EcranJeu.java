@@ -62,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -181,6 +182,12 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         double echologiaLat = 48.10922932860948, echologiaLng = -0.7235687971115112;
         double hugoLat = 48.069250, hugoLng = -0.774704;
 
+        //position min et max des coordonnées des carrés sur l'iut pour l'altar
+        double bloc1LatMin = 48.084972780102866, bloc1LatMax = 48.08618401591062, bloc1LngMin = -0.7599502801895142, bloc1LngMax = -0.7577294111251831;
+        double bloc2LatMin = 48.086012007829495, bloc2LatMax = 48.08646352770626, bloc2LngMin = -0.7592207193374634, bloc2LngMax = -0.7568603754043579;
+        double bloc3LatMin = 48.08644919379935, bloc3LatMax = 48.08724471959043, bloc3LngMin = -0.7583838701248169, bloc3LngMax = -0.7567852735519409;
+        LatLng altarPos;
+
         // Initialisation de la position de départ de la caméra
         LatLng startCameraPosition = new LatLng(depInfoLat, depInfoLng);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 17.0f));
@@ -198,7 +205,21 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         recupererLesDrapeauxSurLeServeur();
         recupererLesBasesSurLeServeur();
 
-        //Timer qui lance toutes les requêtes serveur pour les coordonnéesà toutes les 2 sec
+        //Création de l'altar
+        int choixBloc = getRandomBloc();
+        if (choixBloc < 40) {
+            altarPos = new LatLng(getRandomPosInRange(bloc1LatMin,bloc1LatMax), getRandomPosInRange(bloc1LngMin,bloc1LngMax));
+        }
+        else if (choixBloc > 39 && choixBloc < 51) {
+            altarPos = new LatLng(getRandomPosInRange(bloc2LatMin,bloc2LatMax), getRandomPosInRange(bloc2LngMin,bloc2LngMax));
+        }
+        else {
+            altarPos = new LatLng(getRandomPosInRange(bloc3LatMin,bloc3LatMax), getRandomPosInRange(bloc3LngMin,bloc3LngMax));
+        }
+
+        mMap.addMarker(new MarkerOptions().position(altarPos).title("Altar"));
+
+        //Timer qui lance toutes les requêtes serveur pour les coordonnées à toutes les 2 sec
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -514,6 +535,18 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             }
         }
 
+    }
+
+    public double getRandomPosInRange(double posMin, double posMax) {
+        return (Math.random() * (posMax - posMin) + posMin);
+        // .toFixed() returns string, so ' * 1' is a trick to convert to number
+    }
+
+    public int getRandomBloc() {
+        Random rand = new Random();
+        int nombreAleatoire;
+        nombreAleatoire = rand.nextInt(100 - 1 + 1) + 1;
+        return nombreAleatoire;
     }
 
     public float calculEcartCoor(LatLng coordonneesPlayer, LatLng coordonneesEnemy) {
