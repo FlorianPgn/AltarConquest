@@ -29,6 +29,8 @@ import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionBasesPositions;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionPlayersInformations;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionFlagsPositions;
+import com.example.florian.altarconquest.ServerInteractions.ServerSendDeletedPlayer;
+import com.example.florian.altarconquest.ServerInteractions.ServerSendPlayerHoldAFlag;
 import com.example.florian.altarconquest.ServerInteractions.ServerSendPlayersInformations;
 
 import android.location.LocationListener;
@@ -60,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -78,10 +81,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     public ImageView imageEconomie;
     private TextView timerTextView, scoreBlueTeamTextView, scoreRedTeamTextView;
 
-    Map<String, Circle> coordinates;
-
-    public Context context = this;
-
+    public static Map<String, Circle> coordinates;
 
     private int lastFlagCaptured = 0;
 
@@ -115,7 +115,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         mapFragment.getMapAsync(this);
         
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
-        //timerTextView = (TextView) findViewById(R.id.timerTextView);
+        timerTextView = (TextView) findViewById(R.id.timerTextView);
 
         scoreBlueTeamTextView = (TextView) findViewById(R.id.scoreBlueTeamTextView);
         scoreRedTeamTextView = (TextView) findViewById(R.id.scoreRedTeamTextView);
@@ -183,8 +183,13 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         double echologiaLat = 48.10922932860948, echologiaLng = -0.7235687971115112;
         double hugoLat = 48.069250, hugoLng = -0.774704;
 
+        //position min et max des coordonnées des carrés sur l'iut pour l'altar
+        double bloc1LatMin = 48.084972780102866, bloc1LatMax = 48.08618401591062, bloc1LngMin = -0.7599502801895142, bloc1LngMax = -0.7577294111251831;
+        double bloc2LatMin = 48.086012007829495, bloc2LatMax = 48.08646352770626, bloc2LngMin = -0.7592207193374634, bloc2LngMax = -0.7568603754043579;
+        LatLng altarPos;
+
         // Initialisation de la position de départ de la caméra
-        LatLng startCameraPosition = new LatLng(hugoLat, hugoLng);
+        LatLng startCameraPosition = new LatLng(depInfoLat, depInfoLng);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 17.0f));
         retirerMouvementCameraMarkers();
 
@@ -200,7 +205,21 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         recupererLesDrapeauxSurLeServeur();
         recupererLesBasesSurLeServeur();
 
-        //Timer qui lance toutes les requêtes serveur pour les coordonnéesà toutes les 2 sec
+        //Création de l'altar
+
+        if (game.getAltar() != null) {
+            int choixBloc = getRandomBloc();
+            if (choixBloc < 90) {
+                altarPos = new LatLng(getRandomPosInRange(bloc1LatMin,bloc1LatMax), getRandomPosInRange(bloc1LngMin,bloc1LngMax));
+            }
+            else {
+                altarPos = new LatLng(getRandomPosInRange(bloc2LatMin,bloc2LatMax), getRandomPosInRange(bloc2LngMin,bloc2LngMax));
+            }
+            game.setAltar(altarPos);
+        }
+
+
+        //Timer qui lance toutes les requêtes serveur pour les coordonnées à toutes les 2 sec
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -261,6 +280,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     public void updateTimer() {
         if (minutes == 0 && seconds == 0) {
             Intent intent = new Intent(this, EcranFinJeu.class);
+            intent.putExtra("STRING_COLOR", game.getRedTeam().getScore()>game.getBlueTeam().getScore()?TeamColor.RED.toString():TeamColor.BLUE.toString());
             startActivity(intent);
             finish();
         }
@@ -292,17 +312,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.drapeaurouge));
             mMap.addMarker(marker);
         }
-        afficherJoueursEnnemiesAvecDrapeau();
-    }
-
-    public void afficherJoueursEnnemiesAvecDrapeau() {
-        joueursAvecDrapeau = new ArrayList<Player>();
-        for (Player player : game.getTeam(enemyTeamColor).getListeDesPlayers()) {
-            if (player.isHoldingAFlag() == true) {
-                updateAffichagePositionJoueurs(player);
-                joueursAvecDrapeau.add(player);
-            }
-        }
     }
 
     public void recupererLesDrapeauxSurLeServeur() {
@@ -332,6 +341,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             if (!player.getPseudo().equals(pseudo))
                 updateAffichagePositionJoueurs(player);
         }
+        afficherJoueursEnnemiesAvecDrapeau();
     }
 
     public void updateAffichagePositionJoueurs(Player player) {
@@ -344,7 +354,23 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             circle = mMap.addCircle(circleOptions);
             coordinates.put(player.getPseudo(), circle);
         } else {
+            //circle.setVisible(true);
             circle.setCenter(player.getCoordonnees());
+        }
+    }
+
+    public void afficherJoueursEnnemiesAvecDrapeau() {
+        for (Player player : game.getTeam(enemyTeamColor).getListeDesPlayers()) {
+            if (player.isHoldingAFlag() == true) {
+                Toast.makeText(this, "Un ennemi a capturé un de vos drapeaux !", Toast.LENGTH_LONG).show();
+                updateAffichagePositionJoueurs(player);
+            } else {
+                Circle circle = coordinates.get(player.getPseudo());
+                if (circle != null) {
+                    circle.remove();
+                }
+                coordinates.remove(player.getPseudo());
+            }
         }
     }
 
@@ -429,16 +455,35 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         flagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Player player = game.getTeam(myTeamColor).getJoueur(pseudo);
-                for (int i = 0; i >= joueursAvecDrapeau.size(); i++) {
-                    if (DISTANCE_MAXIMUM_REQCUISE >= calculEcartCoor(player.getCoordonnees(), joueursAvecDrapeau.get(i).getCoordonnees())) {
-                        Toast.makeText(EcranJeu.this, "Le drapeau a été recupéré",
-                                Toast.LENGTH_LONG).show();
+                boolean someoneHaveAFlag = false;
+                for (final Player enemy : game.getTeam(enemyTeamColor).getListeDesPlayers()) {
+                    if (enemy.isHoldingAFlag()){
+                        someoneHaveAFlag = true;
+                        if (DISTANCE_MAXIMUM_REQCUISE >= calculEcartCoor(game.getTeam(myTeamColor).getJoueur(pseudo).getCoordonnees(), enemy.getCoordonnees())) {
+                            Toast.makeText(EcranJeu.this, "Le drapeau est a portée appuyez longtemps pour le capturer !", Toast.LENGTH_LONG).show();
+                            flagButton.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View v) {
+                                    if (game.getTeam(myTeamColor).getJoueur(pseudo).isDefenceTokenAvailable() == true) {
+                                        ServerSendPlayerHoldAFlag ssphaf = new ServerSendPlayerHoldAFlag();
+                                        ssphaf.execute(enemy.getPseudo(), String.valueOf(game.getId()), "0");
+                                        game.getTeam(myTeamColor).getJoueur(pseudo).setDefenseTokenAvailable(false);
+                                    }
+                                    else {
+                                        Toast.makeText(EcranJeu.this, "Vous n'avez pas de jeton de défense disponible !", Toast.LENGTH_LONG).show();
+                                    }
+                                    return true;
+                                }
+                            });
+                        }
+                        else {
+                            Toast.makeText(EcranJeu.this, "L'ennemi n'est pas a portée", Toast.LENGTH_LONG).show();
+                        }
                     }
-                    else {
-                        Toast.makeText(EcranJeu.this, "L'ennemi n'est pas a portée",
-                                Toast.LENGTH_LONG).show();
-                    }
+
+                }
+                if (!someoneHaveAFlag) {
+                    Toast.makeText(EcranJeu.this, "Il n'y a pas de drapeau entrain d'être volé à proximité", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -498,6 +543,18 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
+    public double getRandomPosInRange(double posMin, double posMax) {
+        return (Math.random() * (posMax - posMin) + posMin);
+        // .toFixed() returns string, so ' * 1' is a trick to convert to number
+    }
+
+    public int getRandomBloc() {
+        Random rand = new Random();
+        int nombreAleatoire;
+        nombreAleatoire = rand.nextInt(100 - 1 + 1) + 1;
+        return nombreAleatoire;
+    }
+
     public float calculEcartCoor(LatLng coordonneesPlayer, LatLng coordonneesEnemy) {
         float distance = 0;
         Location locPlayer = new Location("");
@@ -543,6 +600,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     public void scanQuestion(int numLotQuestion, int lastFlagCaptured, Player player, String scanContent){
         this.lastFlagCaptured = lastFlagCaptured;
         player.setAttackTokenAvailable(false);
+        player.setHoldingAFlag(true);
+        ServerSendPlayerHoldAFlag ssphaf = new ServerSendPlayerHoldAFlag();
+        ssphaf.execute(pseudo, String.valueOf(game.getId()), "1");
         Intent intent = new Intent(this, EcranQuestions.class);
         intent.putExtra("Questions", numLotQuestion);
         Log.e("Ce qu'on a récupéré","" + scanContent);
@@ -668,7 +728,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     @Override
     public void onStart() {
         super.onStart();
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
@@ -678,7 +737,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     @Override
     public void onStop() {
         super.onStop();
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
@@ -704,5 +762,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ServerSendDeletedPlayer ssdp = new ServerSendDeletedPlayer();
+        ssdp.execute(pseudo);
+    }
 }

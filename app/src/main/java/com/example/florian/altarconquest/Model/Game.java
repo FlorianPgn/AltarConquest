@@ -4,6 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.example.florian.altarconquest.View.EcranJeu;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 
 /**
@@ -18,6 +21,8 @@ public class Game implements Parcelable {
     private Team redTeam;
     private int nbJoueurs;
     private int nbJoueursMax;
+    private boolean enCours = false;
+    private LatLng altar;
 
     public Game(int id, String name, int nbJoueursMax){
         this.id = id;
@@ -73,6 +78,7 @@ public class Game implements Parcelable {
             redTeam.ajouterDrapeau(flag);
     }
 
+
     public int getId() { return id;}
 
     public String getName() {
@@ -109,7 +115,20 @@ public class Game implements Parcelable {
         }
     }
 
+    public LatLng getAltar() { return altar; }
+
+    public boolean isEnCours() {
+        return enCours;
+    }
+
     public void setNbJoueurs(int nbJoueurs) { this.nbJoueurs = nbJoueurs; }
+
+    public void setEnCours(boolean enCours) {
+        this.enCours = enCours;
+    }
+
+    public void setAltar(LatLng altar) { this.altar = altar; }
+
 
     @Override
     public int describeContents() {
@@ -126,51 +145,32 @@ public class Game implements Parcelable {
 
     public void updatePlayersInformation(List<Player> listPlayer){
         if(getBlueTeam().getListeDesPlayers().size() == 0) {
-            for (Player player : listPlayer) {
-                if (player.getColor() == TeamColor.BLUE) {
-                    getBlueTeam().ajouterJoueur(player);
-                } else {
-                    getRedTeam().ajouterJoueur(player);
-                }
-            }
+            initialiserListesDesJoueurs(listPlayer);
         }
 
         for (Player player:listPlayer) {
-            if (player.getColor() == TeamColor.BLUE) {
-                for (Player inGamePlayer:getBlueTeam().getListeDesPlayers()) {
-                    if(inGamePlayer.getPseudo().equals(player.getPseudo())) {
-                        inGamePlayer.setCoordonnees(player.getCoordonnees());
-                        inGamePlayer.setScore(player.getScore());
-                        if (player.isHoldingAFlag()==true) {
-                            inGamePlayer.setHoldingAFlag(true);
-                        }
-                        else {
-                            inGamePlayer.setHoldingAFlag(false);
-                        }  
-                    }
-                }
-            } else {
-                for (Player inGamePlayer:getRedTeam().getListeDesPlayers()) {
-                    if(inGamePlayer.getPseudo().equals(player.getPseudo())) {
-                        inGamePlayer.setCoordonnees(player.getCoordonnees());
-                         inGamePlayer.setScore(player.getScore());
-                        if (player.isHoldingAFlag()==true) {
-                            inGamePlayer.setHoldingAFlag(true);
-                        }
-                        else {
-                            inGamePlayer.setHoldingAFlag(false);
-                        }
+
+            for (Player inGamePlayer : getTeam(player.getColor()).getListeDesPlayers()) { //Pour chaque joueurs
+                if(inGamePlayer.getPseudo().equals(player.getPseudo())) { //Si les pseudos sont égaux
+                    inGamePlayer.setCoordonnees(player.getCoordonnees());
+                    inGamePlayer.setScore(player.getScore());
+                    if (player.isHoldingAFlag() == true) {
+                        inGamePlayer.setHoldingAFlag(true);
+                    } else {
+                        inGamePlayer.setHoldingAFlag(false);
                     }
                 }
             }
         }
     }
 
-    public void ajouterBase(Base base) {
-        if(base.getTeamColor().equals(TeamColor.BLUE)){
-            getBlueTeam().setBase(base);
-        } else {
-            getRedTeam().setBase(base);
+    public void initialiserListesDesJoueurs(List<Player> listPlayer) {
+        for (Player player : listPlayer) {
+                getTeam(player.getColor()).ajouterJoueur(player);
         }
+    }
+
+    public void ajouterBase(Base base) {
+        getTeam(base.getTeamColor()).setBase(base);
     }
 }

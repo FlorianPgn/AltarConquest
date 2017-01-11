@@ -27,6 +27,7 @@ import com.example.florian.altarconquest.Model.TeamColor;
 import com.example.florian.altarconquest.R;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionPlayersLobby;
 import com.example.florian.altarconquest.ServerInteractions.ServerSendDeletedPlayer;
+import com.example.florian.altarconquest.ServerInteractions.ServerSendGameEnCours;
 
 import java.util.List;
 import java.util.Timer;
@@ -143,6 +144,8 @@ public class EcranLobby_Partie extends Activity {
 
     public void ouvrirRejoindrePartie() {
         //Si on quitte le lobby on est supprimé de la partie en BDD
+        timer.cancel();
+
         ServerSendDeletedPlayer ssdp = new ServerSendDeletedPlayer();
         ssdp.execute(pseudo);
 
@@ -188,14 +191,23 @@ public class EcranLobby_Partie extends Activity {
                 }
 
             }
-            Log.i("TestCouleur", "colorsAreSet"+colorsAreSet);
-            Log.i("TestCouleur", "nbJoueursEquipeRouge"+nbJoueursEquipeRouge);
-            Log.i("TestCouleur", "nbJoueursEquipeBleu"+nbJoueursEquipeBleu);
-            Log.i("TestCouleur", "jmax"+game.getNbJoueursMax()/2);
             if (colorsAreSet && nbJoueursEquipeRouge == game.getNbJoueursMax()/2 && nbJoueursEquipeBleu == game.getNbJoueursMax()/2) {
                 timer.cancel();  //On arrête les requêtes serveur pour avoir les joueurs du lobby
 
                 //Serialize l'objet game
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("game", game);
+
+                ServerSendGameEnCours ssgec = new ServerSendGameEnCours();
+                ssgec.equals(String.valueOf(game.getId()));
+
+                //Passe à l'écran de jeu le pseudo et la couleur de team
+                Intent intent = new Intent(this, EcranJeu.class);
+                intent.putExtra("STRING_PSEUDO", pseudo);
+                intent.putExtra("STRING_COLOR", teamColor.toString());
+                intent.putExtras(bundle);
+                startActivity(intent);
+
 
                 //Passe à l'écran de jeu le pseudo et la couleur de team
 
@@ -216,7 +228,6 @@ public class EcranLobby_Partie extends Activity {
 
     @Override
     public void onBackPressed() {
-        timer.cancel();
         ouvrirRejoindrePartie();
     }
 }

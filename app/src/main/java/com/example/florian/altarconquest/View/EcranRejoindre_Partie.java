@@ -28,17 +28,9 @@ public class EcranRejoindre_Partie extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rejoindre_partie);
 
-        timer =  new Timer();
 
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                ServerReceptionGamesProperties srgp = new ServerReceptionGamesProperties(EcranRejoindre_Partie.this);
-                srgp.execute();
-            }
-        };
 
-        timer.schedule(timerTask, 0, 1000 * 4);
+        creerTimer();
 
         ImageButton bouton_retour = (ImageButton) findViewById(R.id.bouton_retour);
         bouton_retour.setOnClickListener(new View.OnClickListener() {
@@ -59,14 +51,40 @@ public class EcranRejoindre_Partie extends Activity {
     }
 
     public void ouvrirGestion_Partie() {
+        timer.cancel();
         Intent intent = new Intent(this, EcranGestion_Partie.class);
         startActivity(intent);
     }
 
+    public void creerTimer(){
+        timer =  new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                ServerReceptionGamesProperties srgp = new ServerReceptionGamesProperties(EcranRejoindre_Partie.this);
+                srgp.execute();
+            }
+        };
+
+        timer.schedule(timerTask, 0, 1000 * 4);
+    }
+
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         timer.cancel();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        creerTimer();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ouvrirGestion_Partie();
+
+    }
 }
