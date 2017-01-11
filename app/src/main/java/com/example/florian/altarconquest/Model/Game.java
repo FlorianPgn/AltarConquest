@@ -149,6 +149,7 @@ public class Game implements Parcelable {
         }
 
         for (Player player:listPlayer) {
+
             for (Player inGamePlayer : getTeam(player.getColor()).getListeDesPlayers()) { //Pour chaque joueurs
                 if(inGamePlayer.getPseudo().equals(player.getPseudo())) { //Si les pseudos sont égaux
                     inGamePlayer.setCoordonnees(player.getCoordonnees());

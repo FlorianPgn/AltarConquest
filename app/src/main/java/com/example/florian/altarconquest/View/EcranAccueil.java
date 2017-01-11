@@ -2,8 +2,13 @@ package com.example.florian.altarconquest.View;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +21,9 @@ import com.example.florian.altarconquest.R;
 import static com.google.zxing.integration.android.IntentIntegrator.REQUEST_CODE;
 
 public class EcranAccueil extends Activity {
+
+    boolean checkScan = false;
+    boolean checkGPS = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +38,17 @@ public class EcranAccueil extends Activity {
         boutonJouer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ouvrirCreationPartie();
+                if (checkScan == false) {
+                    checkScan();
+                    checkScan = true;
+                }
+                if (checkScan == true && checkGPS == false) {
+                    checkGPS();
+                    checkGPS = true;
+                }
+                else {
+                    ouvrirCreationPartie();
+                }
             }
         });
 
@@ -51,10 +69,46 @@ public class EcranAccueil extends Activity {
         if (!(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
         }
-
     }
 
+    public void checkScan() {
 
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Veuillez installer votre scanneur de QRcode.");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "J'installe mon scanneur !",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
+                        Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+                        startActivity(marketIntent);
+
+                    }
+                });
+        AlertDialog alert1 = builder1.create();
+        alert1.setCancelable(false);
+        alert1.show();
+    }
+
+    public void checkGPS() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Veuillez activer votre GPS.");
+        builder1.setCancelable(true);
+        builder1.setPositiveButton(
+                "J'active mon GPS !",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent i = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(i, 1);
+                    }
+                });
+        AlertDialog alert1 = builder1.create();
+        alert1.setCancelable(false);
+        alert1.show();
+    }
 
     public void ouvrirCreationPartie() {
         Intent intent = new Intent(this, EcranGestion_Partie.class);
