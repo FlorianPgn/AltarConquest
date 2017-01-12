@@ -167,7 +167,7 @@ public class EcranLobby_Partie extends Activity {
 
         //Lorsque la partie est compléte
         if(game.getNbJoueursMax() == listPlayer.size()) {
-            TeamColor teamColor = null;
+            teamColor = null;
 
             //On vérifie que tous les joueurs ont choisis leur team
             for (Player player:listPlayer) {
@@ -192,22 +192,6 @@ public class EcranLobby_Partie extends Activity {
 
             }
             if (colorsAreSet && nbJoueursEquipeRouge == game.getNbJoueursMax()/2 && nbJoueursEquipeBleu == game.getNbJoueursMax()/2) {
-                timer.cancel();  //On arrête les requêtes serveur pour avoir les joueurs du lobby
-
-                //Serialize l'objet game
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("game", game);
-
-                ServerSendGameEnCours ssgec = new ServerSendGameEnCours();
-                ssgec.equals(String.valueOf(game.getId()));
-
-                //Passe à l'écran de jeu le pseudo et la couleur de team
-                Intent intent = new Intent(this, EcranJeu.class);
-                intent.putExtra("STRING_PSEUDO", pseudo);
-                intent.putExtra("STRING_COLOR", teamColor.toString());
-                intent.putExtras(bundle);
-                startActivity(intent);
-
 
                 //Passe à l'écran de jeu le pseudo et la couleur de team
 
@@ -217,9 +201,17 @@ public class EcranLobby_Partie extends Activity {
     }
 
     public void lancerPartie() {
+        timer.cancel();  //On arrête les requêtes serveur pour avoir les joueurs du lobby
+
+        //Serialize l'objet game
         Bundle bundle = new Bundle();
         bundle.putParcelable("game", game);
-        Intent intent = new Intent(context, EcranJeu.class);
+
+        ServerSendGameEnCours ssgec = new ServerSendGameEnCours();
+        ssgec.execute(String.valueOf(game.getId()));
+
+        //Passe à l'écran de jeu le pseudo et la couleur de team
+        Intent intent = new Intent(this, EcranJeu.class);
         intent.putExtra("STRING_PSEUDO", pseudo);
         intent.putExtra("STRING_COLOR", teamColor.toString());
         intent.putExtras(bundle);

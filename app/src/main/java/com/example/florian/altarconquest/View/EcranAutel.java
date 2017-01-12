@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Hugo on 10/01/2017.
@@ -28,8 +29,8 @@ import java.util.ArrayList;
 public class EcranAutel extends FragmentActivity implements OnMapReadyCallback {
 
     private Game game;
-    private LatLng coord;
-    private ArrayList<LatLng> listCoord;
+    private List<LatLng> listCoord;
+    private double latitude, longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +47,12 @@ public class EcranAutel extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
+        listCoord = new ArrayList<>();
+
         Bundle extras = getIntent().getExtras();
         game = extras.getParcelable("game");
-        coord = game.getRedTeam().getListeDesPlayers().get(0).getCoordonnees();
+        latitude = extras.getDouble("DOUBLE_LAT");
+        longitude = extras.getDouble("DOUBLE_LNG");
 
         ServerReceptionPlayersInformations src = new ServerReceptionPlayersInformations(game);
         src.execute(String.valueOf(game.getId()));
@@ -57,8 +61,9 @@ public class EcranAutel extends FragmentActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         // Initialisation de la position de départ de la caméra
-        LatLng startCameraPosition = new LatLng(coord.latitude, coord.longitude);
+        LatLng startCameraPosition = new LatLng(latitude, longitude);
         BitmapDescriptor autel = BitmapDescriptorFactory.fromResource(R.drawable.etoile);
+
         map.addMarker(new MarkerOptions().position(game.getAltar()).title("Autel").icon(autel));
 
         map.moveCamera(CameraUpdateFactory.newLatLng(startCameraPosition));

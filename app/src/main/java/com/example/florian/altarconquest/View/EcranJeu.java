@@ -8,12 +8,12 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -58,8 +58,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -78,8 +79,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
     private ArrayList<Player> joueursAvecDrapeau;
+    private ArrayList<TextView> textesBoutons;
     public ImageView imageEconomie;
-    private TextView timerTextView, scoreBlueTeamTextView, scoreRedTeamTextView;
+    private TextView timerTextView, scoreBlueTeamTextView, scoreRedTeamTextView, scanQRCode, carteAutel, recupererFlag, couleurEquipe, tvAttaque, tvDefense;
 
     public static Map<String, Circle> coordinates;
 
@@ -95,6 +97,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private TeamColor enemyTeamColor;
     private Location location;
 
+    private final double START_CAMERA_LAT = 48.08574927627401, START_CAMERA_LNG = -0.7584989108085632;
+
     private Game game;
 
     private final int REQUEST_CODE = 128;
@@ -109,6 +113,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        couleurEquipe = (TextView) findViewById(R.id.couleur_Equipe);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -183,13 +189,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         double echologiaLat = 48.10922932860948, echologiaLng = -0.7235687971115112;
         double hugoLat = 48.069250, hugoLng = -0.774704;
 
-        //position min et max des coordonnées des carrés sur l'iut pour l'altar
-        double bloc1LatMin = 48.084972780102866, bloc1LatMax = 48.08618401591062, bloc1LngMin = -0.7599502801895142, bloc1LngMax = -0.7577294111251831;
-        double bloc2LatMin = 48.086012007829495, bloc2LatMax = 48.08646352770626, bloc2LngMin = -0.7592207193374634, bloc2LngMax = -0.7568603754043579;
-        LatLng altarPos;
-
         // Initialisation de la position de départ de la caméra
-        LatLng startCameraPosition = new LatLng(depInfoLat, depInfoLng);
+        LatLng startCameraPosition = new LatLng(START_CAMERA_LAT, START_CAMERA_LNG);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 17.0f));
         retirerMouvementCameraMarkers();
 
@@ -435,23 +436,35 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     public void creationMenuDeroulant() {
         boutonsDeployables = new ArrayList<Button>();
+        textesBoutons = new ArrayList<TextView>();
 
         attackToken = (ImageView) findViewById(R.id.attackToken);
         defenceToken = (ImageView) findViewById(R.id.defenceToken);
 
 
         mapButton = (Button) findViewById(R.id.mapButton);
+        carteAutel = (TextView) findViewById(R.id.carte_Autel);
         boutonsDeployables.add(mapButton);
+        textesBoutons.add(carteAutel);
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Ouvre la grande map avec l'altar
-                // A compléter
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("game", game);
+
+                Intent intent = new Intent(EcranJeu.this, EcranAutel.class);
+                intent.putExtras(bundle);
+                intent.putExtra("DOUBLE_LAT", START_CAMERA_LAT);
+                intent.putExtra("DOUBLE_LNG", START_CAMERA_LNG);
+                startActivity(intent);
             }
         });
 
         flagButton = (Button) findViewById(R.id.flagButton);
+        recupererFlag = (TextView) findViewById(R.id.recuperer_Flag);
         boutonsDeployables.add(flagButton);
+        textesBoutons.add(recupererFlag);
         flagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -489,7 +502,15 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         });
 
         qrCodeButton = (Button) findViewById(R.id.qrCodeButton);
+        scanQRCode = (TextView) findViewById(R.id.scan_QRCode);
+        tvAttaque = (TextView) findViewById(R.id.attaque);
+        tvDefense = (TextView) findViewById(R.id.defense);
         boutonsDeployables.add(qrCodeButton);
+        textesBoutons.add(scanQRCode);
+
+        textesBoutons.add(tvAttaque);
+        textesBoutons.add(tvDefense);
+
         qrCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -507,6 +528,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             leBouton.setClickable(false);
         }
 
+        for (TextView leTexte : textesBoutons) {
+            leTexte.setVisibility(View.INVISIBLE);
+            leTexte.setClickable(false);
+        }
+
         treeButton = (Button) findViewById(R.id.treeButton);
         treeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -519,8 +545,27 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
                     treeButton.setVisibility(View.INVISIBLE);
                 }
+
+                for (TextView leTexte : textesBoutons) {
+                    leTexte.setVisibility(View.VISIBLE);
+                    if (myTeamColor.equals(TeamColor.RED)) {
+                        leTexte.setTextColor(Color.RED);
+                    }
+                    else {
+                        leTexte.setTextColor(Color.BLUE);
+                    }
+                }
             }
         });
+
+        if (myTeamColor.equals(TeamColor.RED)) {
+            couleurEquipe.setText("Vous êtes ROUGE");
+            couleurEquipe.setTextColor(Color.RED);
+        }
+        else {
+            couleurEquipe.setText("Vous êtes BLEU");
+            couleurEquipe.setTextColor(Color.BLUE);
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -572,7 +617,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     private void gestionQRcodes(String scanContent) {
         Player player = game.getTeam(myTeamColor).getJoueur(pseudo);
-
         if(scanContent.equals("base")) {
             if (lastFlagCaptured == 0) {
                 Toast.makeText(this, "Allez donc chasser les drapeaux énnemis plutôt que de rester à votre base petit coquinou", Toast.LENGTH_LONG).show();
@@ -594,10 +638,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             Toast.makeText(this, "Vous portez actuellement le drapeau énnemi n°"
                     + lastFlagCaptured
                     + ", allez vite le déposer à votre base pour faire gagner un point à votre équipe", Toast.LENGTH_LONG).show();
+
         }
     }
 
-    public void scanQuestion(int numLotQuestion, int lastFlagCaptured, Player player, String scanContent){
+    public void scanFlag(int numLotQuestion, int lastFlagCaptured, Player player ){
         this.lastFlagCaptured = lastFlagCaptured;
         player.setAttackTokenAvailable(false);
         player.setHoldingAFlag(true);
@@ -605,8 +650,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         ssphaf.execute(pseudo, String.valueOf(game.getId()), "1");
         Intent intent = new Intent(this, EcranQuestions.class);
         intent.putExtra("Questions", numLotQuestion);
-        Log.e("Ce qu'on a récupéré","" + scanContent);
-	    startActivity(intent);
+	      startActivity(intent);
     }
 
     public void ouvrirEcranAutel() {
