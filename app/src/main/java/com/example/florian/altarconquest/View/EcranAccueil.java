@@ -38,15 +38,7 @@ public class EcranAccueil extends Activity {
         boutonJouer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkScan == false) {
-                    checkScan();
-                    checkScan = true;
-                }
-                if (checkScan == true && checkGPS == false) {
-                    checkGPS();
-                    checkGPS = true;
-                }
-                else {
+                if (checkScan() && checkGPS()) {
                     ouvrirCreationPartie();
                 }
             }
@@ -71,7 +63,7 @@ public class EcranAccueil extends Activity {
         }
     }
 
-    public void checkScan() {
+    public boolean checkScan() {
         if(!appInstalledOrNot("com.google.zxing.client.android")) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setMessage("Veuillez installer votre scanneur de QRcode.");
@@ -90,7 +82,9 @@ public class EcranAccueil extends Activity {
             AlertDialog alert1 = builder1.create();
             alert1.setCancelable(false);
             alert1.show();
+            return false;
         }
+        return true;
     }
 
     private boolean appInstalledOrNot(String uri) {
@@ -104,7 +98,7 @@ public class EcranAccueil extends Activity {
         return false;
     }
 
-    public void checkGPS() {
+    public boolean checkGPS() {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
@@ -121,7 +115,9 @@ public class EcranAccueil extends Activity {
             AlertDialog alert1 = builder1.create();
             alert1.setCancelable(false);
             alert1.show();
+            return false;
         }
+        return true;
     }
 
     public void ouvrirCreationPartie() {
