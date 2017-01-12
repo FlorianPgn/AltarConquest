@@ -194,26 +194,8 @@ public class EcranLobby_Partie extends Activity {
             if (colorsAreSet && nbJoueursEquipeRouge == game.getNbJoueursMax()/2 && nbJoueursEquipeBleu == game.getNbJoueursMax()/2) {
 
                 //Passe à l'écran de jeu le pseudo et la couleur de team
-                final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-                if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-                    builder1.setMessage("Veuillez activer votre GPS.");
-                    builder1.setCancelable(true);
 
-                    builder1.setPositiveButton(
-                            "J'active mon GPS !",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    lancerPartie();
-                                }
-                            });
-                    AlertDialog alert1 = builder1.create();
-                    alert1.setCancelable(false);
-                    alert1.show();
-                }
-                else {
-                    lancerPartie();
-                }
+                lancerPartie();
             }
         }
     }
