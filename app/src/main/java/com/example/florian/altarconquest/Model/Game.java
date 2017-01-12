@@ -70,12 +70,15 @@ public class Game implements Parcelable {
     };
 
     public void ajouterDrapeau(Flag flag){
-        if(flag.getTeamColor() == TeamColor.BLUE)
-            blueTeam.ajouterDrapeau(flag);
-        if(flag.getTeamColor() == TeamColor.RED)
-            redTeam.ajouterDrapeau(flag);
-    }
+        Flag leFlag = getTeam(flag.getTeamColor()).getFlag(flag.getName());
+        if (leFlag == null) {
+            getTeam(flag.getTeamColor()).ajouterDrapeau(flag);
+        } else {
+            leFlag.setCoordonnees(flag.getCoordonnees());
+            leFlag.setCapturable(flag.isCapturable());
+        }
 
+    }
 
     public int getId() { return id;}
 

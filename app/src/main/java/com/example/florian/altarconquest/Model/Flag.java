@@ -41,4 +41,12 @@ public class Flag {
     public String toString(){
         return name+" "+coordonnees.toString()+" "+teamColor;
     }
+
+    public void setCoordonnees(LatLng coordonnees) {
+        this.coordonnees = coordonnees;
+    }
+
+    public void setCapturable(boolean capturable) {
+        this.capturable = capturable;
+    }
 }

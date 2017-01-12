@@ -42,8 +42,6 @@ public class ServerReceptionFlagsPositions extends ServerReceptionData {
                 ecranJeu.getGame().ajouterDrapeau(flag);
             }
 
-            ecranJeu.afficherDrapeaux();
-
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {

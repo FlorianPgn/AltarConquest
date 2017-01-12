@@ -83,10 +83,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private TextView timerTextView, scoreBlueTeamTextView, scoreRedTeamTextView;
 
     public static Map<String, Circle> coordinates;
+    public static Map<String, Marker> flags;
 
     private int lastFlagCaptured = 0;
 
-    private int score = 0;
     private float DISTANCE_MAXIMUM_REQCUISE = 5;
     private int minutes = 15;
     private int seconds = 0;
@@ -96,7 +96,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private TeamColor enemyTeamColor;
     private Location location;
 
-    private final double START_CAMERA_LAT = 48.08574927627401, START_CAMERA_LNG = -0.7584989108085632;
+    private final double START_CAMERA_LAT = 48.10922932860948, START_CAMERA_LNG = -0.7235687971115112;
 
     private Game game;
 
@@ -118,23 +118,26 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         mapFragment.getMapAsync(this);
         
         imageEconomie = (ImageView) findViewById(R.id.economyEnergie);
+        economieEnergie = new EcomieEnergie(this);
+        economieEnergie.start();
+
         timerTextView = (TextView) findViewById(R.id.timerTextView);
 
         scoreBlueTeamTextView = (TextView) findViewById(R.id.scoreBlueTeamTextView);
         scoreRedTeamTextView = (TextView) findViewById(R.id.scoreRedTeamTextView);
 
+        coordinates = new HashMap<>();
+        flags = new HashMap<>();
 
         mapButton = (Button) findViewById(R.id.mapButton);
+
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
                 ouvrirEcranAutel();
             }
         });
-        coordinates = new HashMap<>();
 
-        economieEnergie = new EcomieEnergie(this);
-        economieEnergie.start();
 
         //Récupère l'objet Game du lobby
         Bundle extras = getIntent().getExtras();
@@ -223,9 +226,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             public void run() {
                 ServerReceptionPlayersInformations src = new ServerReceptionPlayersInformations(game);
                 src.execute(String.valueOf(game.getId()));
+                recupererLesDrapeauxSurLeServeur();
                 runOnUiThread(new Runnable() {
                     public void run() {
                         afficherJoueurs();
+                        afficherDrapeaux();
                         updateScores();
                     }
                 });
@@ -301,14 +306,26 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     //Méthodes pour afficher les drapeaux au démarage de l'activité
     public void afficherDrapeaux() {
         for (Flag flag : game.getBlueTeam().getListofFlags()) {
-            MarkerOptions marker = new MarkerOptions().position(flag.getCoordonnees());
-            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.drapeaubleu));
-            mMap.addMarker(marker);
+            Marker markerFlag = flags.get(flag.getName());
+            if (markerFlag == null) {
+                MarkerOptions marker = new MarkerOptions().position(flag.getCoordonnees());
+                marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.drapeaubleu));
+                markerFlag = mMap.addMarker(marker);
+                flags.put(flag.getName(), markerFlag);
+            } else {
+                markerFlag.setPosition(flag.getCoordonnees());
+            }
         }
         for (Flag flag : game.getRedTeam().getListofFlags()) {
-            MarkerOptions marker = new MarkerOptions().position(flag.getCoordonnees());
-            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.drapeaurouge));
-            mMap.addMarker(marker);
+            Marker markerFlag = flags.get(flag.getName());
+            if (markerFlag == null) {
+                MarkerOptions marker = new MarkerOptions().position(flag.getCoordonnees());
+                marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.drapeaurouge));
+                markerFlag = mMap.addMarker(marker);
+                flags.put(flag.getName(), markerFlag);
+            } else {
+                markerFlag.setPosition(flag.getCoordonnees());
+            }
         }
     }
 
@@ -336,8 +353,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     //Méthodes pour afficher la position des joueurs dont on est censé avoir la position
     public void afficherJoueurs() {
         for (Player player : game.getTeam(myTeamColor).getListeDesPlayers()) {
-            if (!player.getPseudo().equals(pseudo))
+            if (!player.getPseudo().equals(pseudo)) {
                 updateAffichagePositionJoueurs(player);
+            }
         }
         afficherJoueursEnnemiesAvecDrapeau();
     }
