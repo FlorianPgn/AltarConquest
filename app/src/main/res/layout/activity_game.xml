@@ -1,129 +1,242 @@
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ecran"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.florian.altarconquest.View.EcranJeu">
-    <RelativeLayout
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/boutons"
+        android:layout_below="@+id/informations"
+        android:id="@+id/economie">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="80dp"
+        android:layout_width="match_parent"
+        android:id="@+id/informations"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_height="match_parent"
+            android:src="@drawable/red_flag_icon"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/drapeau_rouge"
+            android:layout_width="30dp" />
+
+        <TextView
+            android:id="@+id/scoreRedTeamTextView"
+            android:layout_gravity="center_vertical"
+            android:text="0"
+            android:textStyle="bold"
+            android:textColor="#FF0000"
+            android:textAlignment="center"
+            android:layout_height="match_parent"
+            android:translationY="16dp"
+            android:textSize="40dp"
+            android:layout_width="30dp" />
+
+        <ImageView
+            android:layout_height="match_parent"
+            android:src="@drawable/blue_flag_icon"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/drapeau_bleu"
+            android:layout_width="30dp" />
+
+        <TextView
+            android:id="@+id/scoreBlueTeamTextView"
+            android:layout_gravity="center_vertical"
+            android:text="0"
+            android:textStyle="bold"
+            android:textColor="#0024FF"
+            android:textAlignment="center"
+            android:layout_height="match_parent"
+            android:translationY="16dp"
+            android:textSize="40dp"
+            android:layout_width="30dp" />
+
         <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal">
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/blue_flag_icon" />
-            <TextView
-                android:id="@+id/scoreBlueTeamTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="#0000CD"
-                android:textSize="50dp"
-                android:textStyle="bold" />
+            android:layout_weight="0.5"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></LinearLayout>
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/red_flag_icon" />
+        <TextView
+            android:id="@+id/timerTextView"
+            android:layout_height="match_parent"
+            android:text="00:00"
+            android:textSize="38dp"
+            android:gravity="center_vertical"
+            android:textColor="#333333"
+            android:textAlignment="center"
+            android:layout_width="120dp" />
 
-            <TextView
-                android:id="@+id/scoreRedTeamTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textSize="50dp"
-                android:textStyle="bold"
-                android:textColor="#FF0000"/>
-            <TextView
-                android:id="@+id/timerTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="00"
-                android:textSize="38dp"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:textColor="#333333"/>
-            <ImageView
-                android:id="@+id/attackToken"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"/>
-            <ImageView
-                android:id="@+id/defenceToken"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_weight="0.5"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></LinearLayout>
+
+        <ImageView
+            android:id="@+id/attackToken"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"/>
+
+        <ImageView
+            android:id="@+id/defenceToken"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:id="@+id/boutons"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/flagButton"
+                    android:background="@drawable/flag_icon"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"/>
+            </RelativeLayout>
         </LinearLayout>
-        <Button
-            android:id="@+id/flagButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="100dp"
-            android:background="@drawable/flag_icon" />
+
         <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="50dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="30"
-                android:orientation="horizontal"></LinearLayout>
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3">
+
+                <TextView
+                    android:text="Scan QRCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scan_QRCode"
+                    android:textAlignment="center"
+                    android:layout_gravity="center_vertical"
+                    android:textStyle="normal|bold" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/qrCodeButton"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="@drawable/qr_code_icon" />
+                android:background="@drawable/qr_code_icon"
+                android:layout_width="65dp"
+                android:layout_height="65dp" />
+
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="30"
-                android:orientation="horizontal">
-            </LinearLayout>
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"></LinearLayout>
+
             <Button
                 android:id="@+id/mapButton"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/map_icon" />
+                android:layout_gravity="bottom"
+                android:background="@drawable/map_icon"
+                android:layout_height="65dp"
+                android:layout_width="65dp" />
+
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="30"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3">
+
+                <TextView
+                    android:text="Carte    Autel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/carte_Autel"
+                    android:textAlignment="center"
+                    android:layout_gravity="center_vertical"
+                    android:textStyle="normal|bold" />
             </LinearLayout>
         </LinearLayout>
-        <Button
-            android:id="@+id/unactiveTreeButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/unactive_tree" />
-        <Button
-            android:id="@+id/treeButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/tree_icon" />
-    </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/unactiveTreeButton"
+                    android:background="@drawable/unactive_tree"
+                    android:layout_height="65dp"
+                    android:layout_width="65dp"
+                    android:gravity="center_vertical" />
+
+                <Button
+                    android:id="@+id/treeButton"
+                    android:background="@drawable/tree_icon"
+                    android:layout_height="65dp"
+                    android:layout_width="65dp"
+                    android:gravity="center_vertical"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:text="Récupérer  Drapeau"
+        android:id="@+id/recuperer_Flag"
+        android:textAlignment="center"
+        android:layout_above="@+id/boutons"
+        android:layout_centerHorizontal="true"
+        android:layout_height="50dp"
+        android:textStyle="normal|bold"
+        android:layout_width="70dp" />
+
     <ImageView
-      android:id="@+id/economyEnergie"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
-</FrameLayout>
+        android:id="@+id/economyEnergie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

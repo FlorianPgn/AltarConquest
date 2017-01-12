@@ -8,6 +8,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -57,6 +58,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,8 +78,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private RelativeLayout ecran;
     private ArrayList<Button> boutonsDeployables;
     private ArrayList<Player> joueursAvecDrapeau;
+    private ArrayList<TextView> textesBoutons;
     public ImageView imageEconomie;
-    private TextView timerTextView, scoreBlueTeamTextView, scoreRedTeamTextView;
+    private TextView timerTextView, scoreBlueTeamTextView, scoreRedTeamTextView, scanQRCode, carteAutel, recupererFlag;
 
     public static Map<String, Circle> coordinates;
 
@@ -424,13 +428,16 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     public void creationMenuDeroulant() {
         boutonsDeployables = new ArrayList<Button>();
+        textesBoutons = new ArrayList<TextView>();
 
         attackToken = (ImageView) findViewById(R.id.attackToken);
         defenceToken = (ImageView) findViewById(R.id.defenceToken);
 
 
         mapButton = (Button) findViewById(R.id.mapButton);
+        carteAutel = (TextView) findViewById(R.id.carte_Autel);
         boutonsDeployables.add(mapButton);
+        textesBoutons.add(carteAutel);
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -447,7 +454,9 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         });
 
         flagButton = (Button) findViewById(R.id.flagButton);
+        recupererFlag = (TextView) findViewById(R.id.recuperer_Flag);
         boutonsDeployables.add(flagButton);
+        textesBoutons.add(recupererFlag);
         flagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -471,7 +480,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         });
 
         qrCodeButton = (Button) findViewById(R.id.qrCodeButton);
+        scanQRCode = (TextView) findViewById(R.id.scan_QRCode);
         boutonsDeployables.add(qrCodeButton);
+        textesBoutons.add(scanQRCode);
+        //////
         qrCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -482,6 +494,11 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         for (Button leBouton : boutonsDeployables) {
             leBouton.setVisibility(View.INVISIBLE);
             leBouton.setClickable(false);
+        }
+
+        for (TextView leTexte : textesBoutons) {
+            leTexte.setVisibility(View.INVISIBLE);
+            leTexte.setClickable(false);
         }
 
         treeButton = (Button) findViewById(R.id.treeButton);
@@ -495,6 +512,16 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                     leBouton.setClickable(true);
 
                     treeButton.setVisibility(View.INVISIBLE);
+                }
+
+                for (TextView leTexte : textesBoutons) {
+                    leTexte.setVisibility(View.VISIBLE);
+                    if (myTeamColor.equals(TeamColor.RED)) {
+                        leTexte.setTextColor(Color.RED);
+                    }
+                    else {
+                        leTexte.setTextColor(Color.BLUE);
+                    }
                 }
             }
         });
