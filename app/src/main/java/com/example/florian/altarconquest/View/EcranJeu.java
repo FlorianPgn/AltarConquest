@@ -80,7 +80,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private ArrayList<Player> joueursAvecDrapeau;
     private ArrayList<TextView> textesBoutons;
     public ImageView imageEconomie;
-    private TextView timerTextView, scoreBlueTeamTextView, scoreRedTeamTextView, scanQRCode, carteAutel, recupererFlag;
+    private TextView timerTextView, scoreBlueTeamTextView, scoreRedTeamTextView, scanQRCode, carteAutel, recupererFlag, couleurEquipe, tvAttaque, tvDefense;
 
     public static Map<String, Circle> coordinates;
 
@@ -119,6 +119,8 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        couleurEquipe = (TextView) findViewById(R.id.couleur_Equipe);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -481,9 +483,14 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
         qrCodeButton = (Button) findViewById(R.id.qrCodeButton);
         scanQRCode = (TextView) findViewById(R.id.scan_QRCode);
+        tvAttaque = (TextView) findViewById(R.id.attaque);
+        tvDefense = (TextView) findViewById(R.id.defense);
         boutonsDeployables.add(qrCodeButton);
         textesBoutons.add(scanQRCode);
-        //////
+
+        textesBoutons.add(tvAttaque);
+        textesBoutons.add(tvDefense);
+
         qrCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -525,6 +532,15 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                 }
             }
         });
+
+        if (myTeamColor.equals(TeamColor.RED)) {
+            couleurEquipe.setText("Vous êtes ROUGE");
+            couleurEquipe.setTextColor(Color.RED);
+        }
+        else {
+            couleurEquipe.setText("Vous êtes BLEU");
+            couleurEquipe.setTextColor(Color.BLUE);
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
