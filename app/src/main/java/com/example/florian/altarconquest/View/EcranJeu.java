@@ -63,6 +63,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -109,13 +110,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            Intent i = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivityForResult(i, 1);
-        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
@@ -195,8 +189,6 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         double echologiaLat = 48.10922932860948, echologiaLng = -0.7235687971115112;
         double hugoLat = 48.069250, hugoLng = -0.774704;
 
-
-
         // Initialisation de la position de départ de la caméra
         LatLng startCameraPosition = new LatLng(START_CAMERA_LAT, START_CAMERA_LNG);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(startCameraPosition, 17.0f));
@@ -214,7 +206,21 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         recupererLesDrapeauxSurLeServeur();
         recupererLesBasesSurLeServeur();
 
-        //Timer qui lance toutes les requêtes serveur pour les coordonnéesà toutes les 2 sec
+        //Création de l'altar
+
+        if (game.getAltar() != null) {
+            int choixBloc = getRandomBloc();
+            if (choixBloc < 90) {
+                altarPos = new LatLng(getRandomPosInRange(bloc1LatMin,bloc1LatMax), getRandomPosInRange(bloc1LngMin,bloc1LngMax));
+            }
+            else {
+                altarPos = new LatLng(getRandomPosInRange(bloc2LatMin,bloc2LatMax), getRandomPosInRange(bloc2LngMin,bloc2LngMax));
+            }
+            game.setAltar(altarPos);
+        }
+
+
+        //Timer qui lance toutes les requêtes serveur pour les coordonnées à toutes les 2 sec
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -463,11 +469,25 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             @Override
             public void onClick(View v) {
                 boolean someoneHaveAFlag = false;
-                for (Player enemy : game.getTeam(enemyTeamColor).getListeDesPlayers()) {
+                for (final Player enemy : game.getTeam(enemyTeamColor).getListeDesPlayers()) {
                     if (enemy.isHoldingAFlag()){
                         someoneHaveAFlag = true;
                         if (DISTANCE_MAXIMUM_REQCUISE >= calculEcartCoor(game.getTeam(myTeamColor).getJoueur(pseudo).getCoordonnees(), enemy.getCoordonnees())) {
-                            Toast.makeText(EcranJeu.this, "Le drapeau a été recupéré", Toast.LENGTH_LONG).show();
+                            Toast.makeText(EcranJeu.this, "Le drapeau est a portée appuyez longtemps pour le capturer !", Toast.LENGTH_LONG).show();
+                            flagButton.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View v) {
+                                    if (game.getTeam(myTeamColor).getJoueur(pseudo).isDefenceTokenAvailable() == true) {
+                                        ServerSendPlayerHoldAFlag ssphaf = new ServerSendPlayerHoldAFlag();
+                                        ssphaf.execute(enemy.getPseudo(), String.valueOf(game.getId()), "0");
+                                        game.getTeam(myTeamColor).getJoueur(pseudo).setDefenseTokenAvailable(false);
+                                    }
+                                    else {
+                                        Toast.makeText(EcranJeu.this, "Vous n'avez pas de jeton de défense disponible !", Toast.LENGTH_LONG).show();
+                                    }
+                                    return true;
+                                }
+                            });
                         }
                         else {
                             Toast.makeText(EcranJeu.this, "L'ennemi n'est pas a portée", Toast.LENGTH_LONG).show();
@@ -476,7 +496,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
                 }
                 if (!someoneHaveAFlag) {
-                    Toast.makeText(EcranJeu.this, "Il n'y a pas de drapeau entrain d'être volé", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EcranJeu.this, "Il n'y a pas de drapeau entrain d'être volé à proximité", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -494,7 +514,12 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         qrCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ouvrirScanQrCode();
+                if (attackTokenAvailable) {
+                    ouvrirScanQrCode();
+                }
+                else {
+                    Toast.makeText(context, "Vous n'avez pas de jeton d'attaque, allez donc en chercher à votre base, petit coquinou que vous êtes", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -563,6 +588,18 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     }
 
+    public double getRandomPosInRange(double posMin, double posMax) {
+        return (Math.random() * (posMax - posMin) + posMin);
+        // .toFixed() returns string, so ' * 1' is a trick to convert to number
+    }
+
+    public int getRandomBloc() {
+        Random rand = new Random();
+        int nombreAleatoire;
+        nombreAleatoire = rand.nextInt(100 - 1 + 1) + 1;
+        return nombreAleatoire;
+    }
+
     public float calculEcartCoor(LatLng coordonneesPlayer, LatLng coordonneesEnemy) {
         float distance = 0;
         Location locPlayer = new Location("");
@@ -580,45 +617,29 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     private void gestionQRcodes(String scanContent) {
         Player player = game.getTeam(myTeamColor).getJoueur(pseudo);
-
-        switch (scanContent) {
-            case "base":
-                if (lastFlagCaptured != 0){
-                    player.setAttackTokenAvailable(true);
-                    Log.i("score", ""+player.getScore());
-                    ServerSendPlayerScore ssps = new ServerSendPlayerScore();
-                    ssps.execute(pseudo, String.valueOf(player.getScore()+1));
-                    ServerSendPlayerHoldAFlag ssphaf = new ServerSendPlayerHoldAFlag();
-                    ssphaf.execute(pseudo, String.valueOf(game.getId()), "0");
-                    lastFlagCaptured = 0;
-                    Toast.makeText(this, "BRAVO VOUS AVEZ GAGNÉ UN POINT !", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    player.setAttackTokenAvailable(true);
-                    player.setDefenseTokenAvailable(true);
-                    Toast.makeText(this, "Vous avez rechargé votre Jeton d'Attaque et Défense", Toast.LENGTH_LONG).show();
-                }
-                break;
-            case "1":
-                scanFlag(1, 1, player);
-                break;
-            case "2":
-                scanFlag(4, 2, player);
-                break;
-            case "3":
-                scanFlag(7, 3, player);
-                break;
-            case "4":
-                scanFlag(10, 4, player);
-                break;
-            case "5":
-                scanFlag(13, 5, player);
-                break;
-            case "6":
-                scanFlag(16, 6, player);
-                break;
+        if(scanContent.equals("base")) {
+            if (lastFlagCaptured == 0) {
+                Toast.makeText(this, "Allez donc chasser les drapeaux énnemis plutôt que de rester à votre base petit coquinou", Toast.LENGTH_LONG).show();
+            }
+            else {
+                player.setAttackTokenAvailable(false);
+                scanQuestion(-2 + lastFlagCaptured * 3, lastFlagCaptured, player, scanContent);
+                ServerSendPlayerScore ssps = new ServerSendPlayerScore();
+                ssps.execute(pseudo, String.valueOf(player.getScore() + 1));
+                Toast.makeText(this, "BRAVO VOUS AVEZ GAGNÉ UN POINT !", Toast.LENGTH_LONG).show();
+            }
+            lastFlagCaptured = 0;
+            player.setAttackTokenAvailable(true);
+            player.setDefenseTokenAvailable(true);
         }
+        else {
+            player.setAttackTokenAvailable(false);
+            lastFlagCaptured = Integer.parseInt(scanContent);
+            Toast.makeText(this, "Vous portez actuellement le drapeau énnemi n°"
+                    + lastFlagCaptured
+                    + ", allez vite le déposer à votre base pour faire gagner un point à votre équipe", Toast.LENGTH_LONG).show();
 
+        }
     }
 
     public void scanFlag(int numLotQuestion, int lastFlagCaptured, Player player ){
@@ -629,7 +650,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         ssphaf.execute(pseudo, String.valueOf(game.getId()), "1");
         Intent intent = new Intent(this, EcranQuestions.class);
         intent.putExtra("Questions", numLotQuestion);
-	    startActivity(intent);
+	      startActivity(intent);
     }
 
     public void ouvrirEcranAutel() {
