@@ -11,7 +11,6 @@ import com.example.florian.altarconquest.Model.Game;
 import com.example.florian.altarconquest.R;
 import com.example.florian.altarconquest.ServerInteractions.ServerReceptionGamesProperties;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;

@@ -32,10 +32,10 @@ public class JoinGameListener implements View.OnClickListener {
 
     private Context context;
     private Game game;
-    char charList[] = {'²', '&', '"', '\'', '(', '-', '_', ')', '=', '^', '$', '*', ',', ';', ':', '!', '<', '/', '*', '-', '+', '*', '°', '+', '¨', '£', '%', 'µ', '?', '.', '/', '§', '~', '#', '{', '[', '|', '`', '\\', '^', '@', ']', '¤', ']', '}'};
+    char charList[] = {'é', 'è', 'à', 'ë', 'ä', 'â', 'ê', 'ù', '²', '&', '"', '\'', '(', '-', '_', ')', '=', '^', '$', '*', ',', ';', ':', '!', '<', '/', '*', '-', '+', '*', '°', '+', '¨', '£', '%', 'µ', '?', '.', '/', '§', '~', '#', '{', '[', '|', '`', '\\', '^', '@', ']', '¤', ']', '}'};
     private List<Player> playerList;
     boolean listeUpdated = false;
-    String erreurPseudo = "Caractère(s) interdit(s)";
+    private String erreurPseudo = "Caractère(s) interdit(s)";
 
 
     public JoinGameListener(Context context, Game game) {
@@ -97,8 +97,8 @@ public class JoinGameListener implements View.OnClickListener {
      * @return false si le String contient un caractère interdit
      */
     private boolean isPseudoValid(String pseudo) {
-        if (pseudo.length() < 3) {
-            erreurPseudo = "Ce pseudonyme est trop court ";
+        if (pseudo.length() < 3 || pseudo.length()>=10) {
+            erreurPseudo = "Ce pseudonyme est trop court ou trop long ";
             return false;
         }
 

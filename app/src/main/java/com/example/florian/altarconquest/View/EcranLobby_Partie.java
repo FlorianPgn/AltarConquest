@@ -1,20 +1,12 @@
 package com.example.florian.altarconquest.View;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -48,7 +40,6 @@ public class EcranLobby_Partie extends Activity {
     Timer timer;
     Game game;
     TeamColor teamColor;
-    Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +162,6 @@ public class EcranLobby_Partie extends Activity {
 
             //On vérifie que tous les joueurs ont choisis leur team
             for (Player player:listPlayer) {
-                Log.i("TestCouleur", "if");
                 if (player.getPseudo().equals(pseudo)) { //On récupère notre couleur de team
                     teamColor = player.getColor();
                 }
@@ -181,12 +171,10 @@ public class EcranLobby_Partie extends Activity {
                 }
 
                 else if(player.getColor().equals(teamColor.BLUE)){
-                    Log.i("TestCouleur", "bleu++");
                     nbJoueursEquipeBleu++;
                 }
 
                 else if(player.getColor().equals(teamColor.RED)){
-                    Log.i("TestCouleur", "rouge++");
                     nbJoueursEquipeRouge++;
                 }
 
@@ -194,26 +182,8 @@ public class EcranLobby_Partie extends Activity {
             if (colorsAreSet && nbJoueursEquipeRouge == game.getNbJoueursMax()/2 && nbJoueursEquipeBleu == game.getNbJoueursMax()/2) {
 
                 //Passe à l'écran de jeu le pseudo et la couleur de team
-                final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-                if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-                    builder1.setMessage("Veuillez activer votre GPS.");
-                    builder1.setCancelable(true);
 
-                    builder1.setPositiveButton(
-                            "J'active mon GPS !",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    lancerPartie();
-                                }
-                            });
-                    AlertDialog alert1 = builder1.create();
-                    alert1.setCancelable(false);
-                    alert1.show();
-                }
-                else {
-                    lancerPartie();
-                }
+                lancerPartie();
             }
         }
     }
