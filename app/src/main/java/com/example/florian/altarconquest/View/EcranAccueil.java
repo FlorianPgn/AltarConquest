@@ -38,15 +38,7 @@ public class EcranAccueil extends Activity {
         boutonJouer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkScan == false) {
-                    checkScan();
-                    checkScan = true;
-                }
-                if (checkScan == true && checkGPS == false) {
-                    checkGPS();
-                    checkGPS = true;
-                }
-                else {
+                if (checkScan() && checkGPS()) {
                     ouvrirCreationPartie();
                 }
             }
@@ -71,43 +63,61 @@ public class EcranAccueil extends Activity {
         }
     }
 
-    public void checkScan() {
+    public boolean checkScan() {
+        if(!appInstalledOrNot("com.google.zxing.client.android")) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setMessage("Veuillez installer votre scanneur de QRcode.");
+            builder1.setCancelable(true);
 
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setMessage("Veuillez installer votre scanneur de QRcode.");
-        builder1.setCancelable(true);
+            builder1.setPositiveButton(
+                    "J'installe mon scanneur !",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
+                            Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+                            startActivity(marketIntent);
 
-        builder1.setPositiveButton(
-                "J'installe mon scanneur !",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
-                        Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
-                        startActivity(marketIntent);
-
-                    }
-                });
-        AlertDialog alert1 = builder1.create();
-        alert1.setCancelable(false);
-        alert1.show();
+                        }
+                    });
+            AlertDialog alert1 = builder1.create();
+            alert1.setCancelable(false);
+            alert1.show();
+            return false;
+        }
+        return true;
     }
 
-    public void checkGPS() {
+    private boolean appInstalledOrNot(String uri) {
+        PackageManager pm = getPackageManager();
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+
+        return false;
+    }
+
+    public boolean checkGPS() {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setMessage("Veuillez activer votre GPS.");
-        builder1.setCancelable(true);
-        builder1.setPositiveButton(
-                "J'active mon GPS !",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Intent i = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivityForResult(i, 1);
-                    }
-                });
-        AlertDialog alert1 = builder1.create();
-        alert1.setCancelable(false);
-        alert1.show();
+        if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setMessage("Veuillez activer votre GPS.");
+            builder1.setCancelable(true);
+            builder1.setPositiveButton(
+                    "J'active mon GPS !",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent i = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivityForResult(i, 1);
+                        }
+                    });
+            AlertDialog alert1 = builder1.create();
+            alert1.setCancelable(false);
+            alert1.show();
+            return false;
+        }
+        return true;
     }
 
     public void ouvrirCreationPartie() {

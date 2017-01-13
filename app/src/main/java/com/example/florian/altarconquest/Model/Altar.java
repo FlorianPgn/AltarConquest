@@ -12,4 +12,8 @@ public class Altar {
     public Altar(LatLng coordonees){
         this.coordonees = coordonees;
     }
+
+    public LatLng getCoordonees() {
+        return coordonees;
+    }
 }

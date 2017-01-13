@@ -64,7 +64,13 @@ public class EcranAutel extends FragmentActivity implements OnMapReadyCallback {
         LatLng startCameraPosition = new LatLng(latitude, longitude);
         BitmapDescriptor autel = BitmapDescriptorFactory.fromResource(R.drawable.etoile);
 
-        map.addMarker(new MarkerOptions().position(game.getAltar()).title("Autel").icon(autel));
+        map.addMarker(new MarkerOptions().position(startCameraPosition).title("Autel").icon(autel));
+
+        for (int i = 0; i < 20; i++) {
+            LatLng pos = new LatLng(latitude + Math.random(),longitude + Math.random());
+            listCoord.add(pos);
+            map.addMarker(new MarkerOptions().position(pos).title("Autel Fake").icon(autel));
+        }
 
         map.moveCamera(CameraUpdateFactory.newLatLng(startCameraPosition));
     }

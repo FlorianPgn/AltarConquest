@@ -40,6 +40,15 @@ public class Team {
         return null;
     }
 
+    public Flag getFlag(String name) {
+        for (Flag flag: getListofFlags()) {
+            if (flag.getName().equals(name)) {
+                return flag;
+            }
+        }
+        return null;
+    }
+
 
     //Getters and Setters
     public TeamColor getTeamColor() {

@@ -5,7 +5,6 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import com.example.florian.altarconquest.View.EcranJeu;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class Game implements Parcelable {
     private int nbJoueurs;
     private int nbJoueursMax;
     private boolean enCours = false;
-    private LatLng altar;
 
     public Game(int id, String name, int nbJoueursMax){
         this.id = id;
@@ -72,12 +70,15 @@ public class Game implements Parcelable {
     };
 
     public void ajouterDrapeau(Flag flag){
-        if(flag.getTeamColor() == TeamColor.BLUE)
-            blueTeam.ajouterDrapeau(flag);
-        if(flag.getTeamColor() == TeamColor.RED)
-            redTeam.ajouterDrapeau(flag);
-    }
+        Flag leFlag = getTeam(flag.getTeamColor()).getFlag(flag.getName());
+        if (leFlag == null) {
+            getTeam(flag.getTeamColor()).ajouterDrapeau(flag);
+        } else {
+            leFlag.setCoordonnees(flag.getCoordonnees());
+            leFlag.setCapturable(flag.isCapturable());
+        }
 
+    }
 
     public int getId() { return id;}
 
@@ -115,8 +116,6 @@ public class Game implements Parcelable {
         }
     }
 
-    public LatLng getAltar() { return altar; }
-
     public boolean isEnCours() {
         return enCours;
     }
@@ -126,8 +125,6 @@ public class Game implements Parcelable {
     public void setEnCours(boolean enCours) {
         this.enCours = enCours;
     }
-
-    public void setAltar(LatLng altar) { this.altar = altar; }
 
 
     @Override
@@ -149,7 +146,6 @@ public class Game implements Parcelable {
         }
 
         for (Player player:listPlayer) {
-
             for (Player inGamePlayer : getTeam(player.getColor()).getListeDesPlayers()) { //Pour chaque joueurs
                 if(inGamePlayer.getPseudo().equals(player.getPseudo())) { //Si les pseudos sont égaux
                     inGamePlayer.setCoordonnees(player.getCoordonnees());
