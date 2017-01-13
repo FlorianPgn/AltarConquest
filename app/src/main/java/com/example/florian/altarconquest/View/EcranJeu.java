@@ -600,36 +600,46 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                     ssphaf.execute(pseudo, String.valueOf(game.getId()), "0");
                     lastFlagCaptured = 0;
                     if (myTeamColor.equals(TeamColor.RED)) {
+                        //couleurEquipe.setText("BRAVO VOUS AVEZ GAGNÉ UN POINT ! Continuez de défendre vos DRAPEAUX ROUGES et aller capturer les DRAPEAUX ENNEMIS BLEUS\"");
                     }
                     else {
+                        //couleurEquipe.setText("BRAVO VOUS AVEZ GAGNÉ UN POINT ! Continuez de défendre vos DRAPEAUX BLEUS et aller capturer les DRAPEAUX ENNEMIS ROUGES\"");
                     }
                 }
                 else {
                     player.setAttackTokenAvailable(true);
                     player.setDefenseTokenAvailable(true);
                     if (myTeamColor.equals(TeamColor.RED)) {
+                        //couleurEquipe.setText("Vous avez rechargé votre Jeton d'Attaque et Défense ! Continuez de défendre vos DRAPEAUX ROUGES et aller capturer les DRAPEAUX ENNEMIS BLEUS\"");
                     }
                     else {
+                        //couleurEquipe.setText("Vous avez rechargé votre Jeton d'Attaque et Défense ! Continuez de défendre vos DRAPEAUX BLEUS et aller capturer les DRAPEAUX ENNEMIS ROUGES\"");
                     }
                 }
                 break;
             case "1":
                 scanFlag(1, 1, player);
+                //couleurEquipe.setText("Vous detenez le drapeau ADVERSE N°1, foncez vite à votre BASE valider le point avant de vous le faire reprendre par les ennemis");
                 break;
             case "2":
                 scanFlag(4, 2, player);
+                //couleurEquipe.setText("Vous detenez le drapeau ADVERSE N°2, foncez vite à votre BASE valider le point avant de vous le faire reprendre par les ennemis");
                 break;
             case "3":
                 scanFlag(7, 3, player);
+                //couleurEquipe.setText("Vous detenez le drapeau ADVERSE N°3, foncez vite à votre BASE valider le point avant de vous le faire reprendre par les ennemis");
                 break;
             case "4":
                 scanFlag(10, 4, player);
+                //couleurEquipe.setText("Vous detenez le drapeau ADVERSE N°4, foncez vite à votre BASE valider le point avant de vous le faire reprendre par les ennemis");
                 break;
             case "5":
                 scanFlag(13, 5, player);
+                //couleurEquipe.setText("Vous detenez le drapeau ADVERSE N°5, foncez vite à votre BASE valider le point avant de vous le faire reprendre par les ennemis");
                 break;
             case "6":
                 scanFlag(16, 6, player);
+                //couleurEquipe.setText("Vous detenez le drapeau ADVERSE N°6, foncez vite à votre BASE valider le point avant de vous le faire reprendre par les ennemis");
                 break;
         }
         couleurEquipe.setSelected(true);
