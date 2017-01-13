@@ -11,9 +11,9 @@ public class Base  {
     private LatLng coordonnees;
     private TeamColor teamColor;
 
-    public Base(String name, LatLng coordonees, TeamColor teamColor){
+    public Base(String name, LatLng coordonnees, TeamColor teamColor){
         this.name = name;
-        this.coordonnees = coordonees;
+        this.coordonnees = coordonnees;
         this.teamColor = teamColor;
     }
 
