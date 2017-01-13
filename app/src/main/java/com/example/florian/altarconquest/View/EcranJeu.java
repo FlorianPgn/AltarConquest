@@ -176,6 +176,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        couleurEquipe.setSelected(true);
     }
 
     /**
@@ -421,11 +422,17 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                         leBouton.setClickable(false);
                     }
 
+                    for (TextView leTexte : textesBoutons) {
+                        leTexte.setVisibility(View.INVISIBLE);
+                        leTexte.setClickable(false);
+                    }
+
                     treeButton.setVisibility(View.VISIBLE);
                     treeButton.setClickable(true);
                 }
             }
         });
+        couleurEquipe.setSelected(true);
     }
 
     public void creationMenuDeroulant() {
@@ -534,12 +541,14 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         });
 
         if (myTeamColor.equals(TeamColor.RED)) {
-            couleurEquipe.setText("Vous êtes ROUGE");
+            couleurEquipe.setText("Vous êtes ROUGE, vous devez défendre vos DRAPEAUX ROUGES et aller capturer les DRAPEAUX ENNEMIS BLEUS");
             couleurEquipe.setTextColor(Color.RED);
+            couleurEquipe.setSelected(true);
         }
         else {
-            couleurEquipe.setText("Vous êtes BLEU");
+            couleurEquipe.setText("Vous êtes BLEU, vous devez défendre vos DRAPEAUX BLEUS et aller capturer les DRAPEAUX ENNEMIS ROUGES");
             couleurEquipe.setTextColor(Color.BLUE);
+            couleurEquipe.setSelected(true);
         }
     }
 
@@ -580,23 +589,28 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     private void gestionQRcodes(String scanContent) {
         Player player = game.getTeam(myTeamColor).getJoueur(pseudo);
-
+        couleurEquipe.setSelected(false);
         switch (scanContent) {
             case "base":
                 if (lastFlagCaptured != 0){
                     player.setAttackTokenAvailable(true);
-                    Log.i("score", ""+player.getScore());
                     ServerSendPlayerScore ssps = new ServerSendPlayerScore();
                     ssps.execute(pseudo, String.valueOf(player.getScore()+1));
                     ServerSendPlayerHoldAFlag ssphaf = new ServerSendPlayerHoldAFlag();
                     ssphaf.execute(pseudo, String.valueOf(game.getId()), "0");
                     lastFlagCaptured = 0;
-                    Toast.makeText(this, "BRAVO VOUS AVEZ GAGNÉ UN POINT !", Toast.LENGTH_LONG).show();
+                    if (myTeamColor.equals(TeamColor.RED)) {
+                    }
+                    else {
+                    }
                 }
                 else {
                     player.setAttackTokenAvailable(true);
                     player.setDefenseTokenAvailable(true);
-                    Toast.makeText(this, "Vous avez rechargé votre Jeton d'Attaque et Défense", Toast.LENGTH_LONG).show();
+                    if (myTeamColor.equals(TeamColor.RED)) {
+                    }
+                    else {
+                    }
                 }
                 break;
             case "1":
@@ -618,7 +632,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                 scanFlag(16, 6, player);
                 break;
         }
-
+        couleurEquipe.setSelected(true);
     }
 
     public void scanFlag(int numLotQuestion, int lastFlagCaptured, Player player ){
