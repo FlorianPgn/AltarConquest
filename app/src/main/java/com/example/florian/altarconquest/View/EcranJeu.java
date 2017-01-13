@@ -596,11 +596,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     public void updateTextInfo(){
         if (myTeamColor.equals(TeamColor.RED)) {
-            if(lastFlagCaptured != 0) {
-                textInfoGlissantTextView.setText("Vous avez un capturé un DRAPEAU, vous devez le ramener à votre base en scannant le QR Code qui s'y trouve");
-            } else {
-                textInfoGlissantTextView.setText("Vous êtes ROUGE, vous devez défendre vos DRAPEAUX ROUGES et aller capturer les DRAPEAUX ENNEMIS BLEUS");
-            }
+            textInfoGlissantTextView.setText("Vous êtes ROUGE, vous devez défendre vos DRAPEAUX ROUGES et aller capturer les DRAPEAUX ENNEMIS BLEUS");
             textInfoGlissantTextView.setTextColor(Color.RED);
             textInfoGlissantTextView.setSelected(true);
         }
@@ -688,7 +684,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         scanFlag(-2 + lastFlagCaptured * 3, lastFlagCaptured, player, scanContent);
         ServerSendPlayerScore ssps = new ServerSendPlayerScore();
         ssps.execute(pseudo, String.valueOf(player.getScore() + 1));
-        Toast.makeText(this, "BRAVO VOUS AVEZ GAGNÉ UN POINT !", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "BRAVO VOTRE EQUIPE A GAGNÉ UN POINT !", Toast.LENGTH_LONG).show();
         lastFlagCaptured = 0;
     }
 
