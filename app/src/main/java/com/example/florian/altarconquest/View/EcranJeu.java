@@ -82,7 +82,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     public ImageView imageEconomie;
     private TextView timerTextView, scoreBlueTeamTextView, scoreRedTeamTextView;
 
-    public static Map<String, Circle> coordinates;
+    public static Map<String, Marker> coordinates;
     public static Map<String, Marker> flags;
 
     private int lastFlagCaptured = 0;
@@ -361,31 +361,36 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     }
 
     public void updateAffichagePositionJoueurs(Player player) {
-        Circle circle = coordinates.get(player.getPseudo());
-        if (circle == null) {
+        //Circle circle = coordinates.get(player.getPseudo());
+        Marker marker = coordinates.get(player.getPseudo());
+        if (marker == null) {
             // Instantiates a new CircleOptions object and defines the center and radius
-            CircleOptions circleOptions = new CircleOptions()
+            /*CircleOptions circleOptions = new CircleOptions()
                     .center(player.getCoordonnees())
-                    .radius(3); // In meters
+                    .radius(3); // In meters*/
+            MarkerOptions markerOptions = new MarkerOptions().position(player.getCoordonnees());
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.joueur_bleu));
 
             if (myTeamColor.equals(TeamColor.BLUE)) {
-                circleOptions.fillColor(Color.BLUE);
+                //circleOptions.fillColor(Color.BLUE);
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.joueur_bleu));
             } else {
-                circleOptions.fillColor(Color.RED);
+                //circleOptions.fillColor(Color.RED);
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.joueur_rouge));
             }
             if (player.getColor() != myTeamColor) {
                 Toast.makeText(this, player.getPseudo()+" a capturé un de vos drapeaux !", Toast.LENGTH_LONG).show();
                 if (myTeamColor.equals(TeamColor.BLUE)) {
-                    circleOptions.fillColor(Color.RED);
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.joueur_rouge));
                 } else {
-                    circleOptions.fillColor(Color.BLUE);
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.joueur_bleu));
                 }
             }
-            circle = mMap.addCircle(circleOptions);
-            coordinates.put(player.getPseudo(), circle);
+            marker = mMap.addMarker(markerOptions);
+            coordinates.put(player.getPseudo(), marker);
         } else {
             //circle.setVisible(true);
-            circle.setCenter(player.getCoordonnees());
+            marker.setPosition(player.getCoordonnees());
         }
     }
 
@@ -394,9 +399,10 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
             if (player.isHoldingAFlag() == true) {
                 updateAffichagePositionJoueurs(player);
             } else {
-                Circle circle = coordinates.get(player.getPseudo());
-                if (circle != null) {
-                    circle.remove();
+                //Circle circle = coordinates.get(player.getPseudo());
+                Marker marker = coordinates.get(player.getPseudo());
+                if (marker != null) {
+                    marker.remove();
                 }
                 coordinates.remove(player.getPseudo());
             }
