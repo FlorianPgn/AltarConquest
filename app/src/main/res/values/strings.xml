@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Altar Conquest</string>
     <string name="remerciement">
-         Merci d\'avoir participé à la beta test d\'<b>ALTAR CONQUEST</b>\n\n
+        Merci d\'avoir participé à la beta test d\'<b>ALTAR CONQUEST</b>\n\n
 
         Nous espérons que vous avez passé un bon moment sur notre jeu.\n\n
 
@@ -40,16 +40,16 @@
         Si vous n\'avez plus de <b>JETON DE DÉFENSE</b>, il faudra aller scanner le QR Code de sa base afin de se récupérer un <b>JETON DE DEFENSE</b>.\n\n
 
         <b>---------- AUTEL SACRE ----------</b>\n
-        Afin de remporter la partie, il y a un autre moyen que d\'uniquement gagner de points, vous pouvez aussi trouver l\'<b>AUTEL SACRÉ</b>.\n
+        Afin de remporter la partie, il y a un autre moyen que d\'uniquement gagner des points, vous pouvez aussi trouver l\'<b>AUTEL SACRÉ</b>.\n
         Pour vous aider à le trouver, des questions sur le parc vous seront posées lors de l\'ajout d\'un point à votre équipe.\n
         Si vous répondez bon, un indice sur l\'emplacement de l\'<b>AUTEL SACRÉ</b> vous sera donné.\n
-        Si vous pensez avoir trouvé l\'<b>AUTEL SACRÉ</b>, allez donc vous positionner 30 secondes dans un périmêtre de 3m autour de lui.\n
+        Si vous pensez avoir trouvé l\'<b>AUTEL SACRÉ</b>, allez donc vous positionner 30 secondes dans un périmetre de 3m autour de celui-ci.\n
         La partie sera alors remportée par votre équipe.\n\n
 
         BONNE CHANCE DE LA PART DE TOUTE L\'ÉQUIPE !
     </string>
     <string name="credits">
-        <b>ALTAT CONQUEST 2016/2017\n\n</b>
+        <b>ALTAR CONQUEST 2016/2017\n\n</b>
 
         Jeu créé dans le cadre du Projet Tuteuré de Semestre 3 du DUT Informatique de LAVAL pour le Parc Ecologia (en Mayenne) par :\n\n
 

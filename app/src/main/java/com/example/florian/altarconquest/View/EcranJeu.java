@@ -175,6 +175,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        couleurEquipe.setSelected(true);
     }
 
     /**
@@ -465,11 +466,18 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                         leBouton.setVisibility(View.INVISIBLE);
                         leBouton.setClickable(false);
                     }
+
+                    for (TextView leTexte : textesBoutons) {
+                        leTexte.setVisibility(View.INVISIBLE);
+                        leTexte.setClickable(false);
+                    }
+
                     treeButton.setVisibility(View.VISIBLE);
                     treeButton.setClickable(true);
                 }
             }
         });
+        couleurEquipe.setSelected(true);
     }
 
     public void creationMenuDeroulant() {
@@ -526,7 +534,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
                     }
                 }
                 if (!someoneHaveAFlag) {
-                    Toast.makeText(EcranJeu.this, "Il n'y a pas de drapeau entrain d'être volé à proximité", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EcranJeu.this, "Il n'y a pas de drapeau en train d'être volé à proximité", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -589,12 +597,14 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
         });
 
         if (myTeamColor.equals(TeamColor.RED)) {
-            couleurEquipe.setText("Vous êtes ROUGE");
+            couleurEquipe.setText("Vous êtes ROUGE, vous devez défendre vos DRAPEAUX ROUGES et aller capturer les DRAPEAUX ENNEMIS BLEUS");
             couleurEquipe.setTextColor(Color.RED);
+            couleurEquipe.setSelected(true);
         }
         else {
-            couleurEquipe.setText("Vous êtes BLEU");
+            couleurEquipe.setText("Vous êtes BLEU, vous devez défendre vos DRAPEAUX BLEUS et aller capturer les DRAPEAUX ENNEMIS ROUGES");
             couleurEquipe.setTextColor(Color.BLUE);
+            couleurEquipe.setSelected(true);
         }
     }
 
@@ -647,28 +657,60 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
 
     private void gestionQRcodes(String scanContent) {
         Player player = game.getTeam(myTeamColor).getJoueur(pseudo);
-        if(scanContent.equals("base")) {
-            if (lastFlagCaptured == 0) {
-                Toast.makeText(this, "Allez donc chasser les drapeaux ennemis plutôt que de rester à votre base", Toast.LENGTH_LONG).show();
-            }
-            else {
-                ServerReceptionHoldAFlag serverReceptionHoldAFlag = new ServerReceptionHoldAFlag(this, player, scanContent);
-                serverReceptionHoldAFlag.execute(String.valueOf(game.getId()), pseudo);
-            }
-
-            player.setAttackTokenAvailable(true);
-            player.setDefenseTokenAvailable(true);
+        couleurEquipe.setSelected(false);
+        switch (scanContent) {
+            case "base":
+                if (lastFlagCaptured != 0){
+                    player.setAttackTokenAvailable(true);
+                    ServerSendPlayerScore ssps = new ServerSendPlayerScore();
+                    ssps.execute(pseudo, String.valueOf(player.getScore()+1));
+                    ServerSendPlayerHoldAFlag ssphaf = new ServerSendPlayerHoldAFlag();
+                    ssphaf.execute(pseudo, String.valueOf(game.getId()), "0");
+                    lastFlagCaptured = 0;
+                    if (myTeamColor.equals(TeamColor.RED)) {
+                        //couleurEquipe.setText("BRAVO VOUS AVEZ GAGNÉ UN POINT ! Continuez de défendre vos DRAPEAUX ROUGES et aller capturer les DRAPEAUX ENNEMIS BLEUS\"");
+                    }
+                    else {
+                        //couleurEquipe.setText("BRAVO VOUS AVEZ GAGNÉ UN POINT ! Continuez de défendre vos DRAPEAUX BLEUS et aller capturer les DRAPEAUX ENNEMIS ROUGES\"");
+                    }
+                }
+                else {
+                    player.setAttackTokenAvailable(true);
+                    player.setDefenseTokenAvailable(true);
+                    if (myTeamColor.equals(TeamColor.RED)) {
+                        //couleurEquipe.setText("Vous avez rechargé votre Jeton d'Attaque et Défense ! Continuez de défendre vos DRAPEAUX ROUGES et aller capturer les DRAPEAUX ENNEMIS BLEUS\"");
+                    }
+                    else {
+                        //couleurEquipe.setText("Vous avez rechargé votre Jeton d'Attaque et Défense ! Continuez de défendre vos DRAPEAUX BLEUS et aller capturer les DRAPEAUX ENNEMIS ROUGES\"");
+                    }
+                }
+                break;
+            case "1":
+                scanFlag(1, 1, player, scanContent);
+                //couleurEquipe.setText("Vous detenez le drapeau ADVERSE N°1, foncez vite à votre BASE valider le point avant de vous le faire reprendre par les ennemis");
+                break;
+            case "2":
+                scanFlag(4, 2, player, scanContent);
+                //couleurEquipe.setText("Vous detenez le drapeau ADVERSE N°2, foncez vite à votre BASE valider le point avant de vous le faire reprendre par les ennemis");
+                break;
+            case "3":
+                scanFlag(7, 3, player, scanContent);
+                //couleurEquipe.setText("Vous detenez le drapeau ADVERSE N°3, foncez vite à votre BASE valider le point avant de vous le faire reprendre par les ennemis");
+                break;
+            case "4":
+                scanFlag(10, 4, player, scanContent);
+                //couleurEquipe.setText("Vous detenez le drapeau ADVERSE N°4, foncez vite à votre BASE valider le point avant de vous le faire reprendre par les ennemis");
+                break;
+            case "5":
+                scanFlag(13, 5, player, scanContent);
+                //couleurEquipe.setText("Vous detenez le drapeau ADVERSE N°5, foncez vite à votre BASE valider le point avant de vous le faire reprendre par les ennemis");
+                break;
+            case "6":
+                scanFlag(16, 6, player, scanContent);
+                //couleurEquipe.setText("Vous detenez le drapeau ADVERSE N°6, foncez vite à votre BASE valider le point avant de vous le faire reprendre par les ennemis");
+                break;
         }
-        else {
-            player.setAttackTokenAvailable(false);
-            ServerSendPlayerHoldAFlag ssphf = new ServerSendPlayerHoldAFlag();
-            ssphf.execute(pseudo, String.valueOf(game.getId()), "1");
-            lastFlagCaptured = Integer.parseInt(scanContent);
-            Toast.makeText(this, "Vous avez le drapeau énnemi n°"
-                    + lastFlagCaptured
-                    + ", déposez le à votre base", Toast.LENGTH_LONG).show();
-
-        }
+        couleurEquipe.setSelected(true);
     }
 
     public void scanBaseAvecDrapeau(Player player, String scanContent){
