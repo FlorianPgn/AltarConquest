@@ -94,7 +94,7 @@ public class EcranJeu extends FragmentActivity implements OnMapReadyCallback, Lo
     private TeamColor enemyTeamColor;
     private Location location;
 
-    private final double START_CAMERA_LAT = 48.10952932860948, START_CAMERA_LNG = -0.7228287971115112;
+    private final double START_CAMERA_LAT = 48.08574927627401, START_CAMERA_LNG = -0.7584989108085632;
 
     private Game game;
 

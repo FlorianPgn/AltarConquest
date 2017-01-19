@@ -33,7 +33,7 @@ public class EcranCreation_Partie extends Activity implements AdapterView.OnItem
         passwordPartie = (EditText) findViewById(R.id.input_mot_de_passe);
 
         spinner = (Spinner) findViewById(R.id.input_nb_joueurs);
-        String[] items = {"2", "4", "6", "8", "9", "10", "11", "12"};
+        String[] items = {"2", "4", "6", "8", "10", "12"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         spinner.setAdapter(adapter);
